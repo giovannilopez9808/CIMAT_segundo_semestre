@@ -1,0 +1,16 @@
+*.nav
+*.snm
+*.toc
+*.out
+*.o
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
+*-eps-converted-to.pdf
+*.bbl
+*.bl
+*.bbl
+*.blg
+build/
