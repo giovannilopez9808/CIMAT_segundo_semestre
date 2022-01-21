@@ -4,12 +4,13 @@
 int main()
 {
     unsigned seed = 12345625;
-    int channels = 10;
+    int channels = 54;
+    int min = 10000000000;
     // std::string filename_output = "../Output/test.txt";
     std::string filename_data = "../Data/GSM2-272.ctr";
     // std::fstream file_output = open_file(filename_output);
     lines_class lines(filename_data);
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 1000000; i++)
     {
         seed = rand();
         long int cost = lines.cost(seed,
