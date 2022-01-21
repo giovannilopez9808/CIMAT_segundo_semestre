@@ -20,6 +20,10 @@ nodes_class::nodes_class(unsigned seed, int channels)
         nodes[i].set_channel(channels);
     }
 }
+node nodes_class::get_node_i(int i)
+{
+    return nodes[i];
+}
 nodes_class::~nodes_class()
 {
 }

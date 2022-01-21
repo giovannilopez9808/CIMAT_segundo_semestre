@@ -22,6 +22,7 @@ private:
 public:
     nodes_class(unsigned,
                 int);
+    node get_node_i(int);
     ~nodes_class();
 };
 #endif

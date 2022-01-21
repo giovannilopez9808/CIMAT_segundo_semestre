@@ -50,6 +50,28 @@ line lines_class::get_line_i(int i)
 {
     return lines[i];
 }
+long int lines_class::cost(unsigned seed, int channels)
+{
+    long int result = 0;
+    int c_i, c_j, node_i, node_j, d_ij, interference;
+    line line_i;
+    nodes_class nodes(seed,
+                      channels);
+    for (int i = 0; i < n_lines; i++)
+    {
+        node_i = lines[i].get_node_i();
+        node_j = lines[i].get_node_j();
+        d_ij = lines[i].get_dij();
+        interference = lines[i].get_interference();
+        c_i = nodes.get_node_i(node_i).get_channel();
+        c_j = nodes.get_node_i(node_j).get_channel();
+        if (abs(c_i - c_j) <= d_ij)
+        {
+            result += interference;
+        }
+    }
+    return result;
+}
 lines_class::~lines_class()
 {
 }

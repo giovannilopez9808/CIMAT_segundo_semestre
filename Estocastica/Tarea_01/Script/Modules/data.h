@@ -2,6 +2,7 @@
 #define read_data_H
 #define n_lines 14525
 #include "files.h"
+#include "nodes.h"
 class line
 {
 private:
@@ -29,6 +30,8 @@ private:
 
 public:
     lines_class(std::string);
+    long int cost(unsigned,
+                  int);
     line get_line_i(int);
     ~lines_class();
 };
