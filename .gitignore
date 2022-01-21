@@ -13,4 +13,5 @@
 *.bl
 *.bbl
 *.blg
+.vscode/
 build/
