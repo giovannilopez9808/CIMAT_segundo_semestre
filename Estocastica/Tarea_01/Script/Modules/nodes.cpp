@@ -14,7 +14,6 @@ node::~node()
 
 nodes_class::nodes_class(unsigned seed, int channels)
 {
-    srand(seed);
     for (int i = 0; i < n_nodes; i++)
     {
         nodes[i].set_channel(channels);
