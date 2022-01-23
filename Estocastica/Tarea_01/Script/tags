@@ -437,16 +437,16 @@ STRINGIFY_HELPER	build/CMakeFiles/3.16.3/CompilerIdCXX/CMakeCXXCompilerId.cpp	31
 SUFFIXES	build/Makefile	/^SUFFIXES =$/;"	m
 channel	Modules/nodes.h	/^    int channel;$/;"	m	class:node
 const	build/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c	10;"	d	file:
-cost	Modules/data.cpp	/^long int lines_class::cost(unsigned seed, int channels)$/;"	f	class:lines_class
-d_ij	Modules/data.h	/^    int d_ij;$/;"	m	class:line
+cost	Modules/lines.cpp	/^long int lines_class::cost(unsigned seed, int channels)$/;"	f	class:lines_class
+d_ij	Modules/lines.h	/^    int d_ij;$/;"	m	class:line
 files_H	Modules/files.h	2;"	d
 get_channel	Modules/nodes.cpp	/^int node::get_channel()$/;"	f	class:node
-get_dij	Modules/data.cpp	/^int line::get_dij()$/;"	f	class:line
-get_interference	Modules/data.cpp	/^int line::get_interference()$/;"	f	class:line
-get_line_i	Modules/data.cpp	/^line lines_class::get_line_i(int i)$/;"	f	class:lines_class
-get_node_i	Modules/data.cpp	/^int line::get_node_i()$/;"	f	class:line
+get_dij	Modules/lines.cpp	/^int line::get_dij()$/;"	f	class:line
+get_interference	Modules/lines.cpp	/^int line::get_interference()$/;"	f	class:line
+get_line_i	Modules/lines.cpp	/^line lines_class::get_line_i(int i)$/;"	f	class:lines_class
+get_node_i	Modules/lines.cpp	/^int line::get_node_i()$/;"	f	class:line
 get_node_i	Modules/nodes.cpp	/^node nodes_class::get_node_i(int i)$/;"	f	class:nodes_class
-get_node_j	Modules/data.cpp	/^int line::get_node_j()$/;"	f	class:line
+get_node_j	Modules/lines.cpp	/^int line::get_node_j()$/;"	f	class:line
 info_arch	build/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c	/^char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";$/;"	v
 info_arch	build/CMakeFiles/3.16.3/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* info_arch = "INFO" ":" "arch[" ARCHITECTURE_ID "]";$/;"	v
 info_compiler	build/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c	/^char const* info_compiler = "INFO" ":" "compiler[" COMPILER_ID "]";$/;"	v
@@ -465,21 +465,21 @@ info_version	build/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c	/^char const
 info_version	build/CMakeFiles/3.16.3/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const info_version[] = {$/;"	v
 info_version_internal	build/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c	/^char const info_version_internal[] = {$/;"	v
 info_version_internal	build/CMakeFiles/3.16.3/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const info_version_internal[] = {$/;"	v
-interference	Modules/data.h	/^    int interference;$/;"	m	class:line
-line	Modules/data.cpp	/^line::line()$/;"	f	class:line
-line	Modules/data.h	/^class line$/;"	c
-lines	Modules/data.h	/^    line lines[n_lines];$/;"	m	class:lines_class
-lines_class	Modules/data.cpp	/^lines_class::lines_class(std::string filename)$/;"	f	class:lines_class
-lines_class	Modules/data.h	/^class lines_class$/;"	c
+interference	Modules/lines.h	/^    int interference;$/;"	m	class:line
+line	Modules/lines.cpp	/^line::line()$/;"	f	class:line
+line	Modules/lines.h	/^class line$/;"	c
+lines	Modules/lines.h	/^    line lines[n_lines];$/;"	m	class:lines_class
+lines_class	Modules/lines.cpp	/^lines_class::lines_class(std::string filename)$/;"	f	class:lines_class
+lines_class	Modules/lines.h	/^class lines_class$/;"	c
 main	build/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c	/^int main(argc, argv) int argc; char *argv[];$/;"	f
 main	build/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c	/^void main() {}$/;"	f
 main	build/CMakeFiles/3.16.3/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^int main(int argc, char* argv[])$/;"	f
-main	main.cpp	/^int main()$/;"	f
-n_lines	Modules/data.h	3;"	d
+main	main.cpp	/^int main(int argc, char *argv[])$/;"	f
+n_lines	Modules/lines.h	3;"	d
 n_nodes	Modules/nodes.h	3;"	d
 node	Modules/nodes.h	/^class node$/;"	c
-node_i	Modules/data.h	/^    int node_i;$/;"	m	class:line
-node_j	Modules/data.h	/^    int node_j;$/;"	m	class:line
+node_i	Modules/lines.h	/^    int node_i;$/;"	m	class:line
+node_j	Modules/lines.h	/^    int node_j;$/;"	m	class:line
 nodes	Modules/nodes.h	/^    node nodes[n_nodes];$/;"	m	class:nodes_class
 nodes_H	Modules/nodes.h	2;"	d
 nodes_class	Modules/nodes.cpp	/^nodes_class::nodes_class(unsigned seed, int channels)$/;"	f	class:nodes_class
@@ -487,12 +487,12 @@ nodes_class	Modules/nodes.h	/^class nodes_class$/;"	c
 open_file	Modules/files.cpp	/^std::fstream open_file(std::string filename)$/;"	f
 qnxnto	build/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c	/^char const* qnxnto = "INFO" ":" "qnxnto[]";$/;"	v
 qnxnto	build/CMakeFiles/3.16.3/CompilerIdCXX/CMakeCXXCompilerId.cpp	/^char const* qnxnto = "INFO" ":" "qnxnto[]";$/;"	v
-read_data_H	Modules/data.h	2;"	d
+read_data_H	Modules/lines.h	2;"	d
 read_file	Modules/files.cpp	/^std::fstream read_file(std::string filename)$/;"	f
 set_channel	Modules/nodes.cpp	/^void node::set_channel(int n_channels)$/;"	f	class:node
-set_information	Modules/data.cpp	/^void line::set_information(int nodei,$/;"	f	class:line
+set_information	Modules/lines.cpp	/^void line::set_information(int nodei,$/;"	f	class:line
 volatile	build/CMakeFiles/3.16.3/CompilerIdC/CMakeCCompilerId.c	11;"	d	file:
-~line	Modules/data.cpp	/^line::~line()$/;"	f	class:line
-~lines_class	Modules/data.cpp	/^lines_class::~lines_class()$/;"	f	class:lines_class
+~line	Modules/lines.cpp	/^line::~line()$/;"	f	class:line
+~lines_class	Modules/lines.cpp	/^lines_class::~lines_class()$/;"	f	class:lines_class
 ~node	Modules/nodes.cpp	/^node::~node()$/;"	f	class:node
 ~nodes_class	Modules/nodes.cpp	/^nodes_class::~nodes_class()$/;"	f	class:nodes_class
