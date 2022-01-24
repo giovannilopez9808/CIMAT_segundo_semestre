@@ -12,4 +12,9 @@
 {0pt}
 {2cm}
 \input{Files/titulo.tex}
+\cite{*}
+\let\Section\section
+\def\section*#1{\Section{#1}}
+\bibliographystyle{vancouver}
+\bibliography{references}
 \end{document}
