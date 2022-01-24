@@ -25,8 +25,7 @@ int main(int argc, char *argv[])
         std::cout << j + 1 << " de " << 100 << std::endl;
         for (int i = 0; i < iterations; i++)
         {
-            cost = lines.cost(seed,
-                              channels);
+            cost = lines.cost(channels);
             if (min > cost)
             {
                 min = cost;

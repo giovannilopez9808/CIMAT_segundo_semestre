@@ -12,7 +12,7 @@ node::~node()
 {
 }
 
-nodes_class::nodes_class(unsigned seed, int channels)
+nodes_class::nodes_class(int channels)
 {
     for (int i = 0; i < n_nodes; i++)
     {

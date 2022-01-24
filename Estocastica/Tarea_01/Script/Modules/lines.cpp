@@ -51,13 +51,12 @@ line lines_class::get_line_i(int i)
 {
     return lines[i];
 }
-long int lines_class::cost(unsigned seed, int channels)
+long int lines_class::cost(int channels)
 {
     long int result = 0;
     int c_i, c_j, node_i, node_j, d_ij, interference;
     line line_i;
-    nodes_class nodes(seed,
-                      channels);
+    nodes_class nodes(channels);
     for (int i = 0; i < n_lines; i++)
     {
         node_i = lines[i].get_node_i();

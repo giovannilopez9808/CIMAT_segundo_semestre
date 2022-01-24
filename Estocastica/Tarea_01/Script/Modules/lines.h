@@ -30,8 +30,7 @@ private:
 
 public:
     lines_class(std::string);
-    long int cost(unsigned,
-                  int);
+    long int cost(int);
     line get_line_i(int);
     ~lines_class();
 };

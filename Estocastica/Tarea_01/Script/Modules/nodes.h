@@ -20,8 +20,7 @@ private:
     node nodes[n_nodes];
 
 public:
-    nodes_class(unsigned,
-                int);
+    nodes_class(int);
     node get_node_i(int);
     ~nodes_class();
 };
