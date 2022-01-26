@@ -38,23 +38,20 @@ int main(int argc, char *argv[])
     std::fstream file_output = open_file(filename_output);
     // Carga de las lineas de conexion
     lines_class lines(filename_data);
-    for (int j = 0; j < 100; j++)
+    // Inicializacion del minimo
+    min = LONG_MAX;
+    for (int i = 0; i < iterations; i++)
     {
-        // Inicializacion del minimo
-        min = LONG_MAX;
-        for (int i = 0; i < iterations; i++)
+        // Calculo del costo de la solucion
+        cost = lines.cost(channels);
+        // Si el costo es menor al minimo se guarda el valor
+        if (min > cost)
         {
-            // Calculo del costo de la solucion
-            cost = lines.cost(channels);
-            // Si el costo es menor al minimo se guarda el valor
-            if (min > cost)
-            {
-                min = cost;
-            }
+            min = cost;
         }
-        // Guardado del minimo
-        file_output << min << std::endl;
     }
+    // Guardado del minimo
+    file_output << min << std::endl;
     // Cierre del archivo de salida
     file_output.close();
     return 0;
