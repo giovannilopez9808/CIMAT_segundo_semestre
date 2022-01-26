@@ -22,5 +22,40 @@ Los datos de las penalización y la distancia máxima entre canales fue obtenida
     \item \textbf{p}: Penalización que se recibe si la distancia entre los canales es menor a la distancia máxima.
 \end{enumerate}
 
-El total de nodos es de 272 y el número total de lineas de conexión entre dos nodos es de 1425.
+El total de nodos es de 272 y el número total de lineas de conexión entre dos nodos es de 14525.
 
+\subsection{Algoritmo}
+
+La manera que se empleo la solución del problema fue siguiendo el algoritmo \ref{alg:FAP}. Al inicio se contemplo la lectura total de los datos de la red GSM2-272 en una clase llamada lines, la cual contiene una lista donde cada elemento contiene la información de cada conexión entre dos nodos. En seguida se realizan 100,000 iteraciones en donde cada iteración se le asigna a cada nodo un canal aleatorio entre 1 y $n_c$, donde $n_c$ es el número de canales a asignar. Con la asignación realizada se calcula la función de costo para la red. Se guardo un resultado por cada 100,000 iteraciones realizadas.
+
+\begin{algorithm}[H]
+    \caption{}
+    \label{alg:FAP}
+    \KwInput{n\_channels ,seed}
+    \KwOutput{minimum}
+    n\_nodes $\gets$ 272\\
+    n\_lines $\gets$ 14525\\
+    lines $\gets$ GSM2\_data\\
+    minimum $\gets$ MAX\_int\\
+    \For{$n=1,100000$}
+    {
+        Cost $\gets$  0\\
+        \For{k=1,n\_nodes}
+        {
+            node$_k$ $\gets$ random\_random(n\_channels)\\
+        }
+        \For{k=1,n\_lines}
+        {
+            c$_i$, c$_j$, d$_{ij}$, p$_{ij}$ $\gets$ get\_information(lines[k])\\
+            \If{$|$c$_i$-c$_j|\leq$d$_{ij}$}{
+                cost $\gets$ cost + p$_{ij}$\\
+            }
+        }
+        \If{minimum$>$cost}{
+            minimum $\gets$ cost
+        }
+    }
+    save\_result(minimum)\\
+\end{algorithm}
+
+El algoritmo \ref{alg:FAP} ejecutaron 100 veces en paralelo con 34, 39 y 49 canales consecutivos disponibles en cada nodo. Cada ejecucción tuvo una semilla diferente que va desde la 1 hasta la 100.
