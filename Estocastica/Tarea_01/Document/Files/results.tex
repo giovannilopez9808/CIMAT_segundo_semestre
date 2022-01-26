@@ -6,3 +6,23 @@ El algoritmo \ref{alg:FAP} presenta una complejidad cuadrática, esto es debido 
 
 \subsection{Costos obtenidos}
 
+Las medidas de tendencia central y percentiles obtenidos de los resultados del algoritmo \ref{alg:FAP} con 34, 39 y 49 canales disponibles se encuentran en la tabla \ref{table:central_tendency}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ccccccc} \hline
+        \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}\textbf{Canales}\\ \textbf{disponibles}\end{tabular}} & \textbf{Media} & \textbf{Mínimo} & \textbf{25 \% } & \textbf{50\%} & \textbf{75\%} & \textbf{Máximo} \\ \hline
+        \textbf{34}                                   & 8.55$x10^9$    & 7.70$x10^9$     & 8.40$x10^9$     & 8.60$x10^9$   & 8.70$x10^9$   & 8.903$x10^9$    \\
+        \textbf{39}                                   & 7.24$x10^9$    & 6.70$x10^9$     & 7.10$x10^9$     & 7.25$x10^9$   & 7.40$x10^9$   & 7.608$x10^9$    \\
+        \textbf{49}                                   & 5.39$x10^9$    & 4.90$x10^9$     & 5.30$x10^9$     & 5.40$x10^9$   & 5.50$x10^9$   & 5.709$x10^9$    \\ \hline
+    \end{tabular}
+    \caption{Medidas de tendencia central y percentiles de los costos mínimos obtenidos con el algoritmo \ref{alg:FAP} para 34, 39 y 49 canales disponibles.}
+    \label{table:central_tendency}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=10cm]{Graphics/boxplot.png}
+    \caption{Boxplot de los costos mínimos obtenidos con el algoritmo \ref{alg:FAP} para 34, 39 y 49 canales disponibles.}
+\end{figure}
+
