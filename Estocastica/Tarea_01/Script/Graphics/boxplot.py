@@ -19,6 +19,7 @@ data = {"n=34": c_34,
         "n=39": c_39,
         "n=49": c_49}
 data = pd.DataFrame(data)
+print(data.describe())
 plt.boxplot(data)
 plt.xticks([1, 2, 3],
            data.columns)
