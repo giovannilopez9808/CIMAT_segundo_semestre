@@ -5,9 +5,9 @@ import numpy as np
 parameters = {"path results": "../Output/",
               "path graphics": "../../Document/Graphics/",
               "graphics file": "boxplot.png",
-              "channel 34 file": "channels_34.txt",
-              "channel 39 file": "channels_39.txt",
-              "channel 49 file": "channels_49.txt"}
+              "channel 34 file": "channel_34.dat",
+              "channel 39 file": "channel_39.dat",
+              "channel 49 file": "channel_49.dat"}
 
 c_34 = np.loadtxt("{}{}".format(parameters["path results"],
                                 parameters["channel 34 file"]))
