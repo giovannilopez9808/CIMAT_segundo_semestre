@@ -15,11 +15,12 @@ c_39 = np.loadtxt("{}{}".format(parameters["path results"],
                                 parameters["channel 39 file"]))
 c_49 = np.loadtxt("{}{}".format(parameters["path results"],
                                 parameters["channel 49 file"]))
-data = {"n=34": c_34,
-        "n=39": c_39,
-        "n=49": c_49}
+data = {"34 canales": c_34,
+        "39 canales": c_39,
+        "49 canales": c_49}
 data = pd.DataFrame(data)
-print(data.describe())
+print(data.describe().transpose())
+plt.subplots(figsize=(6, 4))
 plt.boxplot(data)
 plt.xticks([1, 2, 3],
            data.columns)
