@@ -1,1 +1,26 @@
+
 \section{Métodos y materiales}
+
+La tarea que realizan los modelos de FAP es llevar al mínimo global la función de costo que depende el objetivo particular del problema. En este caso se utilizará una función de costo la cual contempla la interferencia provocada por la distancia cercana entre canales usados en cada nodo de la red. Sean dos nodos de comunicación $c_i$ y $c_j$ de una red $s$ donde $i\neq j$, entonces la función de costo esta dada por la ecuación \ref{eq:cost_function}.
+
+\begin{equation}
+    Cost(s) = \sum_{|c_i-c_j| \leq d_{ij}} p_{ij} \label{eq:cost_function}
+\end{equation}
+
+donde $d_{ij}$ es la distancia máxima entre canales de los nodos donde sucede la interferencia y $p_{ij}$ es la penalización de la interferencia.
+
+\subsection{Datos GSM2-272}
+
+Los datos de las penalización y la distancia máxima entre canales fue obtenida a partir del artículo de Montemanni\cite{Montemanni_2010,data}. Los datos tienen el siguiente formato por columnas:
+
+\begin{enumerate}
+    \item \textbf{a}: índices del primer nodo.
+    \item \textbf{b}: índices del segundo nodo.
+    \item \textbf{R}: primer carácter de control.
+    \item $>$ : segundo carácter de control.
+    \item \textbf{s}: Distancia máxima entre canales en la que se contempla la interferencia.
+    \item \textbf{p}: Penalización que se recibe si la distancia entre los canales es menor a la distancia máxima.
+\end{enumerate}
+
+El total de nodos es de 272 y el número total de lineas de conexión entre dos nodos es de 1425.
+
