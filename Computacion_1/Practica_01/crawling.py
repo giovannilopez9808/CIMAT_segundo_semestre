@@ -30,12 +30,13 @@ def format_filename(path: str, date: str) -> str:
     Formato del nombre del archivo con su fecha y el numero de sesion del día 
     """
     files = os.listdir(path)
-    part = sum([True for file in files if date.replace(".", "-") in file])
+    # print(date)
+    date = format_date(date)
+    part = sum([True for file in files if date in file])
     if part:
         part = str(part+1)
     else:
         part = "1"
-    date = format_date(date)
     date = "{}_{}".format(date, part)
     return date
 
@@ -60,9 +61,9 @@ for page_i in range(1, parameters["number of page"]+1, 1):
                                            parameters["folder page"],
                                            page_i)
     # Descarga del indice de las sesiones
-    download(filename_output,
-             page,
-             parameters["header"])
+    # download(filename_output,
+    #          page,
+    #          parameters["header"])
     file = open(filename_output,
                 "r",
                 encoding="utf-8")
@@ -83,9 +84,9 @@ for url in urls:
                                   parameters["folder corpus"],
                                   url)
     # Descarga de cada sesion
-    download(output,
-             complete_url,
-             parameters["header"])
+    # download(output,
+    #          complete_url,
+    #          parameters["header"])
     file = open(output,
                 "r",
                 encoding="utf-8")
