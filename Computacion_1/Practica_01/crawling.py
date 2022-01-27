@@ -30,7 +30,6 @@ def format_filename(path: str, date: str) -> str:
     Formato del nombre del archivo con su fecha y el numero de sesion del día 
     """
     files = os.listdir(path)
-    # print(date)
     date = format_date(date)
     part = sum([True for file in files if date in file])
     if part:
