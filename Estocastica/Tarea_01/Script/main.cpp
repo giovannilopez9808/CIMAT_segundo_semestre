@@ -16,7 +16,6 @@ int main(int argc, char *argv[])
 {
     if (argc != 5)
     {
-
         std::cout << "------------------------" << std::endl;
         std::cout << "    Faltan argumentos" << std::endl;
         std::cout << "------------------------" << std::endl;
