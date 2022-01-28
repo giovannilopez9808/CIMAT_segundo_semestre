@@ -1,0 +1,79 @@
+\section*{Problema 2}
+
+\textbf{Supongamos que X=(X\textsubscript{1}, X\textsubscript{2}), Var(X\textsubscript{1})=Var(X\textsubscript{2})=1}.
+
+
+\textbf{a) Supongamos que X\textsubscript{1} y X\textsubscript{2} son v.a. independientes con promedio 0. Verifica que cualquier dirección l da máxima varianza en las proyecciones.}
+
+Como X\textsubscript{1} y X\textsubscript{2} son v.a independientes entonces, la matriz de covarianza Cov(X) es:
+
+\begin{equation*}
+    Cov(X) = \begin{pmatrix}
+        1 & 0 \\
+        0 & 1
+    \end{pmatrix}
+\end{equation*}
+
+por lo que se obtiene que $Cov(X)= \mathbb{I}$. Entonces, se obtiene que:
+
+\begin{align*}
+    \underset{||l||}{max} \;\; \frac{l^t Cov(X) l}{l^t l} & = \underset{||l||}{max} \;\; \frac{l^t \mathbb{I} l}{l^t l} \\
+                                                          & = \underset{||l||}{max} \;\; \frac{l^t l}{l^t l}            \\
+                                                          & = \underset{||l||}{max} \;\; 1                              \\
+                                                          & = \;\; 1
+\end{align*}
+
+por lo tanto, se maximiza la varianza para cualquier dirección de $l$ en las proyecciones.
+
+\textbf{b) Supongamos que X\textsubscript{1} y X\textsubscript{2} son v.a. dependientes. Calcula la primer componente principal a mano. ¿Qué particularidad tiene?}
+
+Suponiendo de la covarianza de X\textsubscript{1} Y X\textsubscript{2} es a, entonces, la matriz de covarianza es:
+
+\begin{equation*}
+    Cov(X) =
+    \begin{pmatrix}
+        1 & a \\
+        a & 1
+    \end{pmatrix}
+\end{equation*}
+
+Calculando la primer componente $l$, se obtiene que los valores propios de $Cov(X)$ es:
+
+\begin{align*}
+    |Cov(X)-\lambda \mathbb{I} | & = 0   \\
+    \begin{vmatrix}
+        1-\lambda & a          \\
+        a         & 1- \lambda
+    \end{vmatrix}    & =0    \\
+    (1-\lambda)^2 -a^2           & =0    \\
+    (1-\lambda-a )(1-\lambda+a)  & =0    \\
+    \lambda_1                    & = 1-a \\
+    \lambda_2                    & = 1+a
+\end{align*}
+
+Suponiendo que $a>0$, entonces $\lambda_2$ es el eigenvalor mayor. Calculando los vectores propios relacionados a $\lambda_2$, se obtiene que:
+
+\begin{align*}
+    \begin{pmatrix}
+        -a & a  \\
+        a  & -a
+    \end{pmatrix} & = \begin{pmatrix}
+        0 \\ 0
+    \end{pmatrix}  \\
+    \begin{pmatrix}
+        -1 & 1  \\
+        a  & -a
+    \end{pmatrix} & = \begin{pmatrix}
+        0 \\ 0
+    \end{pmatrix}  \\
+    \begin{pmatrix}
+        -1 & 1 \\
+        0  & 0
+    \end{pmatrix} & = \begin{pmatrix}
+        0 \\ 0
+    \end{pmatrix} \\
+    -x_1 + x_2                & = 0                          \\
+    x_1                       & = x_2
+\end{align*}
+
+por lo tanto, el vector propio asociado a $\lambda_2$ es $v_2 = [x_1,x_1]^T$. La particularidad que tiene es que las componetes no tienen un valor determinado por lo que es necesario elegir el parámetro $x_1$ y en seguida normalizar el vector.
