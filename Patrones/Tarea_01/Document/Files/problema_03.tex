@@ -1,0 +1,27 @@
+\section*{Problema 3}
+
+\textbf{Haz unos pequeños cambios necesarios para demostrar que el segundo vector propio de Cov(X) es la solución del problema de maximizar el cociente bajo la restricción adicional de ser ortogonal primer vector propio.}
+
+Al final del video se obtiene que una solución del problema descrito en la ecuación \ref{eq:definition} es el primer vector propio de Cov(X).
+
+\begin{equation}
+    \underset{||l||}{max} \;\; \frac{l^t Cov(X) l }{l^t l}
+    \label{eq:definition}
+\end{equation}
+
+Realizando un cambio de base a la ecuación \ref{eq:definition}, se obtiene la ecuación \ref{eq:change_basis}.
+
+\begin{equation}
+    \underset{||y||}{max} \;\; \frac{y^t \Lambda y}{y^ty}  \rightarrow \underset{||y||}{max} \;\; \frac{\sum\limits_i \mu_i y_i^2}{\sum\limits_i y_i^2} \label{eq:change_basis}
+\end{equation}
+
+Tomando en cuenta que $\mu_1 \ge \mu_2 \ge \cdots \ge \mu_i$, donde $y_1 = (1,0,\dots,0)$. Entonces se propone que $y_2=(0,1,0,\dots,0)$, esto con el proposito que $y_1$ y $y_2$ sean ortogonales. Usando $y_2$ en la ecuación \ref{eq:change_basis}, se obtiene que una solución es $\mu_2$, el cual es el segundo eigenvalor de la matriz Cov(X). Devolviendo a la base original a $y_2$ se obtiene que:
+
+\begin{align*}
+    y_2   & = U^t l_2  \\
+    U y_2 & = UU^t l_2 \\
+    U y_2 & = l_2      \\
+    u_2   & = l_2
+\end{align*}
+
+donde $u_2$ es el segundo eigenvector de la matriz Cov(X) el cual es ortogonal a $u_1$.
