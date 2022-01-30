@@ -13,6 +13,7 @@
 *.bl
 *.bbl
 *.blg
+Rplots.pdf
 .vscode/
 build/
 .ipynb_checkpoints/
