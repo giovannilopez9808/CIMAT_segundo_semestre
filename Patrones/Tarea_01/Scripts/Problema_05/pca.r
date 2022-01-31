@@ -10,4 +10,6 @@ pca <- princomp(data_pca,
 )
 print(summary(pca))
 print(pca$loadings)
-biplot(pca$loadings)
+png(file="../../Document/Graphics/heptatlon_pca.png")
+biplot(pca)
+dev.off()
