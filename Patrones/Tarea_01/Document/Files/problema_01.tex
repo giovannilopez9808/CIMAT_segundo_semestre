@@ -1,0 +1,32 @@
+\section*{Problema 01}
+
+\textbf{Para un estudio se mide la temperatura en diferentes partes del cuerpo de una muestra de personas. Un investigador expresa todas las temperaturas en grados Celcius. Otro investigador convierte primero todas estas temperaturas a grados Fahrenheit. ¿Cómo se relacionan sus matrices de covarianza? Si ambos deciden proyectar en la dirección de máxima varianza, ¿obtendrán las mismas direcciones de proyección? Explica tu respuesta de manera formal.}
+
+En la ecuación se muesra la transformación de grados Celcius a Fahrenheit.
+
+\begin{equation}
+    F = \frac{5}{9} C - \frac{160}{9}
+\end{equation}
+
+La cual se puede reducir a una transformación lineal de la forma:
+
+\begin{equation*}
+    Y = a X + b
+\end{equation*}
+
+donde \begin{itemize}
+    \item a es un número real igual a $\dfrac{5}{9}$.
+    \item b es un número real igual a $\frac{-160}{9}$.
+    \item X es un vector con los grados en Celcius.
+    \item Y es un vector con los grados en Fahrenheit.
+\end{itemize}
+
+Entonces, se tiene que:
+
+\begin{align*}
+    Cov(Y_i,Y_j) & = Cov(aX_i+b,aX_j+b) \\
+                 & = Cov(aX_i,aX_j)     \\
+                 & = a^2 Cov(X_i,X_j)
+\end{align*}
+
+Por lo tanto, la relación entre las matrices de covarianzas es proporcional a $\dfrac{25}{81}$. Al ser proporcionales las direcciones de su máxima varianza serán la misma. El cambio se encontrará en los valores propios encontrados.
