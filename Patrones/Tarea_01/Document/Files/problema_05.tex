@@ -44,9 +44,14 @@ En la figura \ref{fig:estandar_points} se visualizan las medidas $m_n$ de cada p
 
 Con la figura \ref{fig:estandar_points} se puede visualizar que atleta es mejor en que prueba y el rendimiento general de cada uno.
 
+\pagebreak
 \textbf{b) Un problema en un heptatlón es cómo convertir los resultados obtenidos en las diferentes pruebas en un puntaje final. Explora la utilidad de PCA usando la proyección de los resultados de las pruebas sobre el primer componente como una alternativa al puntaje final. ¿Cómo se relaciona con el puntaje final oficial? Información sobre cómo se calcula actualmente el puntaje: \href{http://theaftermatter.blogspot.mx/2012/06/maths-of-heptathlon-why-scoring-system.html}{Puntaje heptatlon}.}
+
+La relación entre los puntajes oficiales y los resultados de la primer componente de PCA resulta ser semejante. Algunos puestos logran conservar su posición del tablero. En cambio existen atletas que reducen o aumentan su posición con respecto a la posición en el puntaje oficial. Esto es debido los problemas presentados en el link. Algunas pruebas se ven como si tuvieran una mayor importancia y la diferencia entre el primer puesto y ultimo no siempre es la misma. En la figura \ref{fig:pca} se ve representado los resultados de aplicar PCA a las mediciones de cada atleta en las pruebas tomadas.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=10cm]{Graphics/heptatlon_pca.png}
+    \caption{Resultados de PCA a las pruebas competidas en los olimpicos 2021.}
+    \label{fig:pca}
 \end{figure}
