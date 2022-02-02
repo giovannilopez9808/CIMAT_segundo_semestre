@@ -1,0 +1,38 @@
+\section*{Problema 04}
+
+\textbf{Let $f(r,\theta)$ be $\mathbb{R}^2 \rightarrow \mathbb{R}$ with $r=\sqrt{x^2+y^2}$ and $\theta = arctan(y/x)$. Compute $\frac{\partial f}{\partial x}$ and $\frac{\partial f}{\partial y}$.}
+
+
+Se tiene que una derivada parcial puede escribir como la ecuación \ref{eq:chain_rule_problem4}. Esto debido a la regla de la cadena.
+
+\begin{equation}
+    \dpartial{f}{q} = \dpartial{f}{r}\dpartial{r}{q} + \dpartial{f}{\theta}\dpartial{\theta}{q} \label{eq:chain_rule_problem4}
+\end{equation}
+
+donde $q$ es una variable generalizada que puede ser $x$ o $y$.
+
+Calculando $\dpartial{r}{q}$ y $\dpartial{\theta}{q}$, se obtiene lo siguiente:
+
+\begin{minipage}{0.45\linewidth}
+    \begin{align*}
+        \dpartial{r}{x} & = \frac{x}{\sqrt{x^2+y^2}} \\
+        \dpartial{r}{y} & = \frac{y}{\sqrt{x^2+y^2}}
+    \end{align*}
+\end{minipage}
+\begin{minipage}{0.45\linewidth}
+    \begin{align*}
+        \dpartial{\theta}{x} & = -\frac{y}{x^2+y^2} \\
+        \dpartial{\theta}{y} & = \frac{x}{ x^2+y^2}
+    \end{align*}
+\end{minipage}
+
+Por lo tanto, $\dpartial{f}{x}$ y $\dpartial{f}{y}$ es:
+
+\begin{equation*}
+    \dpartial{f}{x} = \dpartial{f}{r}\frac{x}{\sqrt{x^2+y^2}} - \dpartial{f}{\theta} \frac{y}{x^2+y^2}
+\end{equation*}
+
+
+\begin{equation*}
+    \dpartial{f}{y} = \dpartial{f}{r}\frac{y}{\sqrt{x^2+y^2}} + \dpartial{f}{\theta} \frac{x}{x^2+y^2}
+\end{equation*}

@@ -1,0 +1,51 @@
+\section*{Problema 07}
+
+\textbf{Let $f,g,h$ be differentiable functions, with $f: \mathbb{R}^n \rightarrow \mathbb{R}^3, g: \mathbb{R}^n \rightarrow \mathbb{R}^3$ and $h: \mathbb{R}^n \rightarrow \mathbb{R}$}
+
+\begin{equation*}
+    h(x) = f(x)^Tg(x)
+\end{equation*}
+
+\textbf{show that}
+
+\begin{equation*}
+    Dh(x) = f(x)^TDg(x)+g(x)^TDf(x)
+\end{equation*}
+
+Se tiene que:
+
+\begin{equation*}
+    h(x) = \begin{bmatrix}
+        f_1 & f_2 & f_3
+    \end{bmatrix} \begin{bmatrix}
+        g_1 \\ g_2 \\ g_3
+    \end{bmatrix}
+\end{equation*}
+
+donde $f_i,g_i$ son funciones que van de $\mathbb{R}^n\rightarrow \mathbb{R}$. Calculando el producto de matrices se obtiene que la función h es:
+
+\begin{equation*}
+    h(x) = f_1g_1 + f_2g_2 +f_3g_3
+\end{equation*}
+
+Calculando $Dh$ se obtiene que:
+
+\begin{align*}
+    Dh(x) & = D( f_1g_1 + f_2g_2 +f_3g_3)                                    \\
+          & = D(f_1g_1) + D(f_2g_2) +D(f_3g_3)                               \\
+          & = f_1 Dg_1 + g_1 Df_1 + f_2 Dg_2 + g_2 Df_2 + f_3Dg_3 + g_3 Df_3 \\
+          & = g_1 Df_1 + g_2 Df_2 + g_3 Df_3 +f_1 Dg_1 + f_2 Dg_2 + f_3 Dg_3 \\
+          & = \begin{bmatrix}
+        g_1 & g_2 & g_3
+    \end{bmatrix}
+    \begin{bmatrix}
+        Df_1 \\ Df_2 \\ Df_3
+    \end{bmatrix} +
+    \begin{bmatrix}
+        f_1 & f_2 & f_3
+    \end{bmatrix}
+    \begin{bmatrix}
+        Dg_1 \\ Dg_2 \\ Dg_3
+    \end{bmatrix}                                                \\
+    Dh(x) & = g^T Df + f^T Dg
+\end{align*}
