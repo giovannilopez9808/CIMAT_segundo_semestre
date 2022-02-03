@@ -1,0 +1,60 @@
+\section*{Problema 03}
+
+\textbf{Compute the gradient of}
+
+\begin{equation*}
+    f(\theta) = \frac{1}{2} \sum_{i=1}^n [g(x_i)-g(Ax_i+b)]^2
+\end{equation*}
+
+\textbf{with respect to $\theta$, where $\theta=[a_{11},a_{12},a_{21},a_{22},b_1,b_2]^T$, $x_i \in \mathbb{R}^2$ are defined as follows:}
+
+\begin{equation*}
+    A = \begin{pmatrix}
+        a_{11} & a_{12} \\
+        a_{21} & a_{22}
+    \end{pmatrix} \qquad
+    b= [b_1,b_2]^T
+\end{equation*}
+
+\textbf{and $g: \mathbb{R}^2 \rightarrow \mathbb{R} \in C^1$.}
+
+Calculando la derivada de f con respecto $\theta$ se obtiene lo siguiente:
+
+\begin{align*}
+    \dd{f}{\theta} & = \dd{}{\theta}\left ( \frac{1}{2} \sum_i \left [ g(x_i)-g(Ax_i+b)\right ]^2\right )                                 \\
+                   & = \frac{1}{2} \sum_i \dd{}{\theta} \left [ g(x_i)-g(Ax_i+b)\right ]^2                                                \\
+                   & = \frac{1}{2} \sum_i 2 \left [ g(x_i)-g(Ax_i+b)\right ] \dd{}{\theta} \left ( g(x_i)-g(Ax_i+b) \right )              \\
+                   & = \frac{1}{2} \sum_i 2 \left [ g(x_i)-g(Ax_i+b)\right ] \left ( \dd{g(x_i)}{\theta} - \dd{g(Ax_i+b)}{\theta}\right )
+\end{align*}
+
+La derivada de $g(x_i)$ con respecto $\theta$ es igual a cero, ya que la función no depende de los elemento de la matriz A o el vector b. Calculando la derivada de $g(Ax_i+b)$ con respecto $\theta$ se obtiene que:
+
+\begin{align*}
+    \dd{g(Ax_i+b)}{\theta} & = \dd{g(Ax_i+b)}{(Ax_i+b)} \dpartial{Ax_i+b}{\theta} \\
+    \dd{g(Ax_i+b)}{\theta} & = \dd{g(Ax_i+b)}{(Ax_i+b)} \begin{pmatrix}
+        x_{i_1} & x_{i_2} & 0       & 0       & 1 & 0 \\
+        0       & 0       & x_{i_1} & x_{i_2} & 0 & 1
+    \end{pmatrix}
+\end{align*}
+
+por lo tanto, la derivada de f con respecto a $\theta$ es:
+
+\begin{equation*}
+    \dd{f}{\theta} = -\sum_i \left [ g(x_i)-g(Ax_i+b)\right ] \left ( \dd{g(Ax_i+b)}{(Ax_i+b)} \right ) \begin{pmatrix}
+        x_{i_1} & x_{i_2} & 0       & 0       & 1 & 0 \\
+        0       & 0       & x_{i_1} & x_{i_2} & 0 & 1
+    \end{pmatrix}
+\end{equation*}
+
+como $\nabla F = Df^T$, entonces, el gradiente de f con respecto $\theta$ es:
+
+\begin{equation*}
+    \nabla f(\theta) = - \sum_i \left [ g(x_i)-g(Ax_i+b)\right ]  \begin{pmatrix}
+        x_{i_1} & 0       \\
+        x_{i_2} & 0       \\
+        0       & x_{i_1} \\
+        0       & x_{i_2} \\
+        1       & 0       \\
+        0       & 1
+    \end{pmatrix} \left ( \dd{g(Ax_i+b)}{(Ax_i+b)} \right )
+\end{equation*}

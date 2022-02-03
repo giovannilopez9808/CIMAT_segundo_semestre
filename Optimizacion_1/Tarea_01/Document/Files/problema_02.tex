@@ -1,0 +1,41 @@
+\section*{Problema 02}
+
+\textbf{Consider the function $f(x)=(a^Tx)(b^Tx)$, where a, b and x are n-dimensional vectors. Compute the gradient $\nabla f(x)$ and the Hessian $\nabla^2 f(x)$.}
+
+Se tiene que:
+
+\begin{equation*}
+    f(x)  =  (a^Tx)(b^Tx)
+\end{equation*}
+
+como $a,b$ y $x$ son vectores, entonces se puede hacer el cambio de $a^T x = x^Ta$, entonces la función $f(x)$ es:
+
+\begin{equation*}
+    f(x)  =  (x^Ta)(b^Tx)
+\end{equation*}
+
+Calculando la derivada de f con respecto a x, se obtiene que:
+
+\begin{equation*}
+    \dd{f}{x} = \dd{(a^Tx)(b^Tx)}{x}
+\end{equation*}
+
+aplicando la regla de la cadena de tal manera que $f(x)=h^T(x)g(x)$, entonces $h(x)=x^Ta$ y $g(x)=b^Tx$. Por ende:
+
+\begin{align*}
+    \dd{f}{x} & = h^T(x)\dd{g}{x} + g^T(x) \dd{h}{x} \\[3pt]
+    \dd{f}{x} & = a^Tx(b^T) + x^Tb(a^T)              \\[3pt]
+    \dd{f}{x} & = x^Tab^T + x^Tba^T
+\end{align*}
+
+como $\nabla f = Df^T$, entonces, el gradiente de f es:
+
+\begin{equation*}
+    \nabla f(x) = (ba^T+ab^T)x
+\end{equation*}
+
+Calculando $\nabla^2 f(x)$ se obtiene que es igula a:
+
+\begin{equation*}
+    \nabla^2 f(x)= ba^T+ab^T
+\end{equation*}
