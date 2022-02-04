@@ -18,3 +18,25 @@
 \begin{equation*}
     ||AB||_p \le ||A||_p ||B||_p
 \end{equation*}
+
+Se tiene que:
+
+\begin{equation*}
+    ||AB||_p  = \underset{x\neq 0}{max} \frac{||AB_x||_p}{||x||_p}
+\end{equation*}
+
+Como A,B se encuentran en un espacio de $\mathbb{R}^{n\times n}$ y x en $\mathbb{R}^n$. Entonces se cumplen las desigualdades de Cauchy-Schwarz. Agrupuando al término Bx se obtiene lo siguiente:
+
+\begin{align*}
+    \underset{x\neq 0}{max} \frac{||AB_x||_p}{||x||_p} & = \underset{x\neq 0}{max} \frac{||A(B_x)||_p}{||x||_p}               \\
+                                                       & \leq \underset{x\neq 0}{max} \frac{||A||_p||B_x||_p}{||x||_p}        \\
+                                                       & \leq \underset{x\neq 0}{max} \frac{||A||_p ||B||_p ||x||_p}{||x||_p} \\
+                                                       & \leq \underset{x\neq 0}{max} ||A||_p ||B||_p                         \\
+                                                       & \leq ||A||_p ||B||_p
+\end{align*}
+
+por lo tanto
+
+\begin{equation*}
+    ||AB||_p \le ||A||_p ||B||_p
+\end{equation*}
