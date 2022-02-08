@@ -1,0 +1,40 @@
+\section*{Problema 08}
+
+\textbf{Let $A \in R^{n\times n}$ be a real symmetric matrix. Show that}
+
+\begin{equation*}
+    max\{ x^TAx: ||x||=1\}=\lambda_{max}(A)
+\end{equation*}
+
+Realizando una descomposición SVD a la matriz A, se obtiene que es igual a:
+
+\begin{equation*}
+    A = U^TDU
+\end{equation*}
+
+donde U es una matriz que contiene a los eigenvectores de A y D es una matriz diagonal que contiene en su diagonal los eigenvalores de A. Entonces:
+
+\begin{align*}
+    x^TAx & = x^TU^T A Ux \\
+          & = (Ux)^T A Ux
+\end{align*}
+
+La operación $Ux$ representa un cambio de base, dando asi que $Ux\rightarrow y$, por ende:
+
+\begin{align*}
+    x^TAx & = y^TDy                       \\
+          & = \sum_i \lambda_i y_i^2      \\
+          & = \sum_i \lambda_i (U_ix_i)^2
+\end{align*}
+
+ordenando los eigenvalores de tal manera que $\lambda_1 > \lambda_2 > \dots > \lambda_n$, entonces
+
+
+\begin{align*}
+    x^TAx      & =\sum_i \lambda_i (U_ix_i)^2     \\
+               & \leq \lambda_1 \sum_i (U_ix_i)^2 \\
+               & \leq \lambda_1 ||x||^2           \\
+               & \leq \lambda_1                   \\
+    max(x^TAx) & = \lambda_1                      \\
+    max(x^TAx) & = \lambda_{max}
+\end{align*}

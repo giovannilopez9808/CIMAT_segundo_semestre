@@ -1,0 +1,83 @@
+\section*{Problema 04}
+
+\textbf{Compute the stationary points of $f(x,y)=\frac{3x^4-4x^3-12x^2+18}{12(1+4y^2)}$ and determine their corresponding type (ie: minimum, maximum or saddle point)}
+
+Para obtener los valors críticos de $f(x,y)$ tenemos que calcular el gradiente del mismo. Calculando la derivada parcial con respecto a x de la función $f(x,y)$ se obtiene lo siguiente:
+
+\begin{align*}
+    \dpartial{f(x,y)}{x} & = \dpartial{}{x} \left (\frac{3x^4-4x^3-12x^2+18}{12(1+4y^2)} \right ) \\
+    \dpartial{f(x,y)}{x} & = \frac{12x^3-12x^2-24x}{12(1+4y^2)}
+\end{align*}
+
+Calculando la derivada parcial con respecto a y de la función $f(x,y)$ se obtiene lo siguiente:
+
+\begin{align*}
+    \dpartial{f(x,y)}{y} & = \dpartial{}{x} \left (\frac{3x^4-4x^3-12x^2+18}{12(1+4y^2)} \right ) \\
+    \dpartial{f(x,y)}{y} & = \frac{-(8y)(3x^4-4x^3-12x^2+18)}{12(1+4y^2)^2}
+\end{align*}
+
+Como los puntos críticos son aquellos tal que $\nabla f(x^*,y^*)=0$, se tiene que:
+
+\begin{align*}
+    \dpartial{f(x,y)}{x}               & =0   \\
+    \frac{12x^3-12x^2-24x}{12(1+4y^2)} & = 0  \\
+    12x^3-12x^2-24x                    & = 0  \\
+    12x(x-2)(x+1)                      & = 0  \\
+    x_1                                & =0   \\
+    x_2                                & = 2  \\
+    x_3                                & = -1
+\end{align*}
+
+\begin{align*}
+    \dpartial{f(x,y)}{y}                           & = 0 \\
+    \frac{-(8y)(3x^4-4x^3-12x^2+18)}{12(1+4y^2)^2} & = 0 \\
+    8y = 0                                               \\
+    y = 0
+\end{align*}
+
+Entonces, se obtiene los siguientes puntos críticos.
+
+\begin{align*}
+    P_1 & (0, 0)  \\
+    P_2 & (2, 0)  \\
+    P_3 & (-1, 0)
+\end{align*}
+
+Calculando el Hessiano de $f(x,y)$ se obtiene lo siguiente:
+
+\begin{align*}
+    \ddpartial{f(x,y)}{x} & =  \dpartial{}{x} \left ( \frac{12x^3-12x^2-24x}{12(1+4y^2)}\right ) \\
+    \ddpartial{f(x,y)}{x} & = \frac{36x^2-24x-24}{12(1+4y^2)}
+\end{align*}
+
+\begin{align*}
+    \ddpartial{f(x,y)}{y} & =  \dpartial{}{x} \left ( \frac{-(8y)(3x^4-4x^3-12x^2+18)}{12(1+4y^2)^2}\right ) \\
+    \ddpartial{f(x,y)}{x} & = \frac{(8)(3x^4-4x^3-12x^2+18)}{12}\left (\frac{4y^2-1}{(4y^2+1)^2} \right )
+\end{align*}
+
+\begin{align*}
+    \dpartial{^2 f(x,y)}{x\partial y} & =  \dpartial{^2 f(x,y)}{y\partial x}                                            \\
+                                      & = \dpartial{}{x} \left (\dpartial{f(x,y)}{y} \right )                           \\
+                                      & = \dpartial{}{x} \left ( \frac{-(8y)(3x^4-4x^3-12x^2+18)}{12(1+4y^2)^2}\right ) \\
+    \dpartial{^2 f(x,y)}{x\partial y} & = \frac{-(8y)(12x^3-12x^2-24)}{12(1+4y^2)^2}
+\end{align*}
+
+Se evaluara $\nabla^2f(x,y)$ para describir si se trata de un punto silla, mínimo o máximo de la función. En la tabla \ref{table:problema4} se muestran los resultados obtenidos.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{llcccc} \hline
+        x  & y & $\partial_{xx} f(x,y)$ & $\partial_{yy} f(x,y)$ & $\partial_x\partial_y f(x,y)$ & $|\nabla^2 f(x,y)|$ \\ \hline
+        0  & 0 & -2                     & -12                    & 0                             & 24                  \\
+        2  & 0 & 6                      & 9.3334                 & 0                             & 56                  \\
+        -1 & 0 & 3                      & -8.6667                & 0                             & -26                 \\ \hline
+    \end{tabular}
+    \caption{Resultados de las segundas derivadas parciales de la función $f(x,y)$ evaluadas en sus puntos críticos.}
+    \label{table:problema4}
+\end{table}
+
+Un punto es punto silla si $|\nabla^2 f(x,y)|<0$, por lo tanto, el punto $(-1,0)$ representa un punto silla.
+
+Un punto es un máximo si $|\nabla^2 f(x,y)|>0$ y $\partial_{xx} f(x,y)<0$, por lo tanto el punto $(0,0)$ es un punto máximo.
+
+Un punto es un mínimo si $|\nabla^2 f(x,y)|>0$ y $\partial_{xx} f(x,y)>0$, por lo tanto el punto $(2,0)$ es un punto mínimo.

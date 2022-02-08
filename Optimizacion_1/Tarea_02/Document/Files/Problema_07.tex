@@ -1,0 +1,29 @@
+\section*{Problema 07}
+
+\textbf{Show, without using the optimality conditions, that $f(x)>f(x^*)$ for all $x \neq x^*$ if}
+
+\begin{equation*}
+    f(x) = \frac{1}{2}x^TQx-b^Tx
+\end{equation*}
+
+\textbf{$Q=Q^T \succ 0$ and $Qx^*=b$.}
+
+
+Se tiene que $x  \rightarrow x +x^*-x^* = x^* + (x-x^*)$, entonces:
+\changefontsizes{10pt}
+\begin{align*}
+    f(x^*+(x-x^*)) & = \frac{1}{2}(x^*+(x-x^*))^T Q (x^*+(x-x^*)-b^T(x-x^*)                                                        \\
+                   & =\frac{1}{2}\left (x^{*T}Qx^* +(x-x^*)^TQx^*+x^{*T}Q(x-x^*) + (x-x^*)^T Q (x-x^*)\right )-b^Tx^*-b^T(x-x^*)^T \\
+                   & = \frac{1}{2} x^{*T}Qx^*  - b^Tx^* + (x-x^*)^TQx^* + \frac{1}{2} (x-x^*)^T Q (x-x^*) -b^T(x-x^*)^T            \\
+                   & =f(x^*)+(x-x^*)^TQx^* + \frac{1}{2} (x-x^*)^T Q (x-x^*) -b^T(x-x^*)^T                                         \\
+                   & =f(x^*)+(x-x^*)^T(Qx^*-b) + \frac{1}{2} (x-x^*)^T Q (x-x^*)                                                   \\
+    f(x)           & =f(x^*)+\frac{1}{2} (x-x^*)^T Q (x-x^*)
+\end{align*}
+
+Como Q es una matriz simetrica con eigenvalores positivos, entonces también es definida positiva. $(x-x^*)$ es un vector, entonces $(x-x^*)^T Q (x-x^*)>0$, por lo tanto:
+
+\begin{align*}
+    f(x) & = f(x^*)+\frac{1}{2} (x-x^*)^T Q (x-x^*) \\
+    f(x) & > f(x^*)
+\end{align*}
+\normalsize
