@@ -1,3 +1,29 @@
 \section*{Problema 02}
 
 \textbf{Suppose that $f(x)=o(g(x))$. Show that $f(x) = O(g(x))$. Tip: Show that for any given $\epsilon > 0$, there exists $\delta> 0$ such that if $0 < ||x||< \delta$, then $|f(x)|< \epsilon|g(x)|$.}
+
+Se tiene que:
+
+\begin{equation*}
+    f(x) \in o(g(x)) \rightarrow \limit{x}{0} \frac{f(x)}{g(x)} =0
+\end{equation*}
+
+eso con lleva a que para un $\epsilon > 0 $ existe un $\delta > 0 $ y tal que
+
+\begin{equation*}
+    \left|\frac{f(x)}{g(x)} \right| < \epsilon  \qquad ||x||< \delta
+\end{equation*}
+
+Por ende
+
+\begin{align*}
+    \left|\frac{f(x)}{g(x)} \right| & < \left|\frac{f(x)}{g(x)} - L\right| + |L| \\
+                                    & < \epsilon^* + |L|                         \\
+                                    & \equiv \epsilon
+\end{align*}
+
+por lo tanto:
+
+\begin{equation*}
+    |f(x)| < \epsilon |g(x)|  \qquad \forall ||x|| < \delta
+\end{equation*}

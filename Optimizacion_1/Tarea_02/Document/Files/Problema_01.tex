@@ -1,3 +1,25 @@
 \section*{Problema 01}
 
 \textbf{Show that $x-sinx = o(x^2)$, as $x\rightarrow 0$}
+
+Realizando el límite cuando $x\rightarrow 0$ de $f(x)=\frac{x-sinx}{x^2}$, se obtiene lo siguente:
+
+\begin{align*}
+    \underset{x\rightarrow 0}{lim} f(x) & = \underset{x\rightarrow 0}{lim} \frac{x-sinx}{x^2}
+\end{align*}
+
+aplicando L'Hopital a este límite se encuentra que:
+
+\begin{align*}
+    \underset{x\rightarrow 0}{lim} \;f(x) & = \underset{x\rightarrow 0}{lim} \;\;\frac{x-sinx}{x^2} \\
+                                          & = \underset{x\rightarrow 0}{lim} \;\;\frac{1-cosx}{x}   \\
+                                          & = \underset{x\rightarrow 0}{lim} \;\;sinx               \\
+    \underset{x\rightarrow 0}{lim} \;f(x) & =
+\end{align*}
+
+
+como obtenemos que el límite cuando $x\rightarrow 0$ de $f(x)$ tiende a 0, entonces
+
+\begin{equation*}
+    x-sinx \in o(x^2)
+\end{equation*}s

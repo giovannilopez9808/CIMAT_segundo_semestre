@@ -1,3 +1,38 @@
 \section*{Problema 03}
 
 \textbf{Show that if functions $f : R^n \rightarrow R$ and $g : R^n \rightarrow R$ satisfy $f (x) = -g(x) + o(g(x))$ and $g(x) > 0$ for all $x \neq 0$, then for all $x \neq 0$ sufficiently small, we have $f (x) < 0$.}
+
+Siguiendo la definición de la notació o pequeña, se tiene que:
+
+\begin{equation*}
+    o(g(x)) = \limit{x}{0} \frac{h(x)}{g(x)}
+\end{equation*}
+
+entonces podemos definir que $h(x)=g(x)e(x)$, donde
+
+\begin{equation*}
+    \limit{x}{0} e(x) =0
+\end{equation*}
+
+Con esto, la función $f(x)$ puede ser escrita de la siguiente manera:
+
+\begin{align*}
+    f(x) & = -g(x) + e(x)g(x) \\
+    f(x) & =  g(x) (e(x)-1)
+\end{align*}
+
+Calculando el límite cuando $f(x)$ tiende a cero, se obtiene lo siguiente:
+
+\begin{align*}
+    \limit{x}{0} f(x) & = \limit{x}{0} g(x) (e(x)-1)                                          \\
+                      & =\limit{x}{0} g(x) \limit{x}{0} (e(x)-1)                              \\
+                      & =\limit{x}{0} g(x) \left (\limit{x}{0} e(x) - \limit{x}{0} -1\right ) \\
+                      & =\limit{x}{0} g(x) \left (-1\right )
+\end{align*}
+
+como $g(x)>0 \forall x\neq 0$, entonces, se puede obtener el límite cuando x tiende a 0 es positivo, por lo tanto:
+
+\begin{align*}
+    \limit{x}{0} f(x) & = \lim{x}{0} -g(x) \\
+    \limit{x}{0} f(x) & <0
+\end{align*}
