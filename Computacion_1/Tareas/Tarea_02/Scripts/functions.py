@@ -461,17 +461,25 @@ def obtain_corpus_emotions(document: list, word_emotions: dict) -> list:
 
 
 def obtain_parameters() -> dict:
+    """
+    Obtiene las rutas y nombres de los archivos que seran usados
+    """
     parameters = {
+        # Ruta de los archivos
         "path data": "../Data/",
+        # Archivos de entrenamiento
         "train": {
             "data": "mex_train.txt",
             "labels": "mex_train_labels.txt"
         },
+        # Archivos de validacion
         "validation": {
             "data": "mex_val.txt",
             "labels": "mex_val_labels.txt"
         },
+        # Archivo de EmoLex
         "EmoLex": "emolex.txt",
+        # Archivo de SEL
         "SEL": "SEL.txt",
         "max words": 5000,
         "max bigrams": 1000,
@@ -480,6 +488,9 @@ def obtain_parameters() -> dict:
 
 
 def load_data(parameters: dict) -> tuple:
+    """
+    Lectura de los datos de entrenamiento y validacion
+    """
     # Definicion de las rutas de cada archivo de datos y validacion
     path_data_tr = join_path(
         parameters["path data"],
@@ -497,11 +508,12 @@ def load_data(parameters: dict) -> tuple:
         parameters["path data"],
         parameters["validation"]["labels"],
     )
-    # Lectura de las oraciones y etiquetas de los datos de entrenamiento y validacion
+    # Lectura de las oraciones y etiquetas de los datos de entrenamiento
     data_tr, labels_tr = get_texts_from_file(
         path_data_tr,
         path_label_tr,
     )
+    # Lectura de las oraciones y etiquetas de los datos de validación
     data_val, labels_val = get_texts_from_file(
         path_data_val,
         path_label_val,
@@ -510,10 +522,14 @@ def load_data(parameters: dict) -> tuple:
 
 
 def load_emolex_data(parameters: dict, data_tr: list, data_val: list) -> tuple:
+    """
+    Lectura del dataset de EmoLex
+    """
     emolex_path = join_path(
         parameters["path data"],
         parameters["EmoLex"],
     )
+    # Carga de la bolsa de emociones
     words_emotions = build_BoE_from_EmoLex(emolex_path)
     data_tr_emolex_emotions = obtain_corpus_emotions(
         data_tr,
@@ -527,10 +543,14 @@ def load_emolex_data(parameters: dict, data_tr: list, data_val: list) -> tuple:
 
 
 def load_sel_data(parameters: dict, data_tr: list, data_val: list) -> tuple:
+    """
+    Lectura del dataset de SEL
+    """
     sel_path = join_path(
         parameters["path data"],
         parameters["SEL"],
     )
+    # Carga de la bolsa de emociones de SEL
     words_emotions, scores = build_BoE_from_SEL(sel_path)
     data_tr_sel_emotions = obtain_corpus_emotions(
         data_tr,
@@ -544,6 +564,9 @@ def load_sel_data(parameters: dict, data_tr: list, data_val: list) -> tuple:
 
 
 def print_results(results: list) -> None:
+    """
+    Impresion estandarizada de los resultados
+    """
     print(
         tabulate(
             results,
