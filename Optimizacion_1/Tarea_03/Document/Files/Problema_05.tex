@@ -5,3 +5,56 @@
 \begin{equation*}
     f(x_1,x_2) = a^3x_1 e^{x_2} +2a^2log(x_1+x_2)-(a+2)x_1 +8ax_2 +16x_1x_2
 \end{equation*}
+
+Calculando las derivadas parciales con respecto a $x_1$ y $x_2$ se obtiene lo siguiente:
+
+\begin{align*}
+    \dpartial{f}{x_1} & = a^3 e^{x_2} + \frac{2a^2}{x_1+x_2} - (a+2)+16x_2 \\
+    \dpartial{f}{x_2} & = \frac{2a^2}{x_1+x_2} +8a +16x_1 +a^3x_1e^{x_2}
+\end{align*}
+
+Evaluando en $(1,0)$, se obtiene lo siguiente:
+
+\begin{align*}
+    \dpartial{f(1,0)}{x_1} & = a^3+2a^2-a-2   \\
+    \dpartial{f(1,0)}{x_2} & = a^3+2a^2+8a+16
+\end{align*}
+
+Encontrando los valores de a tal que $\dpartial{f(1,0)}{x_i} = 0$, se obtiene lo siguiente:
+
+\begin{align*}
+    \dpartial{f(1,0)}{x_1} & = 0       \\
+    a^3+2a^2-a-2           & = 0       \\
+    (a+2)(a-1)(a+1)        & = 0       \\
+    a                      & = -2,-1,1 \\
+    \dpartial{f(1,0)}{x_2} & = 0       \\
+    a^3+2a^2+8a+16         & = 0       \\
+    (a+2)(a^2+8)           & = 0       \\
+    a=-2
+\end{align*}
+
+por lo tanto el único valor posible es $a=-2$. Calcuando el Hessiano de $f$, se obtiene lo siguiente:
+
+\begin{align*}
+    \ddpartial{f}{x_1}              & = -\frac{2a^2}{(x_1+x_2)^2}                 \\
+    \ddpartial{f}{x_2}              & = -\frac{2a^2}{(x_1+x_2)^2} + a^3x_1e^{x_2} \\
+    \dpartial{^2f}{x_1\partial x_2} & = - \frac{2a^2}{(x_1+x_2)^2} +16+a^3e^{x_2}
+\end{align*}
+
+Evaluandolas en $(1,0)$, se obtiene lo siguiente:
+
+\begin{align*}
+    \ddpartial{f(1,0)}{x_1}              & = -2a^2          \\
+    \ddpartial{f(1,0)}{x_2}              & = -2a^2+ a^3     \\
+    \dpartial{^2f(1,0)}{x_1\partial x_2} & = - 2a^2 +16+a^3
+\end{align*}
+
+Por lo que usando $a=-2$, se tiene que:
+
+\begin{align*}
+    \ddpartial{f(1,0)}{x_1}              & = -8  \\
+    \ddpartial{f(1,0)}{x_2}              & = -16 \\
+    \dpartial{^2f(1,0)}{x_1\partial x_2} & = 0
+\end{align*}
+
+Por lo tanto $\nabla^2 f(1,0) = 128 > 0$, por lo que $(1,0)$ es un punto máximo con $a=-2$.
