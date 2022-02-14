@@ -7,3 +7,18 @@
 \end{equation*}
 
 \textbf{is convex if $g_i: \mathbb{R} \rightarrow \mathbb{R}$ are convex.}
+
+Comprobando que $f(\alpha x_1 + (1-\alpha)x_2) \leq \alpha f(x_1) + (1-\alpha)f(x_2)$, se obtiene lo siguiente:
+
+\begin{align*}
+    f(\alpha x_1 + (1-\alpha)x_2) & = log \left ( \sum exp(g_i(\alpha x_1 + (1-\alpha)x_2)) \right )                                      \\
+                                  & \leq log \left (\sum exp(\alpha g_i(x_1)+(1-\alpha)g_i(x_2))\right )                                  \\
+                                  & \leq log \left (\sum exp(\alpha g_i(x_1))exp((1-\alpha)g_i(x_2))\right )                              \\
+                                  & \leq log \left (\sum exp(\alpha g_i(x_1)\sum exp((1-\alpha)g_i(x_2)))\right )                         \\
+                                  & \leq log \left (\sum exp(\alpha g_i(x_1))\right ) + log \left (\sum exp((1-\alpha)g_i(x_2))\right )   \\
+                                  & \leq log \left (\sum exp(g_i(x_1)) \right )^\alpha + log \left (\sum exp(g_i(x_2))\right )^{1-\alpha} \\
+                                  & \leq \alpha log \left (exp(g_i(x_1)) \right ) + (1-\alpha) log \left (\sum exp(g_i(x_2))\right )      \\
+    f(\alpha x_1 + (1-\alpha)x_2) & \leq \alpha f(x_1) + (1-\alpha)f(x_2)
+\end{align*}
+
+por lo tanto $f$ es convexa.
