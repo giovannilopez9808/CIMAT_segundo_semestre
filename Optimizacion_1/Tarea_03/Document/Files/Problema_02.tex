@@ -7,3 +7,43 @@
 \end{equation*}
 
 \textbf{always holds.}
+
+Como $\lambda_1 + \lambda_2 = 1$, entonces $\lambda_1 = 1- \lambda_2$. Por ende, se puede obtener lo siguiente:
+
+\begin{align*}
+    \lambda_1 = 1- \lambda_2 \geq 1
+\end{align*}
+
+Tomando
+
+\begin{align*}
+    0 <       & \lambda_1 \leq 1 \qquad   \\
+    1 \geq    & \frac{1}{\lambda_1} > 0   \\
+    -1 \leq   & -\frac{1}{\lambda_1} < 0  \\
+    0 \leq  1 & - \frac{1}{\lambda_1} < 1
+\end{align*}
+
+Con eso podemos tomar la siguiente operación:
+
+\begin{align*}
+    \frac{1}{\lambda} (\lambda_1 x_1 + \lambda_2 x_2) + \left (1-\frac{1}{\lambda} \right ) x_2 & = x_1 + \frac{\lambda_2}{\lambda_1} x_2 + x_2 - \frac{1}{\lambda_1} x_2 \\
+                                                                                                & = x_1 +x_2 + \left (\frac{\lambda_2-1}{\lambda_1} \right ) x_2          \\
+                                                                                                & = x_1 +x_2 - \frac{\lambda_1}{\lambda_1} x_2                            \\
+                                                                                                & = x_1
+\end{align*}
+
+entonces
+
+\begin{align*}
+    f(x_1)                              & = f\left ( \frac{1}{\lambda} (\lambda_1 x_1 + \lambda_2 x_2) + \left (1-\frac{1}{\lambda} \right ) x_2\right ) \\
+                                        & \leq \frac{1}{\lambda} f(\lambda_1 x_1 + \lambda_2 x_2) + \left (1 - \frac{1}{\lambda_1} \right ) f(x_2)       \\
+                                        & \leq \frac{1}{\lambda_1} f(\lambda_1 x_1 + \lambda_2 x_2) - \frac{\lambda_2}{\lambda_1} f(x_2)                 \\
+    \lambda_1 f(x_1)                    & \leq f(\lambda_1 x_1 + \lambda_2 x_2) - \lambda_2 f(x_2)                                                       \\
+    \lambda_1 f(x_1) + \lambda_2 f(x_2) & \leq f(\lambda_1 x_1 + \lambda_2 x_2)
+\end{align*}
+
+por lo tanto:
+
+\begin{equation*}
+    f(\lambda_1 x_1 + \lambda_2 x_2) \geq \lambda_1 f(x_1) + \lambda_2 f(x_2)
+\end{equation*}
