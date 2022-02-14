@@ -1,3 +1,25 @@
 \section*{Problema 06}
 
 \textbf{Consider the sequence $x_k = 1 + 1/k!, k = 0, 1,\dots.$ Does this sequence converge linearly to 1? Justify your response.}
+
+Calculando el límite cuando $k\rightarrow \infty$ de $x_k$ se obtiene lo siguiente:
+
+\begin{align*}
+    \limit{k}{\infty} x_k & = \limit{k}{\infty} \left (1+ \frac{1}{k!}\right )     \\
+                          & = \limit{k}{\infty} 1 + \limit{k}{\infty} \frac{1}{k!} \\
+                          & = 1 + 0                                                \\
+                          & = 1
+\end{align*}
+
+
+Comprobando que converge de forma lineal, se obtiene lo siguiente:
+
+\begin{align*}
+    \limit{k}{\infty} \frac{||x_{k+1}-1||}{||x_k-1||} & = \limit{k}{\infty} \frac{||1+\frac{1}{(k+1)!}-1||}{||1+\frac{1}{k!}-1||} \\
+                                                      & = \limit{k}{\infty} \frac{\frac{1}{(k+1)!}}{\frac{1}{k!}}                 \\
+                                                      & = \limit{k}{\infty} \frac{k!}{(k+1)!}                                     \\
+                                                      & = \limit{k}{\infty} \frac{1}{k+1}                                         \\
+                                                      & = 0
+\end{align*}
+
+por lo tanto la sucesión $x_k$ converge linealmente a 1.
