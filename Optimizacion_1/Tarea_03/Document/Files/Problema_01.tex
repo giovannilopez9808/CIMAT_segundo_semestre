@@ -1,3 +1,31 @@
 \section*{Problema 01}
 
 \textbf{Is the set $S =\{a \in \mathbb{R}^K | p(0)=1, |p(t)|\leq 1 for t \in [\alpha,\beta]\}$ where $p(t)=a_1 +a_2t +\dots+a_kt^{k-1}$ convex?}
+
+La función $p$, se puede escribir de la siguiente manera:
+
+\begin{equation*}
+    p(t) = A^tX
+\end{equation*}
+
+donde $A$ y $X$ son vectores donde el primer elemento es 1. Esto es debido a que $p(0)=1$.
+
+Sean $a,b \in S$ y $\alpha \in [0,1]$, entonces
+
+\begin{align*}
+    P(\alpha a + (1-\alpha)b) & = (\alpha A^t + (1-\alpha)B^t) T \\
+                              & = \alpha A^t T + (1-\alpha) B^tT \\
+    P(\alpha a + (1-\alpha)b) & =  \alpha P(A) + (1-\alpha) P(B)
+\end{align*}
+
+Calculando $|P(\alpha a + (1-\alpha)b)|$, se obtiene lo siguiente:
+
+\begin{align*}
+    |P(\alpha a + (1-\alpha)b)| & = |\alpha P(A) + (1-\alpha) P(B)|      \\
+                                & \leq |\alpha P(A)| + |(1-\alpha) P(B)| \\
+                                & \leq \alpha |P(A)| + (1-\alpha) |P(B)| \\
+                                & \leq \alpha + 1 - \alpha               \\
+    |P(\alpha a + (1-\alpha)b)| & \leq 1
+\end{align*}
+
+Por lo tanto $P(\alpha a + (1-\alpha)b) \in S$. Se concluye que $S$ es convexo.
