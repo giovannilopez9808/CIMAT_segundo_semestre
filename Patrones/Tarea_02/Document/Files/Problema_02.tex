@@ -11,3 +11,19 @@
 \begin{equation*}
     K(x,y) = \langle \Phi(x), \Phi(y) \rangle
 \end{equation*}
+
+Sea $X=[x_1,x_2]^T$ y $Y=[y_1,y_2]^T$, calculando $\langle X,Y \rangle^3$ se obtiene lo siguiente:
+
+\begin{align*}
+    \langle X,Y \rangle^3 & = (x_1y_1+x_2y_2)^3                                                                                          \\
+                          & = (x_1y_1)^3 + 3(x_1y_1)^2(x_2y_2) + 3(x_1y_1)(x_2y_2)^2 + (x_2y_2)^3                                        \\
+                          & = x_1^3 y_1^3 + \sqrt{3}x_1^2 x_2 \sqrt{3}y_1y_2^2 + \sqrt{3}x_1x_2^2 \sqrt{3}y_1y_2^2+x_2^3y_2^3            \\
+                          & = \langle (x_1^3,\sqrt{3}x_1^2x_2,\sqrt{3}x_1x_2^2,x^3),(y_1^3,\sqrt{3}y_1^2y_2,\sqrt{3}y_1y_2^2,y^3)\rangle \\
+                          & =\langle \Phi(x) , \Phi(y) \rangle
+\end{align*}
+
+por lo tanto:
+
+\begin{equation*}
+    \Phi(z=(z_1,z_2)) = (z_1^3,\sqrt{3}z_1^2z_2,\sqrt{3}z_1z_2^2,z^3)
+\end{equation*}
