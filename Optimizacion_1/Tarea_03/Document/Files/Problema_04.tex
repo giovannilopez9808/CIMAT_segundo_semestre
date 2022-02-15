@@ -1,3 +1,46 @@
 \section*{Problema 04}
 
 \textbf{Show that $f(x,y)=x^2/y, y>0$ is convex.}
+
+Calculando el gradiente de $f$, se obtiene lo siguiente:
+
+\begin{equation*}
+    \nabla f = \begin{bmatrix}
+        \frac{2x}{y} \\ \frac{-x^2}{y^2}
+    \end{bmatrix}
+\end{equation*}
+
+Obteniendo el hessiano de $f$, se obtiene que:
+
+\begin{equation*}
+    \nabla^2 f = \begin{bmatrix}
+        \frac{2}{y}     & -\frac{2x}{y^2}  \\
+        -\frac{2x}{y^2} & \frac{2x^2}{y^3}
+    \end{bmatrix}
+\end{equation*}
+
+Calculando el producto interno con el vector $Z=[z_1,z_2]^T$, se obtiene lo siguiente:
+
+\begin{align*}
+    Z^T \nabla^2 f Z & = \begin{bmatrix}
+        z_1 & z_2
+    \end{bmatrix}
+    \begin{bmatrix}
+        \frac{2}{y}     & -\frac{2x}{y^2}  \\
+        -\frac{2x}{y^2} & \frac{2x^2}{y^3}
+    \end{bmatrix}
+    \begin{bmatrix}
+        z_1 \\ z_2
+    \end{bmatrix}                                                                            \\
+                     & = \begin{bmatrix}
+        \frac{2z_1}{y} - \frac{2xz_2}{y^2} & -\frac{2xz_1}{y^2} + \frac{2x^2z_2}{y^3}
+    \end{bmatrix} \begin{bmatrix}
+        z_1 \\ z_2
+    \end{bmatrix}                             \\
+                     & = \frac{2z_1}{y}- \frac{2xz_2}{y^2} -\frac{2xz_1z_2}{y^2} + \frac{2x^2z_2^2}{y^3} \\
+                     & = \frac{2z_1}{y}- \frac{4xz_2}{y^2} + \frac{2x^2z_2^2}{y^3}                       \\
+                     & = \frac{2}{y^3} \left ( z_1^2y^2-2xyz_1z_2 + x^2z_2^2\right )                     \\
+    Z^T \nabla^2 f Z & = \frac{2}{y^3} \left (z_1y-z_2x\right )^2
+\end{align*}
+
+como $y>0$, entonces $\frac{2}{y^3}>0$, entonces $Z\nabla^2f Z > 0$, por lo tanto $f$ es convexa.
