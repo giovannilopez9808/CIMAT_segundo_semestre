@@ -7,3 +7,30 @@
 \end{equation*}
 
 \textbf{con $1$ un vector de unos de longitud n y c el vector de longitud n con elementos $(\mathbb{K}_{i,i})^n_{i=1}$}
+
+Sea X una matriz con elementos $x_{ij}$, entonces, la matriz $XX^T$ se puede escribir de la siguiente manera:
+
+\begin{equation*}
+    (XX^T)_{ij} = \sum_{k=1}^d x_{ik}x_{jk}
+\end{equation*}
+
+Con esto, el producto $1c^T$, se puede calcular como:
+
+\begin{equation*}
+    (1^Tc)_{ij} = \sum_{k=1}^d x_{jk}^2
+\end{equation*}
+
+De igual manera, el producto $c^T1$, se puede calcular como:
+
+\begin{equation*}
+    (c^T1)_{ij} = \sum_{k=1}^d x_{ik}^2
+\end{equation*}
+
+entonces el elemento $ij$ de la matriz $\mathbb{D}^2$, se obtiene lo siguiente:
+
+\begin{align*}
+    \mathbb{D}^2_{ij} & = \sum_{k=1}^d x_{ik}^2 - 2x_{ik} +x_{jk}^2 \\
+                      & = \sum_{k=1}^d (x_{ik}-x_{jk})^2
+\end{align*}
+
+si tomamos $i=j$, se obtiene la diagonal de $\mathbb{D}^2$ es cero. Por lo tanto, la matriz $\mathbb{D}^2$ es la matriz de distancias entre los vectores $ij$.
