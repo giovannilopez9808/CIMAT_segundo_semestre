@@ -5,3 +5,60 @@
 \begin{equation*}
     (\nabla f(x)-\nabla f(y))^T (x-y) \geq 0, \qquad \forall x,y \in C
 \end{equation*}
+
+
+Supongamos que se cumple:
+
+\begin{equation*}
+    (\nabla f(x)-\nabla f(y))^T (x-y) \geq 0, \qquad \forall x,y \in C
+\end{equation*}
+
+Se tiene que $x+\alpha(y-x) \in C$  si $x,y\in C$ con $\alpha \in [0,1]$, entonces:
+
+\begin{align*}
+    (\nabla f(x+\alpha(y-x)) - \nabla f(x))^T (x+\alpha (y-x)) & \geq 0 \\
+    \alpha (\nabla f(x+\alpha(y-x)) - \nabla f(x))^T (y-x)     & \geq 0
+\end{align*}
+
+por consiguiente
+
+\begin{equation*}
+    \nabla f(x+\alpha (y-x))  \geq \nabla f(x)
+\end{equation*}
+
+nombrando a
+
+\begin{equation*}
+    \Theta (\alpha) = f(x+\alpha (y-x))
+\end{equation*}
+
+la cual
+
+\begin{equation*}
+    \Theta(0) = f(x) \qquad \Theta(1) = f(y)
+\end{equation*}
+
+calculando el gradiente de la función $\Theta$, se obtiene que
+
+\begin{equation*}
+    \nabla \Theta (\alpha) =  \nabla f (x+\alpha (y-x))^T (y-x)
+\end{equation*}
+
+usando el teorema fundamental del calculo se tiene lo siguiente:
+
+\begin{align*}
+    f(y)-f(x) & = \Theta(1) - \Theta(0)                            \\
+              & = \int_0^1 \Theta'(\alpha) d\alpha                 \\
+              & = \int_0^1 \nabla f(x+\alpha (y-x))^T(y-x) d\alpha \\
+              & \geq \int_0^1 \nabla f(x)^T (y-x) d\alpha          \\
+              & \geq \nabla f(x)^T(y-x) \int_0^1 d\alpha           \\
+              & \geq \nabla f(x)^T(y-x)
+\end{align*}
+
+por lo tanto:
+
+\begin{equation*}
+    f(y)-f(x) \geq \nabla f(x)^T(y-x)
+\end{equation*}
+
+lo cual se indica que la función $f$ es convexa. Por ende la suposición que se realizo es correcta.
