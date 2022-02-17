@@ -14,8 +14,8 @@ Comprobando que $f(\alpha x_1 + (1-\alpha)x_2) \leq \alpha f(x_1) + (1-\alpha)f(
 \begin{align*}
     f(\alpha x_1 + (1-\alpha)x_2) & = log \left ( \sum exp((\alpha x_1 + (1-\alpha)x_2)) \right )                                 \\
                                   & = log \left (\sum exp(\alpha x_1) exp((1-\alpha)x_2) \right )                                 \\
-                                  & = log \left (\sum exp(x_1)^\alpha exp(x_2)^(1-\alpha) \right )                                \\
-                                  & \leq \left (\sum exp(x_1)^\alpha \sum  exp(x_2)^(1-\alpha)  \right )                          \\
+                                  & = log \left (\sum exp(x_1)^\alpha exp(x_2)^{1-\alpha} \right )                                \\
+                                  & \leq log \left (\sum exp(x_1)^\alpha \sum  exp(x_2)^{1-\alpha}  \right )                      \\
                                   & \leq \alpha log \left ( \sum exp(x_1) \right ) + (1-\alpha) log \left (\sum exp(x_2) \right ) \\
     f(\alpha x_1 + (1-\alpha)x_2) & \leq \alpha f(x_1) + (1-\alpha) f(x_2)
 \end{align*}

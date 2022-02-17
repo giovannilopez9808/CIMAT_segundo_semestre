@@ -27,17 +27,8 @@ Calculando el gradiente de $f$, se obtiene lo siguiente:
 Calculando el hessiano de $f$, se obtiene lo siguiente:
 
 \begin{align*}
-    \nabla^2 f & = -e^{-g(x)} {\nabla^g}^T \nabla g + e^{-g(x)} \nabla^2 g \\
-               & = e^{-g(x)} \left (\nabla^2g -\nabla^T\nabla g \right )   \\
+    \nabla^2 f & = -e^{-g(x)} \nabla g \nabla g^T + e^{-g(x)} \nabla^2 g   \\
+               & = e^{-g(x)} \left (\nabla^2g -\nabla g\nabla g^T \right ) \\
 \end{align*}
 
-donde
-
-\begin{equation*}
-    \nabla^2g -\nabla^T\nabla g = \begin{bmatrix}
-        \nabla^2 g(x) & \nabla g(x) \\
-        \nabla^T g(x) & 1
-    \end{bmatrix} \succeq 0
-\end{equation*}
-
-como $e^{-g(x)}>0$, por lo tanto $\nabla^2 f>0$, por ende f es convexa.
+donde por el complemento de Schur se tiene que $\nabla^2g -\nabla g\nabla g^T \succeq 0$, y  como $e^{-g(x)}>0$. Entonces $\nabla^2 f>0$, por lo tanto $f$ es convexa.
