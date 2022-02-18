@@ -12,3 +12,37 @@
 \begin{equation*}
     K(A,B ) = \langle \Phi(A), \Phi(B)\rangle
 \end{equation*}
+
+Como $S$ es un conjunto finito, entonces podemos decir que el número total de elementos en $S$ es n. Dando asi que $S =\lbrace s_i \rbrace_{i=1}^n$. Sea $\Phi$ la siguiente función:
+
+\begin{equation*}
+    \Phi (X) = \sum_{i}^n \mathbb{I}_X(s_i)
+\end{equation*}
+
+donde $X$ es un conjunto (vector) de elementos y $\mathbb{I}_S$ una función indicadora tal que
+
+\begin{equation*}
+    \mathbb{I}_X(s_i) =
+    \begin{cases}
+        1 & \text{si }  s_i \in S    \\
+        0 & \text{si } s_i \not\in S
+    \end{cases}
+\end{equation*}
+
+Entonces,
+
+\begin{align*}
+    \langle \Phi(A) , \Phi(B)  \rangle & = \sum_{i=1}^n I_A(s_i) I_B(s_i) \\
+                                       & = \sum_{i=1}^n I_{A\cap B}       \\
+                                       & = \# A \cap B
+\end{align*}
+
+Lo anterior se pudo reducir ya que, la suma dará valores diferentes a cero solo si el elemento $s_i$ se encuentra en los dos conjuntos. Por lo tanto:
+
+\begin{equation*}
+    \Phi (X) = \sum_{i}^n \mathbb{I}_X(s_i) \qquad \mathbb{I}_X(s_i) =
+    \begin{cases}
+        1 & \text{si }  s_i \in X    \\
+        0 & \text{si } s_i \not\in X
+    \end{cases}
+\end{equation*}
