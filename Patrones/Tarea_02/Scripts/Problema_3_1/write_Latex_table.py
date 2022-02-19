@@ -2,7 +2,7 @@ from functions import *
 
 
 def write_table(data: pd.DataFrame, sets: list) -> None:
-    template = "{} & {} & {} & {} \\\\ \\hline"
+    template = "{} & {} & {} & {} \\\\"
     print("-"*40)
     for i, set in enumerate(sets):
         data_set = data[data.index == str(set)]
