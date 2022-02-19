@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
@@ -33,10 +32,25 @@ def format_mnist(data: pd.DataFrame) -> pd.DataFrame:
     return data
 
 
-def obtain_sets(use_flat: bool = True) -> list:
-    sets = np.array([[303, 6733, 2802],
-                    [4958, 126, 5786],
-                    [2589, 60, 5338]])
-    if use_flat:
-        return sets.flatten()
+def obtain_sets_2d(only_numbers: bool = True) -> np.array:
+    sets = {303: "#084c61",
+            6733: "#bd1e1e",
+            2802: "#b96913",
+            67: "#ffc233",
+            9686: "#ccff66",
+            5786: "#e01a4f",
+            2589: "#240046",
+            60: "#008000",
+            5338: "#f72585"}
+    if only_numbers:
+        return sets.keys()
+    return sets
+
+
+def obtain_sets_3d(only_numbers: bool = False) -> np.array:
+    sets = {8681: "#084c61",
+            39: "#bd1e1e",
+            2877: "#b96913"}
+    if only_numbers:
+        return sets.keys()
     return sets

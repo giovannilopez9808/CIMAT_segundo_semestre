@@ -1,15 +1,16 @@
+import matplotlib.pyplot as plt
 from functions import *
 
 parameters = {"path data": "../../Results/Problema_3_1/",
               "file loadings": "pca_components.csv",
               "path graphics": "../../Graphics/Problema_3_1/",
-              "file graphics": "loadings2d.png"}
+              "file graphics": "loadings_2d.png"}
 
 data = read_data(parameters["path data"],
                  parameters["file loadings"],
                  use_index=True)
 data = data.transpose()
-sets = obtain_sets()
+sets = obtain_sets_2d()
 plt.scatter(data["PC1"],
             data["PC2"],
             marker=".",

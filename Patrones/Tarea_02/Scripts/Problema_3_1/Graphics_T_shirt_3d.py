@@ -4,13 +4,13 @@ from functions import *
 parameters = {"path data": "../../Data/",
               "mnist data": "mnist_test.csv",
               "path graphics": "../../Graphics/Problema_3_1/",
-              "file graphics": "T_shirts_2d.png"}
+              "file graphics": "T_shirts_3d.png"}
 
 data = read_data(parameters["path data"],
                  parameters["mnist data"])
 data = format_mnist(data)
-sets = obtain_sets_2d()
-fig, axs = plt.subplots(3, 3, figsize=(10, 10))
+sets = obtain_sets_3d()
+fig, axs = plt.subplots(1, 3, figsize=(10, 10))
 axs = np.array(axs).flatten()
 for i, index in enumerate(sets):
     vector_mnist = data[index]
