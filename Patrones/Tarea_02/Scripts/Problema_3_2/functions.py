@@ -15,6 +15,35 @@ def obtain_parameters():
     return parameters
 
 
+def obtain_all_genres(only_names: bool = False) -> list:
+    genders = ['Crime',
+               'Animation',
+               'Action',
+               'Sci-Fi',
+               'IMAX',
+               'Children',
+               'Comedy',
+               'Adventure',
+               'Western',
+               'Horror',
+               'Musical',
+               'Thriller',
+               'Fantasy',
+               'War',
+               '(no genres listed)',
+               'Documentary',
+               'Film-Noir',
+               'Mystery',
+               'Drama',
+               'Romance']
+    colors = obtain_colors()
+    if only_names:
+        return genders
+    genders_dict = {}
+    for gender, color in zip(genders, colors):
+        genders_dict[gender] = color
+    return genders_dict
+
 def obtain_select_genres(only_names: bool = True):
     genres = [
         "Drama",
