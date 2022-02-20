@@ -11,7 +11,9 @@ data.columns = ["Genre", "Count"]
 data.loc[len(data)-1, "Genre"] = "No listed"
 yticks = np.linspace(0, 44000, 12)
 plt.subplots(figsize=(12, 8))
-bars = plt.bar(data.index, data["Count"])
+bars = plt.bar(data.index,
+               data["Count"],
+               alpha=0.7)
 for index in data.index:
     value = data["Count"][index]
     genre = data["Genre"][index]
@@ -25,7 +27,7 @@ plt.xticks(data.index,
            rotation=60)
 plt.yticks(yticks)
 plt.ylim(0, 44000)
-plt.ylabel("Conteo de calificación")
+plt.ylabel("Conteo de películas")
 plt.grid(axis="y",
          ls="--",
          color="#000000",
