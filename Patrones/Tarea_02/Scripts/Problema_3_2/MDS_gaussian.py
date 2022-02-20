@@ -1,19 +1,6 @@
 from sklearn.manifold import MDS
 from functions import *
 
-
-def gaussian(vector: np.array, sigma: float) -> np.array:
-    n = len(vector)
-    matrix = np.zeros((n, n))
-    for i in range(n):
-        v_i = vector[i]
-        for j in range(i, n):
-            v_j = vector[j]
-            matrix[i, j] = np.exp(-(v_i-v_j)**2/sigma)
-            matrix[j, i] = np.exp(-(v_i-v_j)**2/sigma)
-    return matrix
-
-
 parameters = obtain_parameters()
 parameters["file data"] = "select_rating.csv"
 parameters["file results"] = "MDS_gaussian.csv"

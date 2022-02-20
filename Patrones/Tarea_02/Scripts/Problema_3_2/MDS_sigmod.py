@@ -1,20 +1,14 @@
 from sklearn.manifold import MDS
 from functions import *
 
-
-def linear(vector: np.array) -> np.array:
-    matrix = np.outer(vector, vector)
-    return matrix
-
-
 parameters = obtain_parameters()
 parameters["file data"] = "select_rating.csv"
-parameters["file results"] = "MDS_linear.csv"
+parameters["file results"] = "MDS_sigmod.csv"
 data = read_data(parameters["path results"],
                  parameters["file data"],
                  use_index=True)
 vector = list(data["rating"])
-matrix = linear(vector)
+matrix = sigmod(vector, 0.75, 0.2)
 results = pd.DataFrame(index=data.index,
                        columns=["x", "y"])
 model2d = MDS(random_state=42,
