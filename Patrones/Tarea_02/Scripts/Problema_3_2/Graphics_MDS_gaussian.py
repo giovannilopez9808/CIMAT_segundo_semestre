@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from functions import *
 
 parameters = obtain_parameters()

@@ -1,4 +1,3 @@
-from sklearn.manifold import MDS
 from functions import *
 
 parameters = obtain_parameters()
