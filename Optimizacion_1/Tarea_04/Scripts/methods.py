@@ -33,8 +33,8 @@ class algorithm_class:
             if self.stop_functions.vectors(xi, xj):
                 break
             i += 1
-            # print(xj, function.f(xj))
-            print(function.f(xj), alpha)
+            print(xj, function.f(xj))
+            # print(function.f(xj), alpha)
 
     def descent_gradient(self, function: functions_class, x0: np.array):
         xj = x0.copy()
@@ -43,8 +43,10 @@ class algorithm_class:
         while(True):
             xi = xj.copy()
             gradient = function.gradient(xi)
+            # alpha = self.obtain_alpha.bisection(function, xi, -gradient)
             xj = xi - self.parameters["alpha"]*gradient
             self.results.loc[i] = self.obtain_fx_and_dfx_norm(function, xj)
+            # print(function.f(xj), function.f(xi), alpha)
             if self.stop_functions.functions(function, xi, xj):
                 break
             if self.stop_functions.vectors(xi, xj):
@@ -118,7 +120,7 @@ class problem_class:
     def random_initial_points(self, parameters: dict):
         if parameters["problem name"] == "wood":
             parameters["n"] = 4
-        self.x0 = 0.05*np.random.randn(parameters["n"])
+        self.x0 = 0.025*np.random.randn(parameters["n"])
 
     def solve(self):
         self.algorithm = algorithm_class(self.parameters)
@@ -141,8 +143,6 @@ class obtain_alpha():
         beta = np.inf
         dfx = function.gradient(x)
         dot_grad = np.linalg.multi_dot((dfx, d))
-        armijo_condition = True
-        wolfe_condition = True
         while(True):
             armijo_condition = obtain_armijo_conditon(function,
                                                       dot_grad,
