@@ -5,9 +5,12 @@ def join_path(path: str, filename: str) -> str:
     return "{}{}".format(path, filename)
 
 
-def obtain_filename(method: str, algorithm: str) -> str:
-    algorithm = algorithm.replace(" ", "_")
-    return "{}_{}.csv".format(method, algorithm)
+def obtain_filename(parameters: dict) -> str:
+    algorithm = parameters["algorithm name"].replace(" ", "_")
+    return "{}_{}_{}_{}.csv".format(parameters["problem name"],
+                                    parameters["n"],
+                                    parameters["initial point"],
+                                    algorithm)
 
 
 def obtain_files_per_function(files: list, parameters: dict) -> list:

@@ -68,5 +68,35 @@ class functions_class:
             h[i, i] = 1200 * x[i] * x[i] - 400 * x[i+1] + 2
             h[i+1, i] = -400*x[i]
             h[i, i+1] = -400*x[i]
-        h[n-1, n-1] = 200*(n-1)
+        h[n-1, n-1] = 200
         return h
+
+    def f_lambda(self, data: array, parameters: dict) -> array:
+        x, y = data
+        n = len(x)
+        fx = 0
+        for i in range(n-1):
+            fx += (x[i]-y[i])*(x[i]-y[i])
+            fx += parameters["lambda"]*(x[i+1]-x[i])*(x[i+1]-x[i])
+        fx += (x[n-1]-y[n-1])*(x[n-1]-y[n-1])
+        return fx
+
+    def gradient_lambda(self, data: array, parameters: dict) -> array:
+        x, y = data
+        n = len(x)
+        g = zeros(n)
+        for i in range(n-1):
+            g[i] += 2*(x[i]-y[i])
+            g[i] -= 2*parameters["lambda"]*(x[i+1]-x[i])
+        g[n-1] += 2*(x[n-1]-y[n-1])
+        return g
+
+    def hessian_lambda(self, data: array, parameters: dict) -> array:
+        x, y = data
+        n = len(x)
+        h = zeros((n, n))
+        for i in range(n-1):
+            h[i, i] = 2*(parameters["lambda"]+1)
+            h[i, i+1] = -2*parameters["lambda"]
+            h[i+1, i] = -2*parameters["lambda"]
+        h[n-1, n-1] = 2*parameters["lambda"]
