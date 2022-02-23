@@ -24,17 +24,20 @@ class algorithm_class:
         while(True):
             xi = xj.copy()
             di = solve_system(function.hessian(xi),
-                              -function.gradient(xi))
-            alpha = self.obtain_alpha.bisection(function, xi, di)
-            xj = xi+alpha*di
+                              function.gradient(xi))
+            alpha = self.obtain_alpha.bisection(function, xi, -di)
+            xj = xi-alpha*di
+            # print(function.f(xi), function.f(xj), alpha)
             self.results.loc[i] = self.obtain_fx_and_dfx_norm(function, xj)
             if self.stop_functions.functions(function, xi, xj):
                 break
             if self.stop_functions.vectors(xi, xj):
                 break
+            if self.stop_functions.gradient(function, xj):
+                break
             i += 1
-            print(xj, function.f(xj))
-            # print(function.f(xj), alpha)
+            # print(xj, function.f(xj))
+            print(function.f(xj), alpha)
 
     def descent_gradient(self, function: functions_class, x0: np.array):
         xj = x0.copy()
@@ -108,7 +111,7 @@ class problem_class:
     def use_rosembrock(self, parameters: dict) -> None:
         self.x0 = np.ones(parameters["n"])
         self.x0[0] = -1.2
-        self.x0[parameters["n"]-1] = -1.2
+        self.x0[parameters["n"]-2] = -1.2
 
     def use_lambda_function(self, parameters: dict) -> None:
         x0 = np.random.randn(parameters["n"])
@@ -120,7 +123,7 @@ class problem_class:
     def random_initial_points(self, parameters: dict):
         if parameters["problem name"] == "wood":
             parameters["n"] = 4
-        self.x0 = 0.025*np.random.randn(parameters["n"])
+        self.x0 = 0.5*np.random.randn(parameters["n"])
 
     def solve(self):
         self.algorithm = algorithm_class(self.parameters)

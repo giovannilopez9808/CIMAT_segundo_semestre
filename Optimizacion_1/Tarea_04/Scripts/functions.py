@@ -1,4 +1,5 @@
 from numpy import array, zeros
+from scipy.optimize import rosen_hess, rosen_der, rosen
 
 
 class functions_class:
@@ -55,19 +56,24 @@ class functions_class:
     def gradient_rosembrock(self, x: array) -> array:
         n = len(x)
         g = zeros(n)
-        for i in range(n-1):
-            g[i] = -400*x[i]*(x[i+1]-x[i]*x[i])-2*(1-x[i])
-        i = n-2
-        g[i+1] = 200*(x[i+1]-x[i]*x[i])
+        i = 0
+        g[i] = -400*x[i]*(x[i+1]-x[i]*x[i])-2*(1-x[i])
+        for i in range(1, n-1):
+            g[i] = 200*(x[i]-x[i-1]*x[i-1])
+            g[i] += -400*x[i] * (x[i+1]-x[i]*x[i])
+            g[i] += -2*(1-x[i])
+        i = n-1
+        g[i] = 200*(x[i]-x[i-1]*x[i-1])
         return g
 
     def hessian_rosembrock(self, x: array) -> array:
         n = len(x)
         h = zeros((n, n))
+        h[0, 0] = -200
         for i in range(n-1):
-            h[i, i] = 1200 * x[i] * x[i] - 400 * x[i+1] + 2
-            h[i+1, i] = -400*x[i]
-            h[i, i+1] = -400*x[i]
+            h[i, i] += 1200 * x[i] * x[i] - 400 * x[i+1] + 202
+            h[i+1, i] += -400*x[i]
+            h[i, i+1] += -400*x[i]
         h[n-1, n-1] = 200
         return h
 
