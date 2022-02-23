@@ -1,4 +1,3 @@
-from inspect import Parameter
 from auxiliar import obtain_filename, join_path
 from pandas import DataFrame
 from functions import *
@@ -27,7 +26,6 @@ class algorithm_class:
                               function.gradient(xi))
             alpha = self.obtain_alpha.bisection(function, xi, -di)
             xj = xi-alpha*di
-            # print(function.f(xi), function.f(xj), alpha)
             self.results.loc[i] = self.obtain_fx_and_dfx_norm(function, xj)
             if self.stop_functions.functions(function, xi, xj):
                 break
@@ -36,8 +34,6 @@ class algorithm_class:
             if self.stop_functions.gradient(function, xj):
                 break
             i += 1
-            # print(xj, function.f(xj))
-            print(function.f(xj), alpha)
 
     def descent_gradient(self, function: functions_class, x0: np.array):
         xj = x0.copy()
@@ -46,10 +42,8 @@ class algorithm_class:
         while(True):
             xi = xj.copy()
             gradient = function.gradient(xi)
-            # alpha = self.obtain_alpha.bisection(function, xi, -gradient)
             xj = xi - self.parameters["alpha"]*gradient
             self.results.loc[i] = self.obtain_fx_and_dfx_norm(function, xj)
-            # print(function.f(xj), function.f(xi), alpha)
             if self.stop_functions.functions(function, xi, xj):
                 break
             if self.stop_functions.vectors(xi, xj):
@@ -57,8 +51,6 @@ class algorithm_class:
             if self.stop_functions.gradient(function, xj):
                 break
             i += 1
-            # print(xj, function.f(xj))
-            print(function.f(xj))
 
     def obtain_fx_and_dfx_norm(self, function: functions_class, x: np.array) -> tuple:
         fx = function.f(x)
@@ -102,6 +94,8 @@ class problem_class:
             self.use_wood()
         if parameters["problem name"] == "rosembrock":
             self.use_rosembrock(parameters)
+        if parameters["problem name"] == "lambda":
+            self.use_lambda_function(parameters)
         if parameters["initial point"] == "random":
             self.random_initial_points(parameters)
 
@@ -112,13 +106,6 @@ class problem_class:
         self.x0 = np.ones(parameters["n"])
         self.x0[0] = -1.2
         self.x0[parameters["n"]-2] = -1.2
-
-    def use_lambda_function(self, parameters: dict) -> None:
-        x0 = np.random.randn(parameters["n"])
-        y0 = np.array([2*(i-1)/(parameters["n"]-1)
-                       for i in range(1, parameters["n"])])
-        y0 = y0*y0+np.random.rand(parameters["n"])*parameters["sigma"]
-        self.x0 = [x0, y0]
 
     def random_initial_points(self, parameters: dict):
         if parameters["problem name"] == "wood":
