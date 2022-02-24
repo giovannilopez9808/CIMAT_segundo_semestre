@@ -23,7 +23,6 @@ class datasets_class:
                                            "c1": 0.1,
                                            "c2": 0.9,
                                            "tau": 1e-7,
-                                           "alpha": 1e-4,
                                            "problem name": "rosembrock",
                                            "initial point": "random",
                                            "algorithm name": "newton"
