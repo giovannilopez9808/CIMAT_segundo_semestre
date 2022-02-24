@@ -1,3 +1,4 @@
+from fileinput import filename
 from pandas import DataFrame, read_csv
 
 
@@ -10,11 +11,32 @@ def obtain_filename(parameters: dict) -> str:
                               parameters["lambda"])
 
 
-def obtain_files_per_function(files: list, parameters: dict) -> list:
-    files_function = [file for file in files if parameters["function"] in file]
-    return files_function
-
-
 def read_data(filename: str) -> DataFrame:
     data = read_csv(filename, index_col=0)
     return data
+
+
+def write_status(name: str) -> None:
+    text = "Resolviendo {}".format(name)
+    print("\n")
+    print("-"*len(text))
+    print(text)
+
+
+def obtain_graphics_filename(parameters: dict) -> str:
+    filename = "lambda_{}.png".format(parameters["lambda"])
+    return filename
+
+
+def obtain_colors_per_method() -> dict:
+    colors = {"x": "#007200",
+              "y": "#9d0208",
+              }
+    return colors
+
+
+def obtain_filename_for_random_results(dataset: str) -> str:
+    filename = filename.split()
+    filename = "_".join(filename)
+    filename = "{}.csv".format(filename)
+    return filename
