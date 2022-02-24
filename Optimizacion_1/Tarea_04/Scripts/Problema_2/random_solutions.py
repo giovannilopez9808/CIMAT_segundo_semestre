@@ -13,11 +13,11 @@ for dataset in datasets_list:
                          filename)
     results = DataFrame(columns=["fx", "dfx"])
     results.index.name = "iterations"
-    for i in range(2):
+    for i in range(100):
         print("Ejecuntando {} en la interacion {} de {}".format(dataset, i+1, 100))
         problem = problem_class(parameters)
         problem.solve()
         fx = problem.function.f(problem.algorithm.xj)
         dfx = np.linalg.norm(problem.function.gradient(problem.algorithm.xj))
         results.loc[i] = [fx, dfx]
-    print(results)
+    results.to_csv(filename)
