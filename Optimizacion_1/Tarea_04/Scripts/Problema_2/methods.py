@@ -17,40 +17,49 @@ class algorithm_class:
             self.method = self.descent_gradient
 
     def newton(self, function: functions_class, x0: np.array) -> np.array:
-        xj = x0.copy()
-        self.results.loc[0] = self.obtain_fx_and_dfx_norm(function, xj)
+        self.xj = x0.copy()
+        self.results.loc[0] = self.obtain_fx_and_dfx_norm(
+            function,
+            self.xj)
         i = 1
         while(True):
-            xi = xj.copy()
+            xi = self.xj.copy()
             di = solve_system(function.hessian(xi),
                               function.gradient(xi))
             alpha = self.obtain_alpha.bisection(function, xi, -di)
-            xj = xi-alpha*di
-            self.results.loc[i] = self.obtain_fx_and_dfx_norm(function, xj)
-            if self.stop_functions.functions(function, xi, xj):
+            self.xj = xi-alpha*di
+            self.results.loc[i] = self.obtain_fx_and_dfx_norm(
+                function,
+                self.xj)
+            if self.stop_functions.vectors(xi, self.xj):
                 break
-            if self.stop_functions.vectors(xi, xj):
-                break
-            if self.stop_functions.gradient(function, xj):
+            if self.stop_functions.gradient(
+                    function,
+                    self.xj):
                 break
             i += 1
 
     def descent_gradient(self, function: functions_class, x0: np.array):
-        xj = x0.copy()
-        self.results.loc[0] = self.obtain_fx_and_dfx_norm(function, xj)
+        self.xj = x0.copy()
+        self.results.loc[0] = self.obtain_fx_and_dfx_norm(
+            function,
+            self.xj)
         i = 1
         while(True):
-            xi = xj.copy()
+            xi = self.xj.copy()
             gradient = function.gradient(xi)
-            xj = xi - self.parameters["alpha"]*gradient
-            self.results.loc[i] = self.obtain_fx_and_dfx_norm(function, xj)
-            if self.stop_functions.functions(function, xi, xj):
+            self.xj = xi - self.parameters["alpha"]*gradient
+            self.results.loc[i] = self.obtain_fx_and_dfx_norm(
+                function,
+                self.xj)
+            if self.stop_functions.vectors(xi, self.xj):
                 break
-            if self.stop_functions.vectors(xi, xj):
-                break
-            if self.stop_functions.gradient(function, xj):
+            if self.stop_functions.gradient(
+                    function,
+                    self.xj):
                 break
             i += 1
+            # print(function.f(self.xj))
 
     def obtain_fx_and_dfx_norm(self, function: functions_class, x: np.array) -> tuple:
         fx = function.f(x)
@@ -94,8 +103,6 @@ class problem_class:
             self.use_wood()
         if parameters["problem name"] == "rosembrock":
             self.use_rosembrock(parameters)
-        if parameters["problem name"] == "lambda":
-            self.use_lambda_function(parameters)
         if parameters["initial point"] == "random":
             self.random_initial_points(parameters)
 
