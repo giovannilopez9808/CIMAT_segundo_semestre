@@ -1,1 +1,95 @@
 \section{Métodos}
+
+\subsection{Método de descenso del gradiente}
+
+La dirección que se tomada con el método del descenso del gradiente es el negativo del gradiente, esto es que la ecuación de cada paso en el método esta descrita en la ecuación \ref{eq:equation_gradient}.
+
+\begin{equation}
+    x_{k+1} = x_{k} - \alpha_k \nabla f_k \label{eq:equation_gradient}
+\end{equation}
+
+donde se dice que $\alpha_k$ es fijo si para todo $k$ el valor de $\alpha$ no cambia. Por lo que se convierte en un parametro del método.
+
+\subsection{Método de Newton}
+
+La direccion que es tomada en el método de Newton es obtenida al resolver el sistema matricial de la ecuación \ref{eq:direction_newton}.
+
+\begin{equation}
+    \nabla^2 f_k d_k = \nabla f_k \label{eq:direction_newton}
+\end{equation}
+
+donde $-d_k$ es la dirección de descenso que se tomaria siguiendo la ecuación \ref{eq:equation_newton}.
+
+\begin{equation}
+    x_{k+1} = x_{k} - \alpha_k d_k \label{eq:equation_newton}
+\end{equation}
+
+donde $\alpha_k$ sería obtenido en cada iteración siguiendo el algoritmo \ref{alg:alpha_algorithm}.
+
+\subsection{Condiciones de paro \label{sec:stop}}
+
+\subsubsection{Por posición}
+
+Una de las condiciones tomadas para parar los métodos de Newton y descenso del gradiente es comprobando si la norma de la diferencia entre la posición $k$ y $k+1$ es menor igual a una tolerancia establecida. Esta condición es descrita en la ecuación \ref{eq:position_condition}.
+
+\begin{equation}
+    ||x_{k+1}-x_{k}|| \leq \tau \label{eq:position_condition}
+\end{equation}
+
+\subsubsection{Por función}
+
+Otra manera de comprobar si ya no existe algún movimiendo notable en el método es revisando el valor absoluto de la diferencia de la función evaluada en $x_{k+1}$ y $x_k$. La condición esta descrita en la ecuación \ref{eq:function_condition}.
+
+\begin{equation}
+    |f(x_{k+1})-f(x_k)| \leq \tau \label{eq:function_condition}
+\end{equation}
+
+\subsubsection{Por gradiente}
+
+Como estamos en la búsqueda de puntos estacionarios de $f$, es razonable que una condición de paro este relacionada al gradiente de la function. La condición usando al gradiente de la función esta descrita en la ecuación \ref{eq:gradient_condition}.
+
+\begin{equation}
+    ||\nabla f (x_{k+1})|| \leq \tau \label{eq:gradient_condition}
+\end{equation}
+
+
+\subsection{Algoritmos implementados}
+
+
+
+\subsubsection{Método del descenso del gradiente}
+
+El algoritmo \ref{alg:gradient} se implemento para el método del descenso del gradiente. El algoritmo hace uso de las condiciones de paro descritas en \ref{sec:stop}.
+
+\begin{algorithm}
+    \caption{Método del descenso de gradiente con $\alpha$ fija.\label{alg:gradient} }
+    \KwIn{$x_0\;,f\;,\nabla f\;,\alpha$}
+    \KwOut{$x_{i+1}\,\nabla f(x_{i+1})$}
+    $x_j \gets x_0$\\
+    \Repeat{
+    $x_i \gets x_j$ \\
+    $d_i \gets -\nabla f(x_i)$\\
+    $x_{i+1} \gets  x_i + \alpha d_i$\\
+    check stop conditions$(f,x_i,x_{i+1},\nabla f(x_{i+1}))$
+    }
+    \Return{$x_{i+1},\nabla f(x_{i+1})$}
+\end{algorithm}
+
+\subsubsection{Método de Newton}
+
+El algoritmo \ref{alg:newton} se implemento para el método de Newton. El mismo hace de las condiciones de Wolfe descritas en la sección \ref{sec:wolfe} y las condiciones de paro descritas en \ref{sec:stop}.
+
+\begin{algorithm}
+    \caption{Algoritmo de Newton usando las condiciones de Wolfe.\label{alg:newton}}
+    \KwIn{$x_0\;,f\;,\nabla f$}
+    \KwOut{$x_{i+1}\,\nabla f(x_{i+1})$}
+    $x_j \gets x_0$\\
+    \Repeat{
+    $x_i \gets x_j$ \\
+    $d_i \gets \text{solve(}\nabla^2f(x_i) d_i = \nabla f(x_i)\text{)}$\\
+    $\alpha_i \gets$ Wolfe conditions()\\
+    $x_{i+1} \gets  x_i - \alpha_i d_i$\\
+    check stop conditions$(f,x_i,x_{i+1},\nabla f(x_{i+1}))$
+    }
+    \Return{$x_{i+1},\nabla f(x_{i+1})$}
+\end{algorithm}

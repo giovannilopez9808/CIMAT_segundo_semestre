@@ -56,7 +56,7 @@ En cada iteración de la linea de búsqueda se implementa un cambio en la posici
 Donde $\alpha_k$ es un escalar positivo llamado tamaño de paso.
 
 
-\subsection{Condiciones de Wolfe}
+\subsection{Condiciones de Wolfe \label{sec:wolfe}}
 
 Existen maneras de verificar si el $\alpha_k$ elegido para el k-esimo paso es el óptimo para seguir en la dirección $p_k$. La condición de decrecimiento suficiente esta descrita en la ecuación \ref{eq:armijo_condition}.
 
@@ -75,13 +75,11 @@ La condición de decrecimiento suficiente no es la única que se tiene que conte
 Donde $c_2 \in (0,1)$.
 
 
-La búsqueda de un $\alpha_k$ que cumpla las condiciones de las ecuaciones \ref{eq:armijo_condition} y \ref{eq:curvature_condition} esta descrito en el algoritmo \ref{eq:alpha_algorithm}.
+La búsqueda de un $\alpha_k$ que cumpla las condiciones de las ecuaciones \ref{eq:armijo_condition} y \ref{eq:curvature_condition} esta descrito en el algoritmo \ref{alg:alpha_algorithm}.
 
 \begin{algorithm}
-    \caption{Búsqueda de un $\alpha$ que cumpla las condiciones de las ecuaciones \ref{eq:armijo_condition} y \ref{eq:curvature_condition} \label{eq:alpha_algorithm}}
-    $\alpha_0 \gets 0$\\
-    $\alpha_i \in 1$\\
-    $\beta \gets \infty$\\
+    \caption{Búsqueda de un $\alpha$ que cumpla las condiciones de las ecuaciones \ref{eq:armijo_condition} y \ref{eq:curvature_condition} \label{alg:alpha_algorithm}}
+    $\alpha_0 \gets 0 \qquad \alpha_i \gets 1 \qquad \beta \gets \infty$\\
     \Repeat{
         \If{armijo conditon($\alpha_i$) or curvature contidion($\alpha_i$)}{
             \If{armijo condition($\alpha_i$)}{
