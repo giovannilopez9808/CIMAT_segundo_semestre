@@ -1,21 +1,12 @@
-from sklearn.metrics import confusion_matrix, precision_recall_fscore_support
 from sklearn.feature_selection import chi2, SelectKBest
-from sklearn.model_selection import GridSearchCV
-from nltk.tokenize import TweetTokenizer
+from nltk.tokenize import TweetTokenizer as tokenizer
+from numpy import array, sqrt, zeros, nonzero, log10
+from sklearn.manifold import TSNE
 from sklearn import preprocessing
-from tabulate import tabulate
-from sklearn import metrics
-from sklearn import svm
+from nltk import FreqDist
+from auxiliar import *
 from tsne import tsne
-import numpy as np
-import nltk
-
-
-def join_path(path: str, filename: str) -> str:
-    """
-    Une la direccion de un archivo con su nombre
-    """
-    return "{}{}".format(path, filename)
+from bows import *
 
 
 def get_texts_from_file(path_data: str, path_labels: str) -> tuple:
@@ -38,7 +29,7 @@ def get_texts_from_file(path_data: str, path_labels: str) -> tuple:
     return text, labels
 
 
-def sort_freqdist(vocabylary: nltk.FreqDist) -> list:
+def sort_freqdist(vocabylary: FreqDist) -> list:
     """
     Ordena la lista de distribucion de frecuencias de palabras de mayor frecuencia a menor
     """
@@ -55,312 +46,7 @@ def split_data(data: list, max_words: int) -> list:
     return data[:max_words]
 
 
-def obtain_vocabylary(data: list, max_words: int) -> list:
-    """
-    Obtiene la lista de una distribucion de frecuencias de palabras ordenada de mayor a menor a partir de una lista de oraciones
-    """
-    # Inicializacion del Tokenizador
-    tokenizer = TweetTokenizer()
-    # Inicializacion de la lista que guardara los tokens
-    corpus_palabras = []
-    for tweet in data:
-        # Creacion y guardado de los tokens
-        corpus_palabras += tokenizer.tokenize(tweet)
-    # Creacion de la distribucion de frecuencias
-    vocabylary = nltk.FreqDist(corpus_palabras)
-    vocabylary = sort_freqdist(vocabylary)
-    vocabylary = split_data(vocabylary, max_words)
-    return vocabylary
-
-
-def obtain_vocabulary_with_bigrams(data: list, max_bigrams: int) -> list:
-    """
-    Obtiene la lista de una distribucion de frecuencias de palabras ordenada de mayor a menor a partir de una lista de oraciones
-    """
-    # Inicializacion del Tokenizador
-    tokenizer = TweetTokenizer()
-    # Inicializacion de la lista que guardara los tokens
-    corpus_bigrams = []
-    for tweet in data:
-        # Creacion y guardado de los tokens
-        corpus_bigrams += nltk.bigrams(tokenizer.tokenize(tweet))
-    # Creacion de la distribucion de frecuencias
-    vocabulary = nltk.FreqDist(corpus_bigrams)
-    vocabulary = sort_freqdist(vocabulary)
-    vocabulary = split_data(vocabulary, max_bigrams)
-    return vocabulary
-
-
-def create_dictonary_of_index(vocabylary: list) -> dict:
-    """
-    Crea un diccionario con la posición de mayor a menor frecuencia de cada palabra. La llave es la palabra a consultar
-    """
-    # Inicializacion del diccionario
-    index = dict()
-    # Inicializacion de la posicion
-    i = 0
-    for weight, word in vocabylary:
-        index[word] = i
-        i += 1
-    return index
-
-
-def build_binary_bow(data: list, vocabylary: list, index: dict) -> np.array:
-    """
-    Creacion de la BoW usando pesos binarios
-    """
-    tokenizer = TweetTokenizer()
-    bow = np.zeros((len(data), len(vocabylary)), dtype=float)
-    docs = 0
-    for tweet in data:
-        vocabylary_data = nltk.FreqDist(tokenizer.tokenize(tweet))
-        for word in vocabylary_data:
-            if word in index.keys():
-                bow[docs, index[word]] = 1
-        docs += 1
-    return bow
-
-
-def build_binary_bow_with_probabilities(data: list, vocabylary: list, index: dict,
-                                        probability: dict) -> np.array:
-    """
-    Creacion de la BoW usando pesos binarios
-    """
-    tokenizer = TweetTokenizer()
-    bow = np.zeros((len(data), len(vocabylary)), dtype=float)
-    docs = 0
-    for tweet in data:
-        vocabylary_data = nltk.FreqDist(tokenizer.tokenize(tweet))
-        for word in vocabylary_data:
-            if word in index.keys():
-                bow[docs, index[word]] = 1
-                if word in probability:
-                    bow[docs, index[word]] = probability[word]
-        docs += 1
-    return bow
-
-
-def build_binary_bigram_bow(data: list, vocabylary: list, index: dict) -> np.array:
-    """
-    Creacion de la BoW usando pesos binarios
-    """
-    tokenizer = TweetTokenizer()
-    bow = np.zeros((len(data), len(vocabylary)), dtype=float)
-    docs = 0
-    for tweet in data:
-        bigrams = nltk.bigrams(tokenizer.tokenize(tweet))
-        vocabylary_data = nltk.FreqDist(bigrams)
-        for bigram in vocabylary_data:
-            if bigram in index.keys():
-                bow[docs, index[bigram]] = 1
-        docs += 1
-    return bow
-
-
-def build_frecuency_bow(data: list, vocabylary: list, index: dict) -> np.array:
-    """
-    Creacion de la BoW usando pesos basado en frecuencias
-    """
-    tokenizer = TweetTokenizer()
-    bow = np.zeros((len(data), len(vocabylary)), dtype=float)
-    docs = 0
-    for tweet in data:
-        vocabylary_data = nltk.FreqDist(tokenizer.tokenize(tweet))
-        for word in vocabylary_data:
-            if word in index.keys():
-                bow[docs, index[word]] = vocabylary[word]
-        docs += 1
-    return bow
-
-
-def build_frecuency_bow_with_probabilities(data: list, vocabylary: list,
-                                           index: dict,
-                                           probability: dict) -> np.array:
-    """
-    Creacion de la BoW usando pesos basado en frecuencias
-    """
-    tokenizer = TweetTokenizer()
-    bow = np.zeros((len(data), len(vocabylary)), dtype=float)
-    docs = 0
-    for tweet in data:
-        vocabylary_data = nltk.FreqDist(tokenizer.tokenize(tweet))
-        for word in vocabylary_data:
-            if word in index.keys():
-                bow[docs, index[word]] = tweet.count(word)
-                if word in probability:
-                    bow[docs, index[word]] *= probability[word]
-        docs += 1
-    return bow
-
-
-def build_frecuency_bigram_bow(data: list, vocabylary: list,
-                               index: dict) -> np.array:
-    """
-    Creacion de la BoW usando pesos basado en frecuencias
-    """
-    tokenizer = TweetTokenizer()
-    bow = np.zeros((len(data), len(vocabylary)), dtype=float)
-    docs = 0
-    for tweet in data:
-        bigrams = nltk.bigrams(tokenizer.tokenize(tweet))
-        vocabylary_data = nltk.FreqDist(bigrams)
-        for bigram in vocabylary_data:
-            if bigram in index.keys():
-                bow[docs, index[bigram]] = np.log(vocabylary_data[bigram] + 1)
-        docs += 1
-    return bow
-
-
-def create_empty_dictionary_of_words_and_documents(words: dict,
-                                                   data: list) -> dict:
-    """
-    Crea un diccionario el cual contendra de forma ordenada el indice de cada palabra y su numero de frecuencias en una coleccion
-    """
-    freq_word_per_document = dict()
-    word_count = dict()
-    for i, tweet in enumerate(data):
-        word_count[i] = 0
-    for word in words:
-        freq_word_per_document[word] = word_count
-    return freq_word_per_document
-
-
-def build_tfidf_bow(data: list, vocabylary: list, index: dict) -> np.array:
-    """
-    Creacion de la BoW usando pesos basado en frecuencias
-    """
-    tokenizer = TweetTokenizer()
-    # Inicilizacion del bow
-    bow = np.zeros((len(data), len(vocabylary)), dtype=float)
-    # Total de oraciones
-    n = len(data)
-    # Inicializacion del diccionario que contiene la repeticion de cada palabra
-    idf_per_word_and_document = create_empty_dictionary_of_words_and_documents(
-        index.keys(), data)
-    for docs, tweet in enumerate(data):
-        # Frecuencias
-        vocabylary_data = nltk.FreqDist(tokenizer.tokenize(tweet))
-        for word in vocabylary_data:
-            if word in index.keys():
-                # Descriptiva
-                tf = tweet.count(word)
-                idf_per_word_and_document[word][docs] += 1
-                bow[docs, index[word]] = np.log(tf + 1)
-
-    # Discriminativa
-    for word in index.keys():
-        idf = sum(idf_per_word_and_document[word].values())
-        idf = np.log(n / idf)
-        for docs, tweet in enumerate(data):
-            bow[docs, index[word]] = bow[docs, index[word]] * idf
-    return bow
-
-
-def build_tfidf_bow_with_probabilities(data: list, vocabylary: list, index: dict,
-                                       probability: dict) -> np.array:
-    """
-    Creacion de la BoW usando pesos basado en frecuencias
-    """
-    tokenizer = TweetTokenizer()
-    # Inicilizacion del bow
-    bow = np.zeros((len(data), len(vocabylary)), dtype=float)
-    # Total de oraciones
-    n = len(data)
-    # Inicializacion del diccionario que contiene la repeticion de cada palabra
-    idf_per_word_and_document = create_empty_dictionary_of_words_and_documents(
-        index.keys(), data)
-    for docs, tweet in enumerate(data):
-        # Frecuencias
-        vocabylary_data = nltk.FreqDist(tokenizer.tokenize(tweet))
-        for word in vocabylary_data:
-            if word in index.keys():
-                # Descriptiva
-                tf = tweet.count(word)
-                idf_per_word_and_document[word][docs] += 1
-                bow[docs, index[word]] = np.log(tf + 1)
-
-    # Discriminativa
-    for word in index.keys():
-        idf = sum(idf_per_word_and_document[word].values())
-        idf = np.log(n / idf)
-        for docs, tweet in enumerate(data):
-            if word in probability:
-                bow[docs, index[word]] *= probability[word]
-            bow[docs, index[word]] *= idf
-    return bow
-
-
-def build_tfidf_bigram_bow(data: list, vocabylary: list, index: dict) -> np.array:
-    """
-    Creacion de la BoW usando pesos basado en frecuencias
-    """
-    tokenizer = TweetTokenizer()
-    # Inicilizacion del bow
-    bow = np.zeros((len(data), len(vocabylary)), dtype=float)
-    # Total de oraciones
-    n = len(data)
-    # Inicializacion del diccionario que contiene la repeticion de cada palabra
-    idf_per_word_and_document = create_empty_dictionary_of_words_and_documents(
-        index.keys(), data)
-    for docs, tweet in enumerate(data):
-        # Frecuencias
-        bigrams = nltk.bigrams(tokenizer.tokenize(tweet))
-        vocabylary_data = nltk.FreqDist(bigrams)
-        for bigram in vocabylary_data:
-            if bigram in index.keys():
-                # Descriptiva
-                tf = vocabylary_data[bigram]
-                idf_per_word_and_document[bigram][docs] += 1
-                bow[docs, index[bigram]] = np.log(tf + 1)
-
-    # Discriminativa
-    for bigram in index.keys():
-        idf = sum(idf_per_word_and_document[bigram].values())
-        idf = np.log(n / idf)
-        for docs, tweet in enumerate(data):
-            bow[docs, index[bigram]] = bow[docs, index[bigram]] * idf
-    return bow
-
-
-def create_model(bow_tr: np.array, labels_tr: np.array) -> GridSearchCV:
-    """
-    Creacion del modelo para realizar el aprendizaje
-    """
-    parameters_model = {"C": [0.05, 0.12, 0.25, 0.5, 1, 2, 4]}
-    svr = svm.LinearSVC(class_weight="balanced", max_iter=1200000)
-    grid = GridSearchCV(estimator=svr,
-                        param_grid=parameters_model,
-                        n_jobs=8,
-                        scoring="f1_macro",
-                        cv=5)
-    grid.fit(bow_tr, labels_tr)
-    return grid
-
-
-def evaluate_model(bow_val: np.array, labels_val: np.array, grid: GridSearchCV,
-                   name: str) -> list:
-    """
-    Resultados del modelo con el dataset de validacion
-    """
-    y_pred = grid.predict(bow_val)
-    precision, recall, fscore, _ = precision_recall_fscore_support(
-        labels_val,
-        y_pred,
-        average="macro",
-        pos_label=1,
-    )
-    print(confusion_matrix(
-        labels_val,
-        y_pred,
-    ))
-    print(metrics.classification_report(
-        labels_val,
-        y_pred,
-    ))
-    return [name, precision, recall, fscore]
-
-
-def normalize(bow: np.array) -> np.array:
+def normalize(bow: array) -> array:
     """
     Normalizacion de la BoW de dos dimensiones
     """
@@ -371,68 +57,10 @@ def normalize(bow: np.array) -> np.array:
         norm = 0
         # Calculo de la norma
         norm += sum([value**2 for value in bow[i]])
-        norm = np.sqrt(norm)
+        norm = sqrt(norm)
         # Estandarizacion de la norma
-        bow_norm[i] = np.array([value / norm for value in bow[i]])
+        bow_norm[i] = array([value / norm for value in bow[i]])
     return bow_norm
-
-
-def build_BoE_from_EmoLex(filename: str) -> dict:
-    """
-    Creacion de una bolsa de emociones a partir de la base de datos de EmoLex
-    """
-    with open(filename, "r", encoding='utf-8') as file:
-        # Inicializacion de los diccionarios
-        words_dict = dict()
-        scores = dict()
-        # Salto del header
-        for i in range(1):
-            next(file)
-        for line in file:
-            # Lectura de la informacion
-            data = line.split('\t')
-            if data[1] != 'NO TRANSLATION':
-                # Obtencion del score
-                score = float(data[3])
-                word = data[1].lower()
-                if not word in words_dict:
-                    words_dict[word] = data[2]
-                    scores[word] = score
-                elif score > scores[word]:
-                    words_dict[word] = data[2]
-                    scores[word] = score
-    return words_dict
-
-
-def build_BoE_from_SEL(filename: str) -> tuple:
-    """
-    Creacion de una bolsa de emociones a partir de la base de datos de SEL
-    """
-    # Apertura del archivo
-    with open(filename, "r", encoding='latin-1') as file:
-        # Inicializacion de los diccionarios
-        words_emotions = dict()
-        scores = dict()
-        # Salto del header
-        for i in range(1):
-            next(file)
-        # Lectura del archivo
-        for line in file:
-            # Split de los datos
-            data = line.split('\t')
-            # Score
-            score = float(data[1])
-            # Palabra en minusculas
-            word = data[0].lower()
-            # Si no se ha guardado se guarda
-            if not word in words_emotions:
-                words_emotions[word] = data[2].replace("\n", "")
-                scores[word] = score
-            # Si ya existe se comprueba que sea el que contiene mayor score
-            elif score > scores[word]:
-                words_emotions[word] = data[2].replace("\n", "")
-                scores[word] = score
-    return words_emotions, scores
 
 
 def mask_emotion(tokens: list, word_emotions: dict) -> list:
@@ -450,44 +78,16 @@ def obtain_corpus_emotions(document: list, word_emotions: dict) -> list:
     """
     Obtiene todo un corpus de emociones enmascarando cada tweet con la bolsa de emociones dada
     """
-    tokenizer = TweetTokenizer()
     # Copia del corpus
     document_copy = document.copy()
     for i, tweet in enumerate(document):
-        tweet = tokenizer.tokenize(tweet)
+        tweet = tokenizer().tokenize(tweet)
         emotions = mask_emotion(
             tweet,
             word_emotions,
         )
         document_copy[i] = " ".join(emotions)
     return document_copy
-
-
-def obtain_parameters() -> dict:
-    """
-    Obtiene las rutas y nombres de los archivos que seran usados
-    """
-    parameters = {
-        # Ruta de los archivos
-        "path data": "../Data/",
-        # Archivos de entrenamiento
-        "train": {
-            "data": "mex_train.txt",
-            "labels": "mex_train_labels.txt"
-        },
-        # Archivos de validacion
-        "validation": {
-            "data": "mex_val.txt",
-            "labels": "mex_val_labels.txt"
-        },
-        # Archivo de EmoLex
-        "EmoLex": "emolex.txt",
-        # Archivo de SEL
-        "SEL": "SEL.txt",
-        "max words": 5000,
-        "max bigrams": 1000,
-    }
-    return parameters
 
 
 def load_data(parameters: dict) -> tuple:
@@ -524,101 +124,49 @@ def load_data(parameters: dict) -> tuple:
     return data_tr, labels_tr, data_val, labels_val
 
 
-def load_emolex_data(parameters: dict, data_tr: list, data_val: list) -> tuple:
-    """
-    Lectura del dataset de EmoLex
-    """
-    emolex_path = join_path(
-        parameters["path data"],
-        parameters["EmoLex"],
-    )
-    # Carga de la bolsa de emociones
-    words_emotions = build_BoE_from_EmoLex(emolex_path)
-    data_tr_emolex_emotions = obtain_corpus_emotions(
-        data_tr,
-        words_emotions,
-    )
-    data_val_emolex_emotions = obtain_corpus_emotions(
-        data_val,
-        words_emotions,
-    )
-    return data_tr_emolex_emotions, data_val_emolex_emotions
-
-
-def load_sel_data(parameters: dict, data_tr: list, data_val: list) -> tuple:
-    """
-    Lectura del dataset de SEL
-    """
-    sel_path = join_path(
-        parameters["path data"],
-        parameters["SEL"],
-    )
-    # Carga de la bolsa de emociones de SEL
-    words_emotions, scores = build_BoE_from_SEL(sel_path)
-    data_tr_sel_emotions = obtain_corpus_emotions(
-        data_tr,
-        words_emotions,
-    )
-    data_val_sel_emotions = obtain_corpus_emotions(
-        data_val,
-        words_emotions,
-    )
-    return data_tr_sel_emotions, data_val_sel_emotions, scores
-
-
-def print_results(results: list) -> None:
-    """
-    Impresion estandarizada de los resultados
-    """
-    print(
-        tabulate(
-            results,
-            headers=[
-                'Algoritmo',
-                'Precision',
-                'Recall',
-                'F1 Score',
-            ],
-        ))
-
-
-def build_DOR(bow: np.array) -> np.array:
+def build_DOR(bow: array) -> array:
     bow_subset = bow.copy()
     # Vocabulario de la coleccion
     vocabulary_dim = bow_subset.shape[1]
-    dor = np.zeros((vocabulary_dim,
-                    bow_subset.shape[0]),
-                   dtype=float)
+    dor = zeros((vocabulary_dim,
+                 bow_subset.shape[0]),
+                dtype=float)
     for i, document in enumerate(bow_subset):
         # No zeros
-        nonzeros_position = np.nonzero(document)[0]
+        nonzeros_position = nonzero(document)[0]
         # Vocabulario en el documento
         vocabylary_document = len(nonzeros_position)
         # Logaritmo del numero de vocabularios
-        log = np.log10(vocabulary_dim/vocabylary_document)
+        log = log10(vocabulary_dim/vocabylary_document)
         for term in nonzeros_position:
             # Calculo de cada termino
-            dor[term, i] = (1+np.log10(document[term])) * log
+            dor[term, i] = (1+log10(document[term])) * log
     dor = preprocessing.normalize(dor)
     return dor
 
 
-def obtain_best_features(bow: np.array, labels: np.array) -> list:
+def obtain_best_features(bow: array, labels: array) -> list:
     features = SelectKBest(chi2, k=1000)
     features.fit(bow, labels)
     best_features = features.get_support(indices=True)
     return best_features
 
 
-def obtain_target_matrix(index: dict, dor: np.array, best_features: np.array) -> np.array:
+def obtain_target_matrix(index: dict, dor: array, best_features: array) -> array:
     invert_index = {}
     for word in index:
         invert_index[index[word]] = word
     target_words = [invert_index[word] for word in best_features]
-    target_matrix = np.array([dor[index[word]] for word in target_words])
+    target_matrix = array([dor[index[word]] for word in target_words])
     return target_matrix
 
 
-def obatin_reduce_matrix(target_matrix: np.array) -> np.array:
+def obatin_reduce_matrix(target_matrix: array) -> array:
     reduce_matrix = tsne(target_matrix, 2)
+    return reduce_matrix
+
+
+def obatin_reduce_matrix_sklearn(target_matrix: array) -> array:
+    tsne_sk = TSNE(init="pca", perplexity=30, learning_rate=30)
+    reduce_matrix = tsne_sk.fit_transform(target_matrix)
     return reduce_matrix
