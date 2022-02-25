@@ -11,7 +11,7 @@ for dataset in datasets.datasets:
     graphics_name = obtain_graphics_filename(parameters)
     files = obtain_files_per_dataset(files, parameters)
     colors = obtain_colors_per_method()
-    fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(6, 5))
+    fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, figsize=(12, 4))
     for file in files:
         method = obtain_method_from_name(file)
         color = colors[method]
@@ -36,6 +36,7 @@ for dataset in datasets.datasets:
         ax2.grid(ls="--", alpha=0.5, color="#000000")
         ax1.set_ylabel("$f\;(X)$")
         ax2.set_ylabel("$||\\nabla f\;(X)||$")
+        ax1.set_xlabel("Iteraciones")
         ax2.set_xlabel("Iteraciones")
         ax2.set_xticks(parameters["xticks"])
     handles, labels = ax1.get_legend_handles_labels()
@@ -43,6 +44,6 @@ for dataset in datasets.datasets:
                handles=handles,
                labels=labels,
                ncol=2,
-               bbox_to_anchor=(0.8, 1.01))
+               bbox_to_anchor=(0.6, 1.01))
     plt.tight_layout(pad=2)
     plt.savefig(join_path(parameters["path graphics"], graphics_name), dpi=400)

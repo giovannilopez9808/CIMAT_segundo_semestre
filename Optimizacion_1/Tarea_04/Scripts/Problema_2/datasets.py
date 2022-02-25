@@ -1,4 +1,8 @@
 class datasets_class:
+    """
+    Conjunto de parametros para cada dataset
+    """
+
     def __init__(self) -> None:
         self.datasets = {
             "rosembrock 2 predefined newton": {"path results": "../../Results/Problema_2/",
@@ -110,6 +114,10 @@ class datasets_class:
 
 
 class datasets_statistics_class:
+    """
+    Conjunto de parametros para cada dataset con la finalizad de hacer un analisis estadistico de los mismos
+    """
+
     def __init__(self) -> None:
         self.datasets = {
             "wood 4 newton": {
@@ -154,6 +162,9 @@ class datasets_statistics_class:
 
 
 class graphics_datasets_class:
+    """
+    Conjunto de parametros usados para realizar las graficas de cada dataset
+    """
 
     def __init__(self) -> None:
         self.datasets = {

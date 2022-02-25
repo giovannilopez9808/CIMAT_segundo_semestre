@@ -3,13 +3,22 @@ from numpy import array, zeros, loadtxt
 
 
 class functions_lambda:
+    """
+    Funciones que se usaran para ser optimizadas
+    """
+
     def __init__(self, parameters: dict) -> None:
+        # Eleccion del lambda
         self.lambda_i = parameters["lambda"]
+        # Creacion o eleccion del vector y
         self.create_y_vector(parameters["n"],
                              parameters["sigma"],
                              parameters["test data"])
 
     def f(self, x: array) -> array:
+        """
+        Funcio de suavizado
+        """
         n = len(x)
         fx = 0
         for i in range(n-1):
@@ -19,6 +28,9 @@ class functions_lambda:
         return fx
 
     def gradient(self, x: array) -> array:
+        """
+        Gradiente de la funcion de suavizado
+        """
         n = len(x)
         g = zeros(n)
         i = 0
@@ -33,8 +45,13 @@ class functions_lambda:
         return g
 
     def create_y_vector(self, n: int, sigma: float, test_data: bool = False):
+        """
+        creacion de vector y
+        """
+        # Definido
         self.t = array([2*(i)/(n-1)-1 for i in range(n)])
         self.y = self.t*self.t + normal(n)*sigma
         if test_data:
+            # Dado un archivo
             self.y = loadtxt("Data/y.txt", delimiter=",")
             self.y = self.y[:128]

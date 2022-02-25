@@ -1,79 +1,91 @@
 from numpy import linspace
 
 
-def obtain_dataset(name: str) -> dict:
-    datasets = {
-        "lambda 1": {"path results": "../../Results/Problema_3/",
-                     "n": 128,
-                     "tau": 1e-6,
-                     "lambda": 1,
-                     "sigma": 1,
-                     "c1": 0.1,
-                     "c2": 0.9,
-                     "problem name": "lambda",
-                     "initial point": "predefined",
-                     "test data": False,
-                     },
-        "lambda 10": {"path results": "../../Results/Problema_3/",
-                      "n": 128,
-                      "tau": 1e-6,
-                      "lambda": 10,
-                      "sigma": 10,
-                      "c1": 0.1,
-                      "c2": 0.9,
-                      "problem name": "lambda",
-                      "initial point": "predefined",
-                      "test data": False,
-                      },
-        "lambda 1000": {"path results": "../../Results/Problema_3/",
-                        "n": 128,
-                        "tau": 1e-6,
-                        "lambda": 1000,
-                        "sigma": 1000,
-                        "c1": 0.1,
-                        "c2": 0.9,
-                        "problem name": "lambda",
-                        "initial point": "predefined",
-                        "test data": False,
-                        },
-        "lambda 1 test": {"path results": "../../Results/Problema_3/",
+class datasets_class:
+    """
+    Conjunto de parametros para cada dataset
+    """
+
+    def __init__(self) -> None:
+
+        self.datasets = {
+            "lambda 1": {"path results": "../../Results/Problema_3/",
+                         "n": 128,
+                         "tau": 1e-6,
+                         "lambda": 1,
+                         "sigma": 1,
+                         "c1": 0.1,
+                         "c2": 0.9,
+                         "problem name": "lambda",
+                         "initial point": "predefined",
+                         "test data": False,
+                         },
+            "lambda 10": {"path results": "../../Results/Problema_3/",
                           "n": 128,
                           "tau": 1e-6,
-                          "lambda": 1,
-                          "sigma": 1,
+                          "lambda": 10,
+                          "sigma": 10,
                           "c1": 0.1,
                           "c2": 0.9,
                           "problem name": "lambda",
                           "initial point": "predefined",
-                          "test data": True,
+                          "test data": False,
                           },
-        "lambda 10 test": {"path results": "../../Results/Problema_3/",
-                           "n": 128,
-                           "tau": 1e-6,
-                           "lambda": 10,
-                           "sigma": 10,
-                           "c1": 0.1,
-                           "c2": 0.9,
-                           "problem name": "lambda",
-                           "initial point": "predefined",
-                           "test data": True,
-                           },
-        "lambda 1000 test": {"path results": "../../Results/Problema_3/",
-                             "n": 128,
-                             "tau": 1e-6,
-                             "lambda": 1000,
-                             "sigma": 1000,
-                             "c1": 0.1,
-                             "c2": 0.9,
-                             "problem name": "lambda",
-                             "initial point": "predefined",
-                             "test data": True,
-                             }
-    }
-    return datasets[name]
+            "lambda 1000": {"path results": "../../Results/Problema_3/",
+                            "n": 128,
+                            "tau": 1e-6,
+                            "lambda": 1000,
+                            "sigma": 1000,
+                            "c1": 0.1,
+                            "c2": 0.9,
+                            "problem name": "lambda",
+                            "initial point": "predefined",
+                            "test data": False,
+                            },
+            "lambda 1 test": {"path results": "../../Results/Problema_3/",
+                              "n": 128,
+                              "tau": 1e-6,
+                              "lambda": 1,
+                              "sigma": 1,
+                              "c1": 0.1,
+                              "c2": 0.9,
+                              "problem name": "lambda",
+                              "initial point": "predefined",
+                              "test data": True,
+                              },
+            "lambda 10 test": {"path results": "../../Results/Problema_3/",
+                               "n": 128,
+                               "tau": 1e-6,
+                               "lambda": 10,
+                               "sigma": 10,
+                               "c1": 0.1,
+                               "c2": 0.9,
+                               "problem name": "lambda",
+                               "initial point": "predefined",
+                               "test data": True,
+                               },
+            "lambda 1000 test": {"path results": "../../Results/Problema_3/",
+                                 "n": 128,
+                                 "tau": 1e-6,
+                                 "lambda": 1000,
+                                 "sigma": 1000,
+                                 "c1": 0.1,
+                                 "c2": 0.9,
+                                 "problem name": "lambda",
+                                 "initial point": "predefined",
+                                 "test data": True,
+                                 }
+        }
+
+    def obtain_dataset(self, name: str) -> dict:
+        return self.datasets[name]
 
 
 class graphics_datasets_class:
+    """
+    Conjunto de parametros usados para realizar las graficas de cada dataset
+    """
+
     def __init__(self) -> None:
         self.datasets = {"lambda 1 test": {"path data": "../../Results/Problema_3/",
                                            "path graphics": "../../Graphics/Problema_3/",
@@ -114,7 +126,7 @@ class graphics_datasets_class:
                                        "lambda": 10,
                                        "xlim": [-1, 1],
                                        "xticks": linspace(-1, 1, 11),
-                                       "y lim": [-20, 20], },
+                                       "y lim": [-25, 25], },
                          "lambda 1000": {"path data": "../../Results/Problema_3/",
                                          "path graphics": "../../Graphics/Problema_3/",
                                          "problem name": "lambda",
@@ -122,7 +134,7 @@ class graphics_datasets_class:
                                          "lambda": 1000,
                                          "xlim": [-1, 1],
                                          "xticks": linspace(-1, 1, 11),
-                                         "y lim": [-2000, 2000]}, }
+                                         "y lim": [-2200, 2200]}, }
 
     def obtain_dataset(self, name: str) -> dict:
         return self.datasets[name]

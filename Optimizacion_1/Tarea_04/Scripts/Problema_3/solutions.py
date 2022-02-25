@@ -1,9 +1,8 @@
-from datasets import *
-from auxiliar import *
-from methods import *
-
-parameters = obtain_dataset("lambda 1000 test")
-filename = obtain_filename(parameters)
-problem = problem_class(parameters)
-problem.solve()
-problem.save()
+from datasets import datasets_class
+from methods import problem_class
+datasets = datasets_class()
+for dataset in datasets.datasets:
+    parameters = datasets.obtain_dataset("lambda 1000 test")
+    problem = problem_class(parameters)
+    problem.solve()
+    problem.save()
