@@ -6,7 +6,8 @@ class functions_lambda:
     def __init__(self, parameters: dict) -> None:
         self.lambda_i = parameters["lambda"]
         self.create_y_vector(parameters["n"],
-                             parameters["sigma"])
+                             parameters["sigma"],
+                             parameters["test data"])
 
     def f(self, x: array) -> array:
         n = len(x)
@@ -31,8 +32,9 @@ class functions_lambda:
         g[n-1] += 2*self.lambda_i*(x[n-1]-x[n-2])
         return g
 
-    def create_y_vector(self, n: int, sigma: float):
+    def create_y_vector(self, n: int, sigma: float, test_data: bool = False):
         self.t = array([2*(i)/(n-1)-1 for i in range(n)])
         self.y = self.t*self.t + normal(n)*sigma
-        self.y = loadtxt("Data/y.txt", delimiter=",")
-        self.y = self.y[:128]
+        if test_data:
+            self.y = loadtxt("Data/y.txt", delimiter=",")
+            self.y = self.y[:128]

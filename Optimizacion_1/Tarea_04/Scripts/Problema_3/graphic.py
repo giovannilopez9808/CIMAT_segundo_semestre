@@ -1,6 +1,6 @@
-from datasets_graphics import *
 import matplotlib.pyplot as plt
 from os import listdir as ls
+from datasets import *
 from auxiliar import *
 
 datasets = graphics_datasets_class()

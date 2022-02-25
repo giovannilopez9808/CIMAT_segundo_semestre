@@ -7,8 +7,10 @@ def join_path(path: str, filename: str) -> str:
 
 
 def obtain_filename(parameters: dict) -> str:
-    return "{}_{}.csv".format(parameters["problem name"],
-                              parameters["lambda"])
+    filename = "lambda_{}.csv".format(parameters["lambda"])
+    if parameters["test data"]:
+        filename = "lambda_{}_test.csv".format(parameters["lambda"])
+    return filename
 
 
 def read_data(filename: str) -> DataFrame:
@@ -25,6 +27,8 @@ def write_status(name: str) -> None:
 
 def obtain_graphics_filename(parameters: dict) -> str:
     filename = "lambda_{}.png".format(parameters["lambda"])
+    if parameters["test data"]:
+        filename = "lambda_{}_test.png".format(parameters["lambda"])
     return filename
 
 
