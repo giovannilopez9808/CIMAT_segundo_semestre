@@ -53,4 +53,14 @@
 \SetKwInput{KwOutput}{Output}
 \setlength{\parskip}{0.05em}
 \SetKwBlock{Repeat}{repeat}{}
+\newcommand{\dpartial}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\dpartiald}[3]{\frac{\partial^2 #1}{\partial #2 \partial #3}}
+\newcommand{\ddpartial}[2]{\frac{\partial^2 #1}{\partial #2^2}}
 \newcommand{\Real}{\mathbb{R}}
+\usepackage{titlesec}
+\setcounter{secnumdepth}{5}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
