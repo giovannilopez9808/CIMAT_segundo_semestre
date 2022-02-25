@@ -7,12 +7,12 @@ En la figura \ref{fig:rosembrock_2} se muestran los resultados de cada iteració
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=12cm]{Graphics/Problema_2/rosembrock_2_predefined.png}
+    \includegraphics[width=17cm]{Graphics/Problema_2/rosembrock_2_predefined.png}
     \caption{Iteraciones de los métodos del descenso del gradiente y de Newton aplicados a la función de Rosembrock para n=2.}
     \label{fig:rosembrock_2}
 \end{figure}
 
-En la tabla \ref{table:rosembrock_2} se muestran los resultados de la primer y última iteracion para cada método.
+En la tabla \ref{table:rosembrock_2} se muestran los resultados de la primer y última iteracion para cada método para la función de Rosembrock para el caso de $n=2$.
 
 \begin{table}[H]
     \centering
@@ -31,7 +31,7 @@ En la figura \ref{fig:rosembrock_2_random} se muestran los resultados de cada it
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=12cm]{Graphics/Problema_2/rosembrock_2_random.png}
+    \includegraphics[width=17cm]{Graphics/Problema_2/rosembrock_2_random.png}
     \caption{Iteraciones de los métodos del descenso del gradiente y de Newton aplicados a la función de Rosembrock para n=2.}
     \label{fig:rosembrock_2_random}
 \end{figure}
@@ -55,7 +55,7 @@ En la figura \ref{fig:rosembrock_100} se muestran los resultados de cada iteraci
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=12cm]{Graphics/Problema_2/rosembrock_100_predefined.png}
+    \includegraphics[width=17cm]{Graphics/Problema_2/rosembrock_100_predefined.png}
     \caption{Iteraciones de los métodos del descenso del gradiente y de Newton aplicados a la función de Rosembrock para n=100.}
     \label{fig:rosembrock_100}
 \end{figure}
@@ -79,7 +79,7 @@ En la figura \ref{fig:rosembrock_100_random} se muestran los resultados de cada 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=12cm]{Graphics/Problema_2/rosembrock_100_random.png}
+    \includegraphics[width=17cm]{Graphics/Problema_2/rosembrock_100_random.png}
     \caption{Iteraciones de los métodos del descenso del gradiente y de Newton aplicados a la función de Rosembrock para n=100.}
     \label{fig:rosembrock_100_random}
 \end{figure}
@@ -99,44 +99,51 @@ En la tabla \ref{table:rosembrock_100_random} se muestran los resultados de la p
 
 \subsubsection{Estadisticas con vectores aleatorios}
 
+Se crearon 400 vectores aleatorios siguiendon la ecuación \ref{eq:random_vector}. Se organizaron conjuntos de 100 vectores para que cada conjunto sea el vector inicial en cada metodo para la función de Rosembrock de $n=2$ y $n=100$.
+
 \paragraph{2 dimensiones}
 
 \subparagraph{Método de Newton}
 
+En la tabla \ref{table:rosembrock_2_random_newton} se concentran los valores medios, desviación estandar, mínimo y máximo de la función y el gradiente de Rosembrock en los puntos estacionarios encontrados con el método de Newton.
+
 \begin{table}[H]
     \centering
     \begin{tabular}{ccc} \hline
-                 & $f(x)$     & $||\nabla f(x)||$ \\ \hline
-        n        & 100.000000 & 100.000000        \\
-        Media    & 0.051269   & 0.189574          \\
-        $\sigma$ & 0.300291   & 1.165927          \\
-        Mínimo   & 0.000000   & 0.000000          \\
-        Máximo   & 2.238695   & 8.806987          \\ \hline
+                 & $f(x)$   & $||\nabla f(x)||$ \\ \hline
+        n        & 100      & 100               \\
+        Media    & 0.051269 & 0.189574          \\
+        $\sigma$ & 0.300291 & 1.165927          \\
+        Mínimo   & 0.000000 & 0.000000          \\
+        Máximo   & 2.238695 & 8.806987          \\ \hline
     \end{tabular}
-    \caption{Media, desviación estandar, mínimo y máximo de los resultados aleatorios usando el método de Newton en la función de Wood.}
-    \label{table:rosembrock_4_random_newton}
+    \caption{Media, desviación estandar, mínimo y máximo de los resultados obtenidos con vectores iniciales aleatorios usando el método de Newton en la función de Rosembrock para $n=2$.}
+    \label{table:rosembrock_2_random_newton}
 \end{table}
 
 \subparagraph{Método del descenso del gradiente}
 
+En la tabla \ref{table:rosembrock_2_random_gradient} se concentran los valores medios, desviación estandar, mínimo y máximo de la función y el gradiente de Rosembrock en los puntos estacionarios encontrados con el método del descenso del gradiente.
+
 \begin{table}[H]
     \centering
     \begin{tabular}{ccc} \hline
-        {}       & $f(x)$              & $||\nabla f(x)||$   \\ \hline
+                 & $f(x)$              & $||\nabla f(x)||$   \\ \hline
         n        & 100                 & 100                 \\
         Media    & $2.333063x10^{-04}$ & $1.381915x10^{-02}$ \\
         $\sigma$ & $5.679958x10^{-09}$ & $1.702874x10^{-07}$ \\
         Mínimo   & $2.332966x10^{-04}$ & $1.381886x10^{-02}$ \\
         Máximo   & $2.333152x10^{-04}$ & $1.381942x10^{-02}$ \\ \hline
     \end{tabular}
-    \caption{Media, desviación estandar, mínimo y máximo de los resultados aleatorios usando el método de Newton en la función de Wood.}
-    \label{table:rosembrock_4_random_gradient}
+    \caption{Media, desviación estandar, mínimo y máximo de los resultados aleatorios usando el método de Newton en la función de Rosembrock para $n=2$.}
+    \label{table:rosembrock_2_random_gradient}
 \end{table}
 
 \paragraph{100 dimensiones}
 
 \subparagraph{Método de Newton}
 
+En la tabla \ref{table:rosembrock_100_random_newton} se concentran los valores medios, desviación estandar, mínimo y máximo de la función y el gradiente de Rosembrock en los puntos estacionarios encontrados con el método de Newton.
 
 \begin{table}[H]
     \centering
@@ -148,11 +155,13 @@ En la tabla \ref{table:rosembrock_100_random} se muestran los resultados de la p
         Mínimo   & 0.000000    & 0.000000          \\
         Máximo   & 5344.705735 & 3423.160112       \\ \hline
     \end{tabular}
-    \caption{Media, desviación estandar, mínimo y máximo de los resultados aleatorios usando el método de Newton en la función de Wood.}
+    \caption{Media, desviación estandar, mínimo y máximo de los resultados aleatorios usando el método de Newton en la función de Rosembrock para $n=100$.}
     \label{table:rosembrock_100_random_newton}
 \end{table}
 
 \subparagraph{Método del descenso del gradiente}
+
+En la tabla \ref{table:rosembrock_100_random_gradient} se concentran los valores medios, desviación estandar, mínimo y máximo de la función y el gradiente de Rosembrock en los puntos estacionarios encontrados con el método de Newton.
 
 \begin{table}[H]
     \centering
@@ -164,6 +173,6 @@ En la tabla \ref{table:rosembrock_100_random} se muestran los resultados de la p
         Mínimo   & $1.000360x10^{-8}$ & $9.988768x10^{-5}$ \\
         Máximo   & $3.986624$         & $9.994944x10^{-5}$ \\ \hline
     \end{tabular}
-    \caption{Media, desviación estandar, mínimo y máximo de los resultados aleatorios usando el método de Newton en la función de Wood.}
+    \caption{Media, desviación estandar, mínimo y máximo de los resultados aleatorios usando el método de Newton en la función de Rosembrock para $n=100$.}
     \label{table:rosembrock_100_random_gradient}
 \end{table}
