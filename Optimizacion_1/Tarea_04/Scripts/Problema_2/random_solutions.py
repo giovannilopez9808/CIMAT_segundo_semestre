@@ -1,4 +1,3 @@
-from unittest import result
 from datasets import *
 from auxiliar import *
 from methods import *
