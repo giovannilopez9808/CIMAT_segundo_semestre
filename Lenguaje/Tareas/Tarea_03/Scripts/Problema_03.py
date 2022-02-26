@@ -1,11 +1,11 @@
 from Modules.functions import load_data, print_results
+from Modules.DTR import build_TCOR, tcor_to_BoW
 from Modules.datasets import obtain_parameters
 from Modules.dictionaries import dictionaries
 from Modules.vocabulary import vocabularies
 from Modules.models import SVM_model
-from Modules.DTR import build_TCOR, tcor_to_BoW
 from Modules.bows import BoW
-from numpy import shape
+
 parameters = obtain_parameters()
 vocabulary = vocabularies()
 dictionary = dictionaries()
