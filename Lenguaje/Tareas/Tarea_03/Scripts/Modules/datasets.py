@@ -5,6 +5,10 @@ def obtain_parameters() -> dict:
     parameters = {
         # Ruta de los archivos
         "path data": "../Data/",
+        "path graphics": "../Graphics/",
+        "path results": "../Results/",
+        "top documents file": "top_documents.txt",
+        "top words file": "top_words.txt",
         # Archivos de entrenamiento
         "train": {
             "data": "mex_train.txt",
@@ -21,7 +25,8 @@ def obtain_parameters() -> dict:
         "SEL": "SEL.txt",
         "max words": 5000,
         "max bigrams": 1000,
-        "path graphics": "../Graphics/",
+        "max similitud words": 10,
+        "max similitud documents": 10,
         "constellation name": "constellation.png",
         "centroid name": "centroid.png",
         "subset words":  ["tristes", "triste", "alegría", "hermosa", "chica", "hombres", "hdp", "madre", "madres", "@usuario", "hijos", "pendeja", "pendejo", "mierda", "loca", "hijo", "hija", "mamá", "tía"]

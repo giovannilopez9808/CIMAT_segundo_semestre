@@ -1,9 +1,13 @@
+from fileinput import filename
+from inspect import Parameter
 from numpy import sum, log10, log2, zeros, array, nonzero, dot
 from nltk.tokenize import TweetTokenizer as tokenizer
 from sklearn.preprocessing import normalize
 from numpy.random import choice, randint
 from itertools import combinations
 from tabulate import tabulate
+
+from Modules.functions import join_path
 
 
 def build_TCOR(data: list, vocabulary: dict, index_word: dict, weight: str = 'short-text') -> array:
@@ -128,29 +132,35 @@ def tcor_to_BoW(data: array, vocabulary: list, index_word: dict, tcor: array) ->
     return BoW
 
 
-def obtain_cosine_similitud(tcor: array) -> list:
+def obtain_cosine_similitud(data: array) -> list:
     distances = []
-    for i in range(tcor.shape[0]):
-        pairs = range(i+1, tcor.shape[0])
+    for i in range(data.shape[0]-1):
+        pairs = range(i+1, data.shape[0])
         for j in pairs:
-            distance = dot(tcor[i], tcor[j])
+            distance = dot(data[i], data[j])
             distances.append([distance, i, j])
     distances.sort(reverse=True)
     return distances
 
 
-def write_top_similitud_words(distances: array, word_index: dict, max: int = 50):
+def write_top_similitud_words(distances: array, word_index: dict, parameters: dict):
     top_list = []
-    for i in range(max):
+    i = 0
+    while(i < parameters["max similitud words"]):
         data_i = distances[i]
         distance_i = data_i[0]
         index_i = data_i[1]
         index_j = data_i[2]
-        top_list += [[i+1,
-                     distance_i,
-                     word_index[index_i],
-                     word_index[index_j]]]
-    print(
+        if word_index[index_i] != word_index[index_j]:
+            top_list += [[i+1,
+                          distance_i,
+                          word_index[index_i],
+                          word_index[index_j]]]
+            i += 1
+    filename = join_path(parameters["path results"],
+                         parameters["top words file"])
+    file = open(filename, "w")
+    file.write(
         tabulate(
             top_list,
             headers=[
@@ -160,3 +170,30 @@ def write_top_similitud_words(distances: array, word_index: dict, max: int = 50)
                 'Palabra 2',
             ],
         ))
+    file.close()
+
+
+def write_top_similitud_documents(distances: array, data: array, parameters: dict):
+    top_list = []
+    for i in range(parameters["max similitud documents"]):
+        data_i = distances[i]
+        distance_i = data_i[0]
+        index_i = data_i[1]
+        index_j = data_i[2]
+        top_list += [[i+1,
+                     distance_i,
+                     data[index_i],
+                     data[index_j]]]
+    filename = join_path(parameters["path results"],
+                         parameters["top documents file"])
+    file = open(filename, "w")
+    file.write(tabulate(
+        top_list,
+        headers=[
+            'Posición',
+            'Angulo',
+            'Palabra 1',
+            'Palabra 2',
+        ],
+    ))
+    file.close()

@@ -1,4 +1,5 @@
 from nltk.tokenize import TweetTokenizer as tokenizer
+from sklearn.preprocessing import normalize
 from nltk import bigrams as bigrams_nltk
 from .dictionaries import dictionaries
 from numpy import zeros, array, log10
@@ -131,6 +132,7 @@ class BoW:
             idf = log10(n / idf)
             for docs, tweet in enumerate(data):
                 bow[docs, index[word]] = bow[docs, index[word]] * idf
+        bow = normalize(bow)
         return bow
 
     def build_tfidf_with_probabilities(self, data: list, vocabylary: list, index: dict,
