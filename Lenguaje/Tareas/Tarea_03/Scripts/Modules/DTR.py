@@ -1,9 +1,9 @@
-from numpy import sum, log10, log2, zeros, array, nonzero
+from numpy import sum, log10, log2, zeros, array, nonzero, dot
 from nltk.tokenize import TweetTokenizer as tokenizer
 from sklearn.preprocessing import normalize
 from numpy.random import choice, randint
 from itertools import combinations
-from numpy import shape
+from tabulate import tabulate
 
 
 def build_TCOR(data: list, vocabulary: dict, index_word: dict, weight: str = 'short-text') -> array:
@@ -126,3 +126,37 @@ def tcor_to_BoW(data: array, vocabulary: list, index_word: dict, tcor: array) ->
         BoW[i] = BoW[i]/n
         i += 1
     return BoW
+
+
+def obtain_cosine_similitud(tcor: array) -> list:
+    distances = []
+    for i in range(tcor.shape[0]):
+        pairs = range(i+1, tcor.shape[0])
+        for j in pairs:
+            distance = dot(tcor[i], tcor[j])
+            distances.append([distance, i, j])
+    distances.sort(reverse=True)
+    return distances
+
+
+def write_top_similitud_words(distances: array, word_index: dict, max: int = 50):
+    top_list = []
+    for i in range(max):
+        data_i = distances[i]
+        distance_i = data_i[0]
+        index_i = data_i[1]
+        index_j = data_i[2]
+        top_list += [[i+1,
+                     distance_i,
+                     word_index[index_i],
+                     word_index[index_j]]]
+    print(
+        tabulate(
+            top_list,
+            headers=[
+                'Posición',
+                'Angulo',
+                'Palabra 1',
+                'Palabra 2',
+            ],
+        ))

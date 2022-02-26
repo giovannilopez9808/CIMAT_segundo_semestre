@@ -44,23 +44,6 @@ def split_data(data: list, max_words: int) -> list:
     return data[:max_words]
 
 
-def normalize(bow: array) -> array:
-    """
-    Normalizacion de la BoW de dos dimensiones
-    """
-    # Copia de la BoW
-    bow_norm = bow.copy()
-    for i in range(bow.shape[0]):
-        # Inicializacion de la norma
-        norm = 0
-        # Calculo de la norma
-        norm += sum([value**2 for value in bow[i]])
-        norm = sqrt(norm)
-        # Estandarizacion de la norma
-        bow_norm[i] = array([value / norm for value in bow[i]])
-    return bow_norm
-
-
 def mask_emotion(tokens: list, word_emotions: dict) -> list:
     """
     Enmascara un tweet a partir de las BoE dadas

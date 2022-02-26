@@ -27,3 +27,9 @@ class dictionaries:
         for word in words:
             freq_word_per_document[word] = word_count
         return freq_word_per_document
+
+    def obtain_invert_dictionary(self, index_word: dict) -> dict:
+        invert_index = {}
+        for word in index_word:
+            invert_index[index_word[word]] = word
+        return invert_index
