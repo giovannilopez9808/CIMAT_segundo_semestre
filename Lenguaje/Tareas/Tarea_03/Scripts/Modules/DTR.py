@@ -1,10 +1,9 @@
-from cv2 import transpose
 from numpy import sum, log10, log2, zeros, array, nonzero
 from nltk.tokenize import TweetTokenizer as tokenizer
 from sklearn.preprocessing import normalize
 from numpy.random import choice, randint
 from itertools import combinations
-from numpy import matmul
+from numpy import shape
 
 
 def build_TCOR(data: list, vocabulary: dict, index_word: dict, weight: str = 'short-text') -> array:
@@ -103,3 +102,27 @@ def random_indexing_with_DOR(data: array, index_word: dict, size: int) -> array:
                 ri_matrix[index] += id_matrix[index]
     ri_matrix = normalize(ri_matrix)
     return ri_matrix
+
+
+def tcor_to_BoW(data: array, vocabulary: list, index_word: dict, tcor: array) -> array:
+    document_len = len(data)
+    vocabulary_len = len(vocabulary)
+    # Obtengo conjunto de tokens por documento
+    sets = [set(tokenizer().tokenize(doc)) for doc in data]
+    # Quito palabras que no están en vocabulario
+    for subset in sets:
+        auxiliar = subset.copy()
+        for word in auxiliar:
+            if word not in index_word:
+                subset.remove(word)
+    BoW = zeros((document_len, vocabulary_len),
+                dtype=float)
+    i = 0
+    for subset in sets:
+        n = 0
+        for word in subset:
+            BoW[i] += tcor[index_word[word]]
+            n += 1
+        BoW[i] = BoW[i]/n
+        i += 1
+    return BoW

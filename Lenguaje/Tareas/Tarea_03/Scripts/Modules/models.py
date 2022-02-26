@@ -1,7 +1,7 @@
 from sklearn.metrics import confusion_matrix, precision_recall_fscore_support
 from sklearn.model_selection import GridSearchCV
 from sklearn import metrics, svm
-from numpy import array
+from numpy import array, shape
 
 
 class SVM_model:
@@ -34,12 +34,12 @@ class SVM_model:
             average="macro",
             pos_label=1,
         )
-        print(confusion_matrix(
-            labels_val,
-            y_pred,
-        ))
-        print(metrics.classification_report(
-            labels_val,
-            y_pred,
-        ))
+        # print(confusion_matrix(
+        #     labels_val,
+        #     y_pred,
+        # ))
+        # print(metrics.classification_report(
+        #     labels_val,
+        #     y_pred,
+        # ))
         return [name, precision, recall, fscore]
