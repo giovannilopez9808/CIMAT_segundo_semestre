@@ -1,10 +1,10 @@
 from random import random
 from Modules.functions import load_data, obatin_reduced_matrix, obtain_best_features, obtain_target_matrix
 from Modules.graphics import create_constellation, create_centroid
+from Modules.DTR import build_DOR, random_indexing_with_DOR
 from Modules.datasets import obtain_parameters
 from Modules.dictionaries import dictionaries
 from Modules.vocabulary import vocabularies
-from Modules.DTR import build_DOR, random_indexing_with_DOR
 from Modules.bows import BoW
 
 parameters = obtain_parameters()
