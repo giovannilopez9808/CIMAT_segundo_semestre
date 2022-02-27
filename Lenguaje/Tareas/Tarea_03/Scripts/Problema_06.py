@@ -1,4 +1,4 @@
-from Modules.functions import load_data, obtain_information_gain, print_tuple_as_table, sort_dict
+from Modules.functions import load_data, obtain_information_gain, print_tuple_as_table
 from Modules.datasets import obtain_parameters
 from Modules.dictionaries import dictionaries
 from Modules.graphics import create_wordcloud
@@ -16,5 +16,5 @@ ig = obtain_information_gain(data_tr,
                              labels_val,
                              index_word)
 create_wordcloud(ig, parameters)
-ig = sort_dict(ig)
+ig = dictionary.sort_dict(ig)
 print_tuple_as_table(ig, 50)

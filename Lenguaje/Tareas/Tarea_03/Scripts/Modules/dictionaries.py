@@ -1,4 +1,8 @@
 class dictionaries:
+    """
+    Métodos para crear diccionarios con diferentes informaciones
+    """
+
     def __init__(self) -> None:
         pass
 
@@ -29,7 +33,18 @@ class dictionaries:
         return freq_word_per_document
 
     def obtain_invert_dictionary(self, index_word: dict) -> dict:
+        """
+        Invierte los valores de un diccionario dado. Los values pasan a ser keys y viceversa
+        """
         invert_index = {}
         for word in index_word:
             invert_index[index_word[word]] = word
         return invert_index
+
+    def sort_dict(self, data: dict, reverse: bool = True) -> dict:
+        """
+        Ordena un diccionario
+        """
+        dict_sort = sorted(
+            data.items(), key=lambda item: item[1], reverse=reverse)
+        return dict_sort

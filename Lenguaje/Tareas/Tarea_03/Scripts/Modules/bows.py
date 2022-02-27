@@ -7,6 +7,10 @@ from nltk import FreqDist
 
 
 class BoW:
+    """
+    Métodos para crear bolsas de palabras en base a diferentes pesados
+    """
+
     def __init__(self) -> None:
         pass
 

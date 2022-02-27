@@ -1,68 +1,66 @@
-from numpy import sum, log, log2, zeros, array, nonzero, dot
+from numpy import sum, log, zeros, array, nonzero, dot
 from nltk.tokenize import TweetTokenizer as tokenizer
 from sklearn.preprocessing import normalize
 from numpy.random import choice, randint
+from Modules.functions import join_path
 from itertools import combinations
 from tabulate import tabulate
 
-from Modules.functions import join_path
 
-
-def build_TCOR(data: list, vocabulary: dict, index_word: dict, weight: str = 'short-text') -> array:
+def build_TCOR(data: list, vocabulary: dict, index_word: dict) -> array:
+    """
+    Método para crear una TCOR en base a unos datos dados. Este realiza un pesado de texto
+    """
     vocabulary_len = len(vocabulary)
     tcor = zeros((vocabulary_len,
                   vocabulary_len),
                  dtype=float)
-    # Conjunto de tokens por documento
+    # Conjunto de sets de los tokens por documento
     sets = [set(tokenizer().tokenize(doc)) for doc in data]
-    # Palabras que no estan en el vocabulario
+    # Palabras que no se encuentran en el vocabulario
     for subset in sets:
+        # Copia del subset
         auxiliar = subset.copy()
         for word in auxiliar:
+            # Si la palabra ya se encuentra en el set la elimina
             if word not in index_word:
                 subset.remove(word)
+    # Recorrido por todos los tweets
     for subset in sets:
         for word in subset:
             # Coocurrencia de palabra consigo mismas
             word_i = index_word[word]
             tcor[word_i, word_i] += 1.0
+        # Comparacion si dos palabras se encuentra en el mismo documento
         for word_i, word_j in combinations(subset, 2):
+            # Si se encuentran se cuentan
             if word_i in index_word and word_j in index_word:
                 i = index_word[word_i]
                 j = index_word[word_j]
                 tcor[i, j] += 1.0
                 tcor[j, i] += 1.0
-
-    if weight == 'short-text':
-        for i in range(vocabulary_len):
-            sum_i = sum(tcor[i] > 0)
-            for j in range(vocabulary_len):
-                t_ij = tcor[i, j]
-                if t_ij > 0:
-                    t_ij = 1+log(t_ij)
-                    t_ij *= log(vocabulary_len/sum_i)
-                    tcor[i, j] = t_ij
-    if weight == 'PPMI':
-        word_count = sum(tcor,
-                         axis=1)
-        context_count = sum(tcor,
-                            axis=0)
-        total = sum(word_count)
-        for i in range(tcor.shape[0]):
-            for j in range(tcor.shape[1]):
-                t_ij = tcor[i, j]
-                if t_ij > 0:
-                    p_ij = t_ij / total
-                    p_word = word_count[i] / total
-                    p_contex = context_count[j] / total
-                    if abs(p_word * p_contex) > 0:
-                        value = log(p_ij/(p_word*p_contex))
-                        tcor[i, j] = max(value, 0)
+    for i in range(vocabulary_len):
+        # Suma de todos los valores mayores a cero de la columna
+        sum_i = sum(tcor[i] > 0)
+        # Recorrido por el vector
+        for j in range(vocabulary_len):
+            # Elemento ij de TCOR
+            t_ij = tcor[i, j]
+            # Si es mayor a cero
+            if t_ij > 0:
+                # Se calcula su peso
+                t_ij = 1+log(t_ij)
+                t_ij *= log(vocabulary_len/sum_i)
+                tcor[i, j] = t_ij
+    # Normalizacion
     tcor = normalize(tcor)
     return tcor
 
 
 def build_DOR(bow: array) -> array:
+    """
+    Creacion de una DOR en base a una bolsa de palabras
+    """
     bow_subset = bow.copy()
     # Vocabulario de la coleccion
     vocabulary_dim = bow_subset.shape[1]
@@ -75,15 +73,18 @@ def build_DOR(bow: array) -> array:
         # Vocabulario en el documento
         vocabylary_document = len(nonzeros_position)
         # Logaritmo del numero de vocabularios
-        log = log(vocabulary_dim/vocabylary_document)
+        log_value = log(vocabulary_dim/vocabylary_document)
         for term in nonzeros_position:
             # Calculo de cada termino
-            dor[term, i] = (1+log(document[term])) * log
+            dor[term, i] = (1+log(document[term])) * log_value
     dor = normalize(dor)
     return dor
 
 
-def random_indexing_with_DOR(data: array, index_word: dict, size: int) -> array:
+def random_indexing(data: array, index_word: dict, size: int) -> array:
+    """
+    Creacion de random indexing a partir de una base de datos
+    """
     vocabulary_len = len(index_word)
     # Representación random Indexing
     ri_matrix = zeros((vocabulary_len, size),
@@ -93,10 +94,14 @@ def random_indexing_with_DOR(data: array, index_word: dict, size: int) -> array:
     # Asigno aleatoriamente -1 y 1 al 20% de los datos
     nonzero_size = round(0.2 * size)
     for i in range(vocabulary_len):
+        # Eleccion aleatoria de los -1,1
         values = choice([-1, 1], size=nonzero_size)
+        # Eleccion aleatoria de las posicones
         positions = randint(size, size=nonzero_size)
+        # Guardado de los valores aleatorios
         for j in range(nonzero_size):
             id_matrix[i, positions[j]] = values[j]
+    # Suma de los contextos en cada espacio
     for doc in data:
         for word in tokenizer().tokenize(doc):
             if word in index_word:
@@ -107,30 +112,36 @@ def random_indexing_with_DOR(data: array, index_word: dict, size: int) -> array:
 
 
 def tcor_to_BoW(data: array, vocabulary: list, index_word: dict, tcor: array) -> array:
+    """
+    Creacion de una BoW a partir de TCOR
+    """
+    # Tamaño de documetos
     document_len = len(data)
+    # Tamaño de vocabulario
     vocabulary_len = len(vocabulary)
     # Obtengo conjunto de tokens por documento
     sets = [set(tokenizer().tokenize(doc)) for doc in data]
-    # Quito palabras que no están en vocabulario
+    # Eliminacion de las palabras que no se encuentran en el vocabulario
     for subset in sets:
         auxiliar = subset.copy()
         for word in auxiliar:
             if word not in index_word:
                 subset.remove(word)
+    # Inicialziacion de la BoW
     BoW = zeros((document_len, vocabulary_len),
                 dtype=float)
-    i = 0
-    for subset in sets:
-        n = 0
+    # Calculo de los pesos
+    for i, subset in enumerate(sets):
         for word in subset:
             BoW[i] += tcor[index_word[word]]
-            n += 1
-        BoW[i] = BoW[i]/n
-        i += 1
+        BoW[i] = BoW[i]/len(subset)
     return BoW
 
 
 def obtain_cosine_similitud(data: array) -> list:
+    """
+    Obtiene la distancia de coseno de los vectores dado una matriz de datos
+    """
     distances = []
     for i in range(data.shape[0]-1):
         pairs = range(i+1, data.shape[0])
@@ -141,7 +152,10 @@ def obtain_cosine_similitud(data: array) -> list:
     return distances
 
 
-def write_top_similitud_words(distances: array, word_index: dict, parameters: dict):
+def write_top_similitud_words(distances: array, word_index: dict, parameters: dict, show: bool = False):
+    """
+    Impresion de los resultsdos en la similitud de palabras
+    """
     top_list = []
     i = 0
     while(i < parameters["max similitud words"]):
@@ -157,21 +171,27 @@ def write_top_similitud_words(distances: array, word_index: dict, parameters: di
             i += 1
     filename = join_path(parameters["path results"],
                          parameters["top words file"])
-    file = open(filename, "w")
-    file.write(
-        tabulate(
-            top_list,
-            headers=[
-                'Posición',
-                'Angulo',
-                'Palabra 1',
-                'Palabra 2',
-            ],
-        ))
-    file.close()
+    table = tabulate(
+        top_list,
+        headers=[
+            'Posición',
+            'Angulo',
+            'Palabra 1',
+            'Palabra 2',
+        ],
+    )
+    if show:
+        print(table)
+    else:
+        file = open(filename, "w")
+        file.write(table)
+        file.close()
 
 
-def write_top_similitud_documents(distances: array, data: array, parameters: dict):
+def write_top_similitud_documents(distances: array, data: array, parameters: dict, show: bool = False):
+    """
+    Escritura de la similitud de documentos
+    """
     top_list = []
     for i in range(parameters["max similitud documents"]):
         data_i = distances[i]
@@ -184,14 +204,18 @@ def write_top_similitud_documents(distances: array, data: array, parameters: dic
                      data[index_j]]]
     filename = join_path(parameters["path results"],
                          parameters["top documents file"])
-    file = open(filename, "w")
-    file.write(tabulate(
+    table = tabulate(
         top_list,
         headers=[
             'Posición',
             'Angulo',
-            'Palabra 1',
-            'Palabra 2',
+            'Documento 1',
+            'Documento 2',
         ],
-    ))
-    file.close()
+    )
+    if show:
+        print(table)
+    else:
+        file = open(filename, "w")
+        file.write(table)
+        file.close()

@@ -1,3 +1,4 @@
+from fcntl import F_SETFL
 from .functions import obtain_stopwords
 from .functions import join_path
 from wordcloud import WordCloud
@@ -6,7 +7,7 @@ from numpy import array
 import warnings
 
 
-def create_constellation(reduced_matrix: array, target_words: array, parameters: dict) -> None:
+def create_constellation(reduced_matrix: array, target_words: array, parameters: dict, show: bool = False) -> None:
     warnings.filterwarnings("ignore")
     stopwords = obtain_stopwords("spanish")
     plt.figure(figsize=(40, 40), dpi=100)
@@ -23,12 +24,15 @@ def create_constellation(reduced_matrix: array, target_words: array, parameters:
             plt.annotate(word, (x, y), color='black')
     plt.tight_layout()
     plt.axis("off")
-    filename = join_path(parameters["path graphics"],
-                         parameters["constellation name"])
-    plt.savefig(filename)
+    if show:
+        plt.show()
+    else:
+        filename = join_path(parameters["path graphics"],
+                             parameters["constellation name"])
+        plt.savefig(filename)
 
 
-def create_centroid(reduced_matrix: array, target_words: array, parameters: dict) -> None:
+def create_centroid(reduced_matrix: array, target_words: array, parameters: dict, show: bool = False) -> None:
     fig, ax = plt.subplots(figsize=(15, 15))
     for idx, word in enumerate(target_words[:]):
         if word in parameters["subset words"]:
@@ -48,16 +52,22 @@ def create_centroid(reduced_matrix: array, target_words: array, parameters: dict
                         position)
     ax.axis("off")
     plt.tight_layout()
-    filename = join_path(parameters["path graphics"],
-                         parameters["centroid name"])
-    plt.savefig(filename)
+    if show:
+        plt.show()
+    else:
+        filename = join_path(parameters["path graphics"],
+                             parameters["centroid name"])
+        plt.savefig(filename)
 
 
-def create_wordcloud(data: dict, parameters: dict) -> None:
+def create_wordcloud(data: dict, parameters: dict, show: bool = False) -> None:
     wc = WordCloud()
     wc.generate_from_frequencies(data)
     plt.axis("off")
     plt.imshow(wc, interpolation="bilinear")
-    filename = join_path(parameters["path graphics"],
-                         parameters["wordcloud name"])
-    plt.savefig(filename)
+    if show:
+        plt.show()
+    else:
+        filename = join_path(parameters["path graphics"],
+                             parameters["wordcloud name"])
+        plt.savefig(filename)

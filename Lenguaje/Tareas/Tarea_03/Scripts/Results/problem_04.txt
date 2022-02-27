@@ -1,0 +1,12 @@
+  Posición    Angulo  Palabra 1    Palabra 2
+----------  --------  -----------  -----------
+         1         1  beyond       bangtan
+         2         1  diciéndoles  bangtan
+         3         1  diciéndoles  beyond
+         4         1  scene        bangtan
+         5         1  scene        beyond
+         6         1  scene        diciéndoles
+         7         1  seran        bangtan
+         8         1  seran        beyond
+         9         1  seran        diciéndoles
+        10         1  seran        scene

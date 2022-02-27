@@ -156,13 +156,23 @@ def obtain_stopwords(language: str) -> set:
 
 
 def obtain_information_gain(data_tr: array, labels_tr: array, data_val: array, labels_val: array, index_word: dict) -> float:
+    """
+    Calcula la ganancia de infomacion de toda la coleccion de una base de datos
+    """
+    # Concadenacion de los datos de entrenamiento
     data = concatenate((data_tr, data_val))
+    # Concadenacion de las clases
     labels = concatenate((labels_tr, labels_val))
+    # Numero de documentos
     nt = data.shape[0]
+    # Numero de documentos de cada clase
     np = FreqDist(labels)
+    # Numero de documentos que contiene una palabra en cada clase
     nip = obtain_nip(data, labels, np, index_word)
+    # Numero de terminos en la coleccion
     ni = obtain_ni(nip)
     IG = {}
+    # Calculo de la funcion
     for word in index_word:
         value = 0
         n_i = ni[word]
@@ -179,31 +189,35 @@ def obtain_information_gain(data_tr: array, labels_tr: array, data_val: array, l
 
 
 def obtain_nip(data: list, labels: list, np: FreqDist, index_word: dict) -> dict:
+    """
+    Obtiene el numero de documentos de cada termino por clase
+    """
     nip = {}
+    # Tamaño de las clases
     np_len = len(np)
+    # Inicializacion del diccionario de las clases
     zeros_dict = dict(zip(np.keys(), zeros(np_len)))
     for word in index_word:
+        # Inicializacion de cada termino
         nip[word] = zeros_dict.copy()
         for i, doc in enumerate(data):
+            # Si la palabra esta en el documento
             if word in doc.lower():
+                # Clase del documento
                 type_class = labels[i]
+                # Conteo
                 nip[word][type_class] += 1
     return nip
 
 
 def obtain_ni(nip: dict) -> dict:
+    """
+    Obtiene el numero de terminos en la coleccion
+    """
     ni = {}
     for word in nip:
-        if word == "a":
-            print(nip[word])
         ni[word] = sum(nip[word].values())
     return ni
-
-
-def sort_dict(data: dict) -> dict:
-    dict_sort = sorted(
-        data.items(), key=lambda item: item[1], reverse=True)
-    return dict_sort
 
 
 def print_tuple_as_table(data: list, max: int) -> None:
