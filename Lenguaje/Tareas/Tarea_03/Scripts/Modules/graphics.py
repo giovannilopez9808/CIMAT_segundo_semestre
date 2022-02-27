@@ -1,5 +1,6 @@
 from .functions import obtain_stopwords
 from .functions import join_path
+from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 from numpy import array
 import warnings
@@ -49,4 +50,14 @@ def create_centroid(reduced_matrix: array, target_words: array, parameters: dict
     plt.tight_layout()
     filename = join_path(parameters["path graphics"],
                          parameters["centroid name"])
+    plt.savefig(filename)
+
+
+def create_wordcloud(data: dict, parameters: dict) -> None:
+    wc = WordCloud()
+    wc.generate_from_frequencies(data)
+    plt.axis("off")
+    plt.imshow(wc, interpolation="bilinear")
+    filename = join_path(parameters["path graphics"],
+                         parameters["wordcloud name"])
     plt.savefig(filename)

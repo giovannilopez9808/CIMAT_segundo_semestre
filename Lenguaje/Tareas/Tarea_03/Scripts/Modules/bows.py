@@ -2,7 +2,7 @@ from nltk.tokenize import TweetTokenizer as tokenizer
 from sklearn.preprocessing import normalize
 from nltk import bigrams as bigrams_nltk
 from .dictionaries import dictionaries
-from numpy import zeros, array, log10
+from numpy import zeros, array, log
 from nltk import FreqDist
 
 
@@ -100,7 +100,7 @@ class BoW:
             vocabylary_data = FreqDist(bigrams)
             for bigram in vocabylary_data:
                 if bigram in index.keys():
-                    bow[docs, index[bigram]] = log10(
+                    bow[docs, index[bigram]] = log(
                         vocabylary_data[bigram] + 1)
             docs += 1
         return bow
@@ -125,11 +125,11 @@ class BoW:
                     # Descriptiva
                     tf = tweet.count(word)
                     idf_per_word_and_document[word][docs] += 1
-                    bow[docs, index[word]] = log10(tf + 1)
+                    bow[docs, index[word]] = log(tf + 1)
         # Discriminativa
         for word in index.keys():
             idf = sum(idf_per_word_and_document[word].values())
-            idf = log10(n / idf)
+            idf = log(n / idf)
             for docs, tweet in enumerate(data):
                 bow[docs, index[word]] = bow[docs, index[word]] * idf
         bow = normalize(bow)
@@ -156,12 +156,12 @@ class BoW:
                     # Descriptiva
                     tf = tweet.count(word)
                     idf_per_word_and_document[word][docs] += 1
-                    bow[docs, index[word]] = log10(tf + 1)
+                    bow[docs, index[word]] = log(tf + 1)
 
         # Discriminativa
         for word in index.keys():
             idf = sum(idf_per_word_and_document[word].values())
-            idf = log10(n / idf)
+            idf = log(n / idf)
             for docs, tweet in enumerate(data):
                 if word in probability:
                     bow[docs, index[word]] *= probability[word]
@@ -189,12 +189,12 @@ class BoW:
                     # Descriptiva
                     tf = vocabylary_data[bigram]
                     idf_per_word_and_document[bigram][docs] += 1
-                    bow[docs, index[bigram]] = log10(tf + 1)
+                    bow[docs, index[bigram]] = log(tf + 1)
 
         # Discriminativa
         for bigram in index.keys():
             idf = sum(idf_per_word_and_document[bigram].values())
-            idf = log10(n / idf)
+            idf = log(n / idf)
             for docs, tweet in enumerate(data):
                 bow[docs, index[bigram]] = bow[docs, index[bigram]] * idf
         return bow

@@ -29,6 +29,7 @@ def obtain_parameters() -> dict:
         "max similitud documents": 10,
         "constellation name": "constellation.png",
         "centroid name": "centroid.png",
-        "subset words":  ["tristes", "triste", "alegría", "hermosa", "chica", "hombres", "hdp", "madre", "madres", "@usuario", "hijos", "pendeja", "pendejo", "mierda", "loca", "hijo", "hija", "mamá", "tía"]
+        "wordcloud name": "wordcloud.png",
+        "subset words":  ["loca", "hdp", "puto", "pendejo", "chica", "hombres", "madre", "madres", "chinguen", "chingue", "pendeja", "mierda", "hijo", "hija", "mamá", "gringos"]
     }
     return parameters

@@ -1,6 +1,4 @@
-from fileinput import filename
-from inspect import Parameter
-from numpy import sum, log10, log2, zeros, array, nonzero, dot
+from numpy import sum, log, log2, zeros, array, nonzero, dot
 from nltk.tokenize import TweetTokenizer as tokenizer
 from sklearn.preprocessing import normalize
 from numpy.random import choice, randint
@@ -41,8 +39,8 @@ def build_TCOR(data: list, vocabulary: dict, index_word: dict, weight: str = 'sh
             for j in range(vocabulary_len):
                 t_ij = tcor[i, j]
                 if t_ij > 0:
-                    t_ij = 1+log10(t_ij)
-                    t_ij *= log10(vocabulary_len/sum_i)
+                    t_ij = 1+log(t_ij)
+                    t_ij *= log(vocabulary_len/sum_i)
                     tcor[i, j] = t_ij
     if weight == 'PPMI':
         word_count = sum(tcor,
@@ -58,7 +56,7 @@ def build_TCOR(data: list, vocabulary: dict, index_word: dict, weight: str = 'sh
                     p_word = word_count[i] / total
                     p_contex = context_count[j] / total
                     if abs(p_word * p_contex) > 0:
-                        value = log2(p_ij/(p_word*p_contex))
+                        value = log(p_ij/(p_word*p_contex))
                         tcor[i, j] = max(value, 0)
     tcor = normalize(tcor)
     return tcor
@@ -77,10 +75,10 @@ def build_DOR(bow: array) -> array:
         # Vocabulario en el documento
         vocabylary_document = len(nonzeros_position)
         # Logaritmo del numero de vocabularios
-        log = log10(vocabulary_dim/vocabylary_document)
+        log = log(vocabulary_dim/vocabylary_document)
         for term in nonzeros_position:
             # Calculo de cada termino
-            dor[term, i] = (1+log10(document[term])) * log
+            dor[term, i] = (1+log(document[term])) * log
     dor = normalize(dor)
     return dor
 

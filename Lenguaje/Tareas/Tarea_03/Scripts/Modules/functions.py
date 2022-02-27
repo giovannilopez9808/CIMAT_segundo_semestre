@@ -1,8 +1,8 @@
 from sklearn.feature_selection import chi2, SelectKBest
 from nltk.tokenize import TweetTokenizer as tokenizer
+from numpy import array, concatenate, zeros, log
 from sklearn.manifold import TSNE
 from nltk.corpus import stopwords
-from numpy import array, sqrt
 from tabulate import tabulate
 from nltk import FreqDist
 
@@ -153,3 +153,64 @@ def print_results(results: list) -> None:
 def obtain_stopwords(language: str) -> set:
     stopwords_list = set(stopwords.words(language))
     return stopwords_list
+
+
+def obtain_information_gain(data_tr: array, labels_tr: array, data_val: array, labels_val: array, index_word: dict) -> float:
+    data = concatenate((data_tr, data_val))
+    labels = concatenate((labels_tr, labels_val))
+    nt = data.shape[0]
+    np = FreqDist(labels)
+    nip = obtain_nip(data, labels, np, index_word)
+    ni = obtain_ni(nip)
+    IG = {}
+    for word in index_word:
+        value = 0
+        n_i = ni[word]
+        for type_class in np:
+            n_p = np[type_class]
+            n_ip = nip[word][type_class]
+            value += n_p*log(n_p/nt)
+            value += -n_ip*log(n_ip/n_i)
+            value += -(n_p-n_ip)*log(n_p-n_ip+1)
+            value += (n_p-n_ip)*log(nt-n_i)
+        value = -value/nt
+        IG[word] = value
+    return IG
+
+
+def obtain_nip(data: list, labels: list, np: FreqDist, index_word: dict) -> dict:
+    nip = {}
+    np_len = len(np)
+    zeros_dict = dict(zip(np.keys(), zeros(np_len)))
+    for word in index_word:
+        nip[word] = zeros_dict.copy()
+        for i, doc in enumerate(data):
+            if word in doc.lower():
+                type_class = labels[i]
+                nip[word][type_class] += 1
+    return nip
+
+
+def obtain_ni(nip: dict) -> dict:
+    ni = {}
+    for word in nip:
+        if word == "a":
+            print(nip[word])
+        ni[word] = sum(nip[word].values())
+    return ni
+
+
+def sort_dict(data: dict) -> dict:
+    dict_sort = sorted(
+        data.items(), key=lambda item: item[1], reverse=True)
+    return dict_sort
+
+
+def print_tuple_as_table(data: list, max: int) -> None:
+    table = []
+    for i in range(max):
+        table += [[data[i][0],
+                   data[i][1]]]
+    print(tabulate(table,
+                   headers=["Palabra",
+                            "Gain information"]))
