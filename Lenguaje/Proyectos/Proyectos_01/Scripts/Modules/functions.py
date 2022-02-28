@@ -9,6 +9,9 @@ def join_path(path: str, filename: str) -> str:
 
 
 def obtain_name_place_from_filename(filename: str) -> str:
+    """
+    Obtiene el nombre del lugar en base a su nombre
+    """
     name = filename.split(".")[0]
     name = name.split("_")
     name = " ".join(name)

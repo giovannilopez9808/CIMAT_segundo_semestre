@@ -4,11 +4,17 @@ class parameters_model:
         self.define_graphics_parameters()
 
     def define_paths(self):
+        """
+        Localizacion de los archivos de datos, resultados y graficas
+        """
         self.parameters = {"path data": "../Data/",
                            "path results": "../Results/",
                            "path graphics": "../Graphics/"}
 
     def define_graphics_parameters(self):
+        """
+        Parametros para los histogramas de cada lugar
+        """
         self.graphics = {"Alhóndiga": {"y lim": 35,
                                        "y delta": 5},
                          "Basilica Colegiata": {"y lim": 20,
