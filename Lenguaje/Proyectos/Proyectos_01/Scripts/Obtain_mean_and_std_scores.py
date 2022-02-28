@@ -1,6 +1,6 @@
 from Modules.functions import join_path, obtain_name_place_from_filename
 from Modules.datasets import parameters_model
-from Modules.data import tripadvisor_model
+from Modules.tripadvisor import tripadvisor_model
 from pandas import DataFrame
 from os import listdir as ls
 

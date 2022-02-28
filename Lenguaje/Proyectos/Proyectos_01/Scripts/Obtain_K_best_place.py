@@ -2,7 +2,7 @@ from Modules.functions import join_path, obtain_best_features, obtain_name_place
 from Modules.dictionary import dictionary_model
 from Modules.vocabulary import vocabulary_class
 from Modules.datasets import parameters_model
-from Modules.data import tripadvisor_model
+from Modules.tripadvisor import tripadvisor_model
 from pandas import DataFrame
 from os import listdir as ls
 from Modules.BoW import BoW

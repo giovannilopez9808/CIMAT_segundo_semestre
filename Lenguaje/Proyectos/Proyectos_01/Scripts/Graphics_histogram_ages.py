@@ -1,7 +1,7 @@
 from Modules.functions import obtain_name_place_from_filename
 from Modules.Graphics import plot_ages_histogram
 from Modules.datasets import parameters_model
-from Modules.data import tripadvisor_model
+from Modules.tripadvisor import tripadvisor_model
 from os import listdir as ls
 
 

@@ -23,7 +23,6 @@ def obtain_best_features(bow: array, labels: array, k: int = 1000) -> list:
     features = SelectKBest(chi2, k=k)
     features.fit(bow, labels)
     best_features = features.get_support(indices=True)
-    # best_features = best_features[:]
     return best_features, features.scores_
 
 

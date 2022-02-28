@@ -1,7 +1,7 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from Modules.vocabulary import vocabulary_class
 from sklearn.preprocessing import normalize
-from .data import tripadvisor_model
+from .tripadvisor import tripadvisor_model
 from numpy import array
 
 
