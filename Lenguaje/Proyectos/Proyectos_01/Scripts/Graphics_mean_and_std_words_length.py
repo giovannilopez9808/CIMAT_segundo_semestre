@@ -5,12 +5,13 @@ from pandas import read_csv
 
 parameters = {"file results": "mean_std_words_length.csv",
               "file graphics": "mean_std_words_length.png",
-              "width": 0.45,
+              "width": 0.35,
               "y lim": 70,
               "y delta": 10,
               "keys": ["Mean", "std"],
               "labels": ["Media", "Desviación estandar"],
-              "format": "%.3f"}
+              "colors":   ["#d9ed92", "#184e77"],
+              "format": "%.2f"}
 dataset = parameters_model()
 filename = join_path(dataset.parameters["path results"],
                      parameters["file results"])
