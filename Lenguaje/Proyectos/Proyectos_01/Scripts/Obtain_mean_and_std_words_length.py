@@ -4,7 +4,7 @@ from Modules.data import tripadvisor_model
 from pandas import DataFrame
 from os import listdir as ls
 
-filename = "mean_std_scores.csv"
+filename = "mean_std_words_length.csv"
 dataset = parameters_model()
 tripadvisor = tripadvisor_model(dataset)
 files = sorted(ls(dataset.parameters["path data"]))
@@ -14,8 +14,9 @@ result_basis = {"Mean": 0.0,
 for file in files:
     nameplace = obtain_name_place_from_filename(file)
     tripadvisor.read_data(file)
-    mean = tripadvisor.data["Escala"].mean()
-    std = tripadvisor.data["Escala"].std()
+    tripadvisor.obtain_word_length_per_opinion()
+    mean = tripadvisor.data["Word length"].mean()
+    std = tripadvisor.data["Word length"].std()
     results[nameplace] = result_basis.copy()
     results[nameplace]["Mean"] = mean
     results[nameplace]["std"] = std

@@ -39,3 +39,7 @@ class tripadvisor_model:
                                  month,
                                  day)
         return date
+
+    def obtain_word_length_per_opinion(self):
+        self.data["Word length"] = self.data["Opinión"].astype(str).str.split()
+        self.data["Word length"] = self.data["Word length"].apply(len)

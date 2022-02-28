@@ -3,11 +3,11 @@ from Modules.functions import join_path
 from Modules.Graphics import plot_bars
 from pandas import read_csv
 
-parameters = {"file results": "mean_std_scores.csv",
-              "file graphics": "mean_std_scores.png",
+parameters = {"file results": "mean_std_words_length.csv",
+              "file graphics": "mean_std_words_length.png",
               "width": 0.45,
-              "y lim": 5,
-              "y delta": 0.5}
+              "y lim": 70,
+              "y delta": 10}
 dataset = parameters_model()
 filename = join_path(dataset.parameters["path results"],
                      parameters["file results"])
