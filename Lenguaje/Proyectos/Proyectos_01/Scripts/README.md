@@ -11,3 +11,5 @@
 -   e: Obtain_distribution_of_genders.py Obtain_distribution_scores.py Graphics_distribution_of_genders.py Graphics_distribution_scores.py
 
 #### Punto 2
+
+Obtain_K_best_place.py Graphics_K_best_place.py
