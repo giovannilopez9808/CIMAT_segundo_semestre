@@ -1,6 +1,7 @@
 from .functions import join_path, obtain_name_place_from_filename
 from .datasets import parameters_model
 import matplotlib.pyplot as plt
+from wordcloud import WordCloud
 from pandas import DataFrame
 from numpy import arange
 
@@ -95,3 +96,16 @@ def plot_ages_histogram(ages: list, dataset: parameters_model, parameters: dict)
     plt.tight_layout()
     # Guardado de la grafica
     plt.savefig(filename, dpi=300)
+
+
+def plot_word_cloud(data: DataFrame, dataset: parameters_model, parameters: dict, show: bool = False) -> None:
+    wc = WordCloud()
+    wc.generate_from_frequencies(data)
+    plt.axis("off")
+    plt.imshow(wc, interpolation="bilinear")
+    if show:
+        plt.show()
+    else:
+        filename = join_path(dataset.parameters["path graphics"],
+                             parameters["wordcloud name"])
+        plt.savefig(filename)

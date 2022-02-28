@@ -23,12 +23,44 @@ class tripadvisor_model:
         """
         Formato de fecha a todo el dataframe
         """
+        data = self.format_date(data)
+        data = self.obtain_new_scala_of_scores(data)
+        data = self.clean_text(data)
+        return data
+
+    def format_date(self, data: DataFrame) -> DataFrame:
         data["Fecha"] = data["Fecha"].astype(str).str.split("/")
-        data["Fecha"] = data["Fecha"].apply(self.format_date)
+        data["Fecha"] = data["Fecha"].apply(self.date_format)
         data["Fecha"] = to_datetime(data["Fecha"])
         return data
 
-    def format_date(self, date: list) -> str:
+    def clean_text(self, data: DataFrame) -> DataFrame:
+        columns = ["Título de la opinión", "Opinión"]
+        for column in columns:
+            data[column] = data[column].astype(str).str.replace('"', "")
+            data[column] = data[column].astype(str).str.lower()
+        return data
+
+    def obtain_word_length_per_opinion(self) -> None:
+        """
+        Obtiene la cantidad de palabras por opinion
+        """
+        self.data["Word length"] = self.data["Opinión"].astype(str).str.split()
+        self.data["Word length"] = self.data["Word length"].apply(len)
+
+    def obtain_new_scala_of_scores(self, data: DataFrame) -> DataFrame:
+        data["new scala"] = data["Escala"].apply(self.new_scala_of_scores)
+        return data
+
+    def new_scala_of_scores(self, score: int) -> int:
+        if score in [4, 5]:
+            return 2
+        if score in [3]:
+            return 1
+        if score in [1, 2]:
+            return 0
+
+    def date_format(self, date: list) -> str:
         """
         Formate de fecha de listas [dia,mes,año] a año-mes-dia
         """
@@ -39,10 +71,3 @@ class tripadvisor_model:
                                  month,
                                  day)
         return date
-
-    def obtain_word_length_per_opinion(self):
-        """
-        Obtiene la cantidad de palabras por opinion
-        """
-        self.data["Word length"] = self.data["Opinión"].astype(str).str.split()
-        self.data["Word length"] = self.data["Word length"].apply(len)
