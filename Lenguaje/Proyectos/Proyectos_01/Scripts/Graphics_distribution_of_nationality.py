@@ -3,14 +3,14 @@ from Modules.functions import join_path
 from Modules.Graphics import plot_bars
 from pandas import read_csv
 
-parameters = {"file results": "mean_std_words_length.csv",
-              "file graphics": "mean_std_words_length.png",
+parameters = {"file results": "distribution_nationality.csv",
+              "file graphics": "distribution_nationality.png",
               "width": 0.45,
-              "y lim": 70,
-              "y delta": 10,
-              "keys": ["Mean", "std"],
-              "labels": ["Media", "Desviación estandar"],
-              "format": "%.3f"}
+              "y lim": 1000,
+              "y delta": 100,
+              "keys": ["Nacional", "Internacional"],
+              "labels": ["Nacional", "Internacional"],
+              "format": "%.0f"}
 dataset = parameters_model()
 filename = join_path(dataset.parameters["path results"],
                      parameters["file results"])

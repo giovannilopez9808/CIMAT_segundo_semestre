@@ -6,24 +6,24 @@ from numpy import arange
 
 
 def plot_bars(data: DataFrame, dataset: parameters_model, parameters: dict) -> None:
-    mean = data["Mean"]
-    std = data["std"]
+    data1 = data[parameters["keys"][0]]
+    data2 = data[parameters["keys"][1]]
     width = parameters["width"]
     values = arange(len(data.index))
     names = [name.replace(" ", "\n") for name in data.index]
     fig, ax = plt.subplots(figsize=(12, 4))
     bar1 = ax.bar(values-width/2,
-                  mean,
+                  data1,
                   width=width,
-                  label="Media",
+                  label=parameters["labels"][0],
                   color="#144552")
     bar2 = ax.bar(values+width/2,
-                  std,
+                  data2,
                   width=width,
-                  label="Desviación estandar",
+                  label=parameters["labels"][1],
                   color="#4d194d")
-    ax.bar_label(bar1, padding=1, fmt="%.3f")
-    ax.bar_label(bar2, padding=1, fmt="%.3f")
+    ax.bar_label(bar1, padding=1, fmt=parameters["format"])
+    ax.bar_label(bar2, padding=1, fmt=parameters["format"])
     ax.set_xticks(values, names)
     ax.set_ylim(0, parameters["y lim"])
     ax.set_yticks(
