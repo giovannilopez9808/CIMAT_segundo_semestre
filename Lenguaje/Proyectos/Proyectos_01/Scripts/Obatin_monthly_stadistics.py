@@ -5,7 +5,7 @@ from os import listdir as ls
 
 
 dataset = parameters_model()
-dataset.parameters["path results"] += "Monthly_mean/"
+dataset.parameters["path results"] += "Monthly/"
 tripadvisor = tripadvisor_model(dataset)
 files = sorted(ls(dataset.parameters["path data"]))
 for file in files:
