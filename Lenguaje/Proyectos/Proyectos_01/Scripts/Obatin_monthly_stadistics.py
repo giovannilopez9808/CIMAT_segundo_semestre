@@ -14,4 +14,5 @@ for file in files:
                          file)
     tripadvisor.read_data(file)
     tripadvisor.obtain_monthly_stadistics_of_scores()
-    tripadvisor.monthly_data.to_csv(filename)
+    tripadvisor.monthly_data.to_csv(filename,
+                                    float_format="%.4f")
