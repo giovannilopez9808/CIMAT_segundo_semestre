@@ -16,6 +16,7 @@ for file in files:
                          file)
     data = read_csv(filename,
                     index_col=0)
+    data = data.iloc[:50]
     plot_word_cloud(data["Scores"].to_dict(),
                     dataset,
                     parameters)

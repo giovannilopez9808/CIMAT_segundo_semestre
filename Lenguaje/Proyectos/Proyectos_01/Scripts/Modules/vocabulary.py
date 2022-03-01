@@ -17,7 +17,7 @@ class vocabulary_class:
     def obtain_stopwords(self):
         stopwords_list = stopwords.words("spanish")
         stopwords_list += stopwords.words("spanish")
-        stopwords_list += [".", ","]
+        stopwords_list += [".", ",", "...", "!", "(", ")", "¡"]
         return set(stopwords_list)
 
     def obtain(self, tripadvisor: tripadvisor_model, data_select: bool = False) -> list:
