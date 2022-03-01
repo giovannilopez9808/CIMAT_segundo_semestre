@@ -1,6 +1,8 @@
 from pandas import DataFrame, read_csv, to_datetime
 from .datasets import parameters_model
 from .functions import join_path
+from pandas import concat
+from cmath import nan
 
 
 class tripadvisor_model:
@@ -85,3 +87,35 @@ class tripadvisor_model:
         self.data_select = self.data[self.data["Edad"] >= age_range[0]]
         self.data_select = self.data_select[self.data_select["Edad"]
                                             <= age_range[1]]
+
+    def obtain_daily_counts_of_scores(self) -> DataFrame:
+        results = {}
+        result_basis = {0: 0,
+                        1: 0,
+                        2: 0}
+        dates = sorted(list(set(self.data["Fecha"])))
+        for date in dates:
+            data_per_day = self.data[self.data["Fecha"] == date]
+            data_counts = data_per_day["new scala"].value_counts()
+            results[date] = result_basis.copy()
+            for value in data_counts.index:
+                results[date][value] = data_counts[value]
+        results = DataFrame(results)
+        self.daily_scores_counts = results.transpose()
+
+    def obtain_yearly_stadistics_of_scores(self) -> DataFrame:
+        self.obtain_daily_counts_of_scores()
+        yearly_scores = self.daily_scores_counts.resample("Y").sum()
+        for date in yearly_scores.index:
+            year_sum = yearly_scores.loc[date].sum()
+            if year_sum != 0:
+                yearly_scores.loc[date] = yearly_scores.loc[date]/year_sum
+            else:
+                yearly_scores.loc[date] = nan
+        yearly_mean_data = self.data.resample("Y", on="Fecha").mean()
+        yearly_std_data = self.data.resample("Y", on="Fecha").std()
+        self.yearly_data = concat([yearly_scores,
+                                   yearly_mean_data["Escala"],
+                                   yearly_std_data["Escala"]],
+                                  axis=1)
+        self.yearly_data.columns = [0, 1, 2, "Escala mean", "Escala std"]

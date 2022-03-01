@@ -31,3 +31,11 @@
 -   Obtain_LSA_ages.py
 -   Obtain_LSA_gender.py
 -   Obtain_LSA_nationality.py
+
+#### Punto 4
+
+#### Punto 5
+
+#### Punto 6
+
+#### Punto 7
