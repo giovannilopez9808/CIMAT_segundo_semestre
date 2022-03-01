@@ -42,6 +42,9 @@
 
 #### Punto 5
 
+-   Obtain_K_bows_concatenate.py
+-   Graphics_K_bows_concatenate.py
+
 #### Punto 6
 
 #### Punto 7
