@@ -25,15 +25,16 @@ for file in files:
                                          data_select=True)
     word_index = dictionary.build_word_index(vocabulary)
     index_word = dictionary.build_index_word(word_index)
-    bow_tfidf = bow.build_TFIDF(tripadvisor,
-                                word_index,
-                                data_select=True)
+    bow_tfidf, words = bow.build_TFIDF(tripadvisor,
+                                       word_index,
+                                       data_select=True,
+                                       return_words=True)
     best_features, scores = obtain_best_features(bow_tfidf,
                                                  tripadvisor.data_select["Escala"],
                                                  'all')
     results = {}
     for index in best_features:
-        results[index_word[index]] = scores[index]
+        results[words[index]] = scores[index]
     results = dictionary.sort_dict(results)
     results = DataFrame(results,
                         columns=["Words", "Scores"])

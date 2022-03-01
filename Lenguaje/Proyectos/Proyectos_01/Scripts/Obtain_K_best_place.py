@@ -22,12 +22,14 @@ for file in files:
     vocabulary = vocabulary_model.obtain(tripadvisor)
     word_index = dictionary.build_word_index(vocabulary)
     index_word = dictionary.build_index_word(word_index)
-    binary = bow.build_binary(tripadvisor, word_index)
+    binary, words = bow.build_TFIDF(tripadvisor,
+                                    word_index,
+                                    return_words=True)
     best_features, scores = obtain_best_features(binary,
                                                  tripadvisor.data["new scale"])
     results = {}
     for index in best_features:
-        results[index_word[index]] = scores[index]
+        results[words[index]] = scores[index]
     results = dictionary.sort_dict(results)
     results = DataFrame(results,
                         columns=["Words", "Scores"])
