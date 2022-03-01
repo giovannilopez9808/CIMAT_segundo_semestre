@@ -100,12 +100,16 @@ def plot_ages_histogram(ages: list, dataset: parameters_model, parameters: dict)
 
 def plot_word_cloud(data: DataFrame, dataset: parameters_model, parameters: dict, show: bool = False) -> None:
     wc = WordCloud()
+    plt.subplots(figsize=(8.5, 4))
     wc.generate_from_frequencies(data)
     plt.axis("off")
     plt.imshow(wc, interpolation="bilinear")
+    plt.tight_layout()
     if show:
         plt.show()
     else:
         filename = join_path(dataset.parameters["path graphics"],
                              parameters["wordcloud name"])
-        plt.savefig(filename)
+        plt.savefig(filename,
+                    bbox_inches="tight",
+                    pad_inches=0,)
