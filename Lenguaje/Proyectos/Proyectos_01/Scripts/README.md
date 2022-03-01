@@ -39,3 +39,8 @@
 #### Punto 6
 
 #### Punto 7
+
+-   Obtain_yearly_stadistics.py
+-   Obtain_monthly_stadistics.py
+-   Graphics_yearly_stadistics.py
+-   Graphics_monthly_stadistics.py
