@@ -28,9 +28,12 @@
 
 #### Punto 3
 
--   Obtain_LSA_ages.py
--   Obtain_LSA_gender.py
--   Obtain_LSA_nationality.py
+-   a y b:
+    -   Obtain_LSA_gender.py
+-   c y d:
+    -   Obtain_LSA_nationality.py
+-   e y f:
+    -   Obtain_LSA_ages.py
 
 #### Punto 4
 
