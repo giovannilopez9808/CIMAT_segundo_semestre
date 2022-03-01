@@ -53,7 +53,7 @@ class tripadvisor_model:
         self.data["Word length"] = self.data["Word length"].apply(len)
 
     def obtain_new_scala_of_scores(self, data: DataFrame) -> DataFrame:
-        data["new scala"] = data["Escala"].apply(self.new_scala_of_scores)
+        data["new scale"] = data["Escala"].apply(self.new_scala_of_scores)
         return data
 
     def new_scala_of_scores(self, score: int) -> int:
@@ -96,7 +96,7 @@ class tripadvisor_model:
         dates = sorted(list(set(self.data["Fecha"])))
         for date in dates:
             data_per_day = self.data[self.data["Fecha"] == date]
-            data_counts = data_per_day["new scala"].value_counts()
+            data_counts = data_per_day["new scale"].value_counts()
             results[date] = result_basis.copy()
             for value in data_counts.index:
                 results[date][value] = data_counts[value]
@@ -136,3 +136,9 @@ class tripadvisor_model:
                                    monthly_std_data["Escala"]],
                                    axis=1)
         self.monthly_data.columns = [0, 1, 2, "Escala mean", "Escala std"]
+
+    def obtain_only_negatives_scores(self):
+        self.data_select = self.data[self.data["new scale"] == 0]
+        print(len(self.data_select))
+        if len(self.data_select) < 10:
+            self.data_select = self.data[self.data["new scale"] != 2]

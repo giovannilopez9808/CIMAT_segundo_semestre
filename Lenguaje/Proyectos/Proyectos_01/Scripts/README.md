@@ -37,6 +37,9 @@
 
 #### Punto 4
 
+-   Obtain_K_negatives_scores.py
+-   Graphics_K_negatives_scores.py
+
 #### Punto 5
 
 #### Punto 6
