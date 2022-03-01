@@ -1,5 +1,6 @@
 from sklearn.feature_selection import chi2, SelectKBest
 from numpy import array
+from os import listdir
 
 
 def join_path(path: str, filename: str) -> str:
@@ -33,3 +34,7 @@ def obtain_target_matrix(index: dict, data: array, best_features: array) -> arra
     target_words = [invert_index[word] for word in best_features]
     target_matrix = array([data[index[word]] for word in target_words])
     return target_words, target_matrix
+
+
+def ls(path: str) -> list:
+    return sorted(listdir(path))

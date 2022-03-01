@@ -1,10 +1,9 @@
-from Modules.functions import join_path, obtain_best_features, obtain_name_place_from_filename
+from Modules.functions import join_path, obtain_best_features, obtain_name_place_from_filename, ls
 from Modules.dictionary import dictionary_model
 from Modules.vocabulary import vocabulary_class
 from Modules.datasets import parameters_model
 from Modules.tripadvisor import tripadvisor_model
 from pandas import DataFrame
-from os import listdir as ls
 from Modules.BoW import BoW
 
 dataset = parameters_model()
@@ -13,7 +12,7 @@ tripadvisor = tripadvisor_model(dataset)
 vocabulary_model = vocabulary_class()
 dictionary = dictionary_model()
 bow = BoW(vocabulary_model)
-files = sorted(ls(dataset.parameters["path data"]))
+files = ls(dataset.parameters["path data"])
 results = {}
 result_basis = {"Words": [],
                 "Scores": []}

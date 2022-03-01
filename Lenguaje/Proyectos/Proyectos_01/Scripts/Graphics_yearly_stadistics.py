@@ -1,13 +1,12 @@
 from Modules.datasets import parameters_model
-from Modules.functions import join_path
+from Modules.functions import join_path, ls
 import matplotlib.pyplot as plt
-from os import listdir as ls
 from pandas import read_csv
 
 datasets = parameters_model()
 datasets.parameters["path results"] += "Yearly/"
 datasets.parameters["path graphics"] += "Yearly/"
-files = sorted(ls(datasets.parameters["path results"]))
+files = ls(datasets.parameters["path results"])
 for file in files:
     filename = join_path(datasets.parameters["path results"],
                          file)

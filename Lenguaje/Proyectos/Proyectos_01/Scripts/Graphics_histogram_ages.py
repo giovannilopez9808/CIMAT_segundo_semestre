@@ -1,15 +1,14 @@
-from Modules.functions import obtain_name_place_from_filename
+from Modules.functions import obtain_name_place_from_filename, ls
 from Modules.Graphics import plot_ages_histogram
 from Modules.datasets import parameters_model
 from Modules.tripadvisor import tripadvisor_model
-from os import listdir as ls
 
 
 parameters = {"filename": ""}
 dataset = parameters_model()
 dataset.parameters["path graphics"] += "Histogram/ages_"
 tripadvisor = tripadvisor_model(dataset)
-files = sorted(ls(dataset.parameters["path data"]))
+files = ls(dataset.parameters["path data"])
 for file in files:
     nameplace = obtain_name_place_from_filename(file)
     tripadvisor.read_data(file)

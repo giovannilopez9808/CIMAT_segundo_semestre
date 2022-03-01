@@ -1,14 +1,12 @@
-from cProfile import label
 from Modules.datasets import parameters_model
-from Modules.functions import join_path
-import matplotlib.pyplot as plt
-from os import listdir as ls
+from Modules.functions import join_path, ls
 from pandas import read_csv, to_datetime
+import matplotlib.pyplot as plt
 
 datasets = parameters_model()
 datasets.parameters["path results"] += "Monthly/"
 datasets.parameters["path graphics"] += "Monthly/"
-files = sorted(ls(datasets.parameters["path results"]))
+files = ls(datasets.parameters["path results"])
 for file in files:
     filename = join_path(datasets.parameters["path results"],
                          file)

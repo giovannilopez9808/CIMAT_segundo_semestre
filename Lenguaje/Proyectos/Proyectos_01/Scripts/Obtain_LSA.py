@@ -1,11 +1,9 @@
-from fileinput import filename
-from Modules.functions import join_path, obtain_name_place_from_filename
+from Modules.functions import join_path, obtain_name_place_from_filename, ls
 from Modules.tripadvisor import tripadvisor_model
 from Modules.dictionary import dictionary_model
 from Modules.vocabulary import vocabulary_class
 from Modules.datasets import parameters_model
 from pandas import DataFrame
-from os import listdir as ls
 from Modules.LSA import LSA
 from Modules.BoW import BoW
 
@@ -15,7 +13,7 @@ dataset = parameters_model()
 dataset.parameters["path results"] += "LSA/"
 bow = BoW(vocabulary_model)
 tripadvisor = tripadvisor_model(dataset)
-files = sorted(ls(dataset.parameters["path data"]))
+files = ls(dataset.parameters["path data"])
 for file in files:
     nameplace = obtain_name_place_from_filename(file)
     tripadvisor.read_data(file)
