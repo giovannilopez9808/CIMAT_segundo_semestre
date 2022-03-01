@@ -23,8 +23,7 @@ for file in files:
     vocabulary = vocabulary_model.obtain(tripadvisor)
     word_index = dictionary.build_word_index(vocabulary)
     index_word = dictionary.build_index_word(word_index)
-    bow.vectorizer.vocabulary = word_index.keys()
-    binary = bow.build_binary(tripadvisor)
+    binary = bow.build_binary(tripadvisor, word_index)
     best_features, scores = obtain_best_features(binary,
                                                  tripadvisor.data["new scala"])
     results = {}

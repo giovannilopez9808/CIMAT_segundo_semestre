@@ -6,6 +6,8 @@ from .functions import join_path
 class tripadvisor_model:
     def __init__(self, dataset: parameters_model) -> None:
         self.parameters = dataset.parameters
+        self.age_range = {"Joven": [10, 50],
+                          "Mayor": [51, 100]}
 
     def read_data(self,  name: str) -> DataFrame:
         """
@@ -71,3 +73,15 @@ class tripadvisor_model:
                                  month,
                                  day)
         return date
+
+    def select_data_per_gender(self, gender: str) -> DataFrame:
+        self.data_select = self.data[self.data["Género"] == gender]
+
+    def select_data_per_nationality(self, nationality: str) -> DataFrame:
+        self.data_select = self.data[self.data["Nacional ó Internacional"] == nationality]
+
+    def select_data_per_age_range(self, age_range: str) -> DataFrame:
+        age_range = self.age_range[age_range]
+        self.data_select = self.data[self.data["Edad"] >= age_range[0]]
+        self.data_select = self.data_select[self.data_select["Edad"]
+                                            <= age_range[1]]

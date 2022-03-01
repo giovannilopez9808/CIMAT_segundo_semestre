@@ -17,15 +17,20 @@ class vocabulary_class:
     def obtain_stopwords(self):
         stopwords_list = stopwords.words("spanish")
         stopwords_list += stopwords.words("spanish")
+        stopwords_list += [".", ","]
         return set(stopwords_list)
 
-    def obtain(self, tripadvisor: tripadvisor_model) -> list:
+    def obtain(self, tripadvisor: tripadvisor_model, data_select: bool = False) -> list:
         """
         Obtiene la lista de una distribucion de frecuencias de palabras ordenada de mayor a menor a partir de una lista de oraciones
         """
         # Inicializacion de la lista que guardara los tokens
         corpus = []
-        for oration in tripadvisor.data["Opinión"]:
+        if data_select:
+            data = tripadvisor.data_select
+        else:
+            data = tripadvisor.data
+        for oration in data["Opinión"]:
             tokens = self.tokenizer(oration)
             tokens = [
                 token for token in tokens if not token in self.stopwords]
@@ -33,7 +38,7 @@ class vocabulary_class:
         # Creacion de la distribucion de frecuencias
         vocabylary = FreqDist(corpus)
         vocabylary = self.sort_freqdist(vocabylary)
-        # vocabylary = self.split_data(vocabylary)
+        vocabylary = self.split_data(vocabylary)
         return vocabylary
 
     def sort_freqdist(self, vocabylary: FreqDist) -> list:
