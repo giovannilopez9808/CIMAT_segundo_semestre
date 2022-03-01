@@ -12,4 +12,11 @@
 
 #### Punto 2
 
-Obtain_K_best_place.py Graphics_K_best_place.py
+-   Obtain_K_best_place.py
+-   Graphics_K_best_place.py
+
+#### Punto 3
+
+-   Obtain_LSA_ages.py
+-   Obtain_LSA_gender.py
+-   Obtain_LSA_nationality.py
