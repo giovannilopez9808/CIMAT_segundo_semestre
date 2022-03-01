@@ -119,3 +119,20 @@ class tripadvisor_model:
                                    yearly_std_data["Escala"]],
                                   axis=1)
         self.yearly_data.columns = [0, 1, 2, "Escala mean", "Escala std"]
+
+    def obtain_monthly_stadistics_of_scores(self) -> DataFrame:
+        self.obtain_daily_counts_of_scores()
+        monthly_scores = self.daily_scores_counts.resample("MS").sum()
+        for date in monthly_scores.index:
+            monthly_sum = monthly_scores.loc[date].sum()
+            if monthly_sum != 0:
+                monthly_scores.loc[date] = monthly_scores.loc[date]/monthly_sum
+            else:
+                monthly_scores.loc[date] = nan
+        monthly_mean_data = self.data.resample("MS", on="Fecha").mean()
+        monthly_std_data = self.data.resample("MS", on="Fecha").std()
+        self.monthly_data = concat([monthly_scores,
+                                   monthly_mean_data["Escala"],
+                                   monthly_std_data["Escala"]],
+                                   axis=1)
+        self.monthly_data.columns = [0, 1, 2, "Escala mean", "Escala std"]
