@@ -37,4 +37,6 @@ def obtain_target_matrix(index: dict, data: array, best_features: array) -> arra
 
 
 def ls(path: str) -> list:
-    return sorted(listdir(path))
+    files = sorted(listdir(path))
+    files = [file for file in files if "." in file]
+    return files
