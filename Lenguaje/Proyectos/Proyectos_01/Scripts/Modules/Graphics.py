@@ -6,7 +6,7 @@ from pandas import DataFrame
 from numpy import arange
 
 
-def plot_bars(data: DataFrame, dataset: parameters_model, parameters: dict) -> None:
+def plot_bars(data: DataFrame, dataset: parameters_model, parameters: dict, show: bool = False) -> None:
     """
     Función que realiza el ploteo de barras, una grafica por todas los lugares
     """
@@ -55,11 +55,14 @@ def plot_bars(data: DataFrame, dataset: parameters_model, parameters: dict) -> N
                ncol=n_bar,
                bbox_to_anchor=(0.6, 1))
     plt.tight_layout(pad=2)
-    # Guardado de la grafica
-    plt.savefig(filename, dpi=300)
+    if show:
+        plt.show()
+    else:
+        # Guardado de la grafica
+        plt.savefig(filename, dpi=300)
 
 
-def plot_ages_histogram(ages: list, dataset: parameters_model, parameters: dict) -> None:
+def plot_ages_histogram(ages: list, dataset: parameters_model, parameters: dict, show: bool = False) -> None:
     """
     Ploteo de los histogramas por edades
     """
@@ -95,7 +98,10 @@ def plot_ages_histogram(ages: list, dataset: parameters_model, parameters: dict)
     ax.grid(ls="--", alpha=0.5, color="#000000", axis="y")
     plt.tight_layout()
     # Guardado de la grafica
-    plt.savefig(filename, dpi=300)
+    if show:
+        plt.show()
+    else:
+        plt.savefig(filename, dpi=300)
 
 
 def plot_word_cloud(data: DataFrame, dataset: parameters_model, parameters: dict, show: bool = False) -> None:
