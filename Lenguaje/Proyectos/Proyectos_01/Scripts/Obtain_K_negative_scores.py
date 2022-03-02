@@ -6,15 +6,15 @@ from Modules.dictionary import dictionary_model
 from Modules.vocabulary import vocabulary_class
 from Modules.datasets import parameters_model
 from Modules.Graphics import plot_word_cloud
+from Modules.BoW import BoW_class
 from pandas import DataFrame
-from Modules.BoW import BoW
 
 dataset = parameters_model()
 dataset.parameters["path results"] += "K_best/Negatives/"
 tripadvisor = tripadvisor_model(dataset)
 vocabulary_model = vocabulary_class()
 dictionary = dictionary_model()
-bow = BoW(vocabulary_model)
+bow = BoW_class(vocabulary_model)
 files = ls(dataset.parameters["path data"])
 for file in files:
     print(file)

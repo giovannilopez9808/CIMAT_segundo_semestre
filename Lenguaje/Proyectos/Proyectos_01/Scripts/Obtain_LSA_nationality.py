@@ -3,14 +3,14 @@ from Modules.tripadvisor import tripadvisor_model
 from Modules.dictionary import dictionary_model
 from Modules.vocabulary import vocabulary_class
 from Modules.datasets import parameters_model
+from Modules.BoW import BoW_class
 from Modules.LSA import LSA
-from Modules.BoW import BoW
 
 vocabulary_model = vocabulary_class()
 dictionary = dictionary_model()
 dataset = parameters_model()
 dataset.parameters["path results"] += "LSA/Nationality/"
-bow = BoW(vocabulary_model)
+bow = BoW_class(vocabulary_model)
 tripadvisor = tripadvisor_model(dataset)
 nationalities = ["Nacional", "Internacional"]
 files = ls(dataset.parameters["path data"])

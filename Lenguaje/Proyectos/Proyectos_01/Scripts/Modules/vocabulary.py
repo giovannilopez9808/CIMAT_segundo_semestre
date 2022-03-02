@@ -1,10 +1,8 @@
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk.tokenize import TweetTokenizer as tokenizer
 from .tripadvisor import tripadvisor_model
-from nltk import bigrams as bigrams_nltk
 from nltk.corpus import stopwords
 from nltk import FreqDist
-from numpy import array
 
 
 class vocabulary_class:

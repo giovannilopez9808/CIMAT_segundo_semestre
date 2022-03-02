@@ -1,4 +1,5 @@
 from sklearn.feature_selection import chi2, SelectKBest
+from pandas import DataFrame, concat
 from numpy import array
 from os import listdir
 
@@ -40,3 +41,9 @@ def ls(path: str) -> list:
     files = sorted(listdir(path))
     files = [file for file in files if "." in file]
     return files
+
+
+def concat_dataframes(data_1: DataFrame, data_2: DataFrame) -> DataFrame:
+    data = concat([data_1, data_2])
+    data.index = range(len(data))
+    return data

@@ -6,7 +6,7 @@ from numpy import array, vectorize
 from pandas import DataFrame
 
 
-class BoW:
+class BoW_class:
     def __init__(self, vocabulary: vocabulary_class) -> None:
         self.vectorizer = CountVectorizer(stop_words=vocabulary.stopwords)
 

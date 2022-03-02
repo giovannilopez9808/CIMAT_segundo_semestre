@@ -1,6 +1,8 @@
+from sklearn.feature_extraction.text import CountVectorizer
 from pandas import DataFrame, read_csv, to_datetime
 from .datasets import parameters_model
 from .functions import join_path
+from nltk.text import Text
 from pandas import concat
 from cmath import nan
 
@@ -142,3 +144,14 @@ class tripadvisor_model:
         print(len(self.data_select))
         if len(self.data_select) < 10:
             self.data_select = self.data[self.data["new scale"] != 2]
+
+    def sort_by_date(self):
+        self.data = self.data.sort_values(by="Fecha")
+
+    def obtain_opinions_as_text(self, stopwords: list) -> Text:
+        vectorizer = CountVectorizer(stop_words=stopwords)
+        tokenizer = vectorizer.build_tokenizer()
+        opinions = " ".join(self.data["Opinión"])
+        opinions = tokenizer(opinions)
+        opinions = Text(opinions)
+        return opinions
