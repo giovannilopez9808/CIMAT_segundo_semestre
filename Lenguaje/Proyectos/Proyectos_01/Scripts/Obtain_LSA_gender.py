@@ -25,10 +25,11 @@ for file in files:
         vocabulary = vocabulary_model.obtain(tripadvisor,
                                              data_select=True)
         word_index = dictionary.build_word_index(vocabulary)
-        tfidf = bow.build_TFIDF(tripadvisor,
-                                word_index,
-                                data_select=True)
-        lsa = LSA(tfidf, word_index, 3)
+        tfidf, words = bow.build_TFIDF(tripadvisor,
+                                       word_index,
+                                       data_select=True,
+                                       return_words=True)
+        lsa = LSA(tfidf, words, 3)
         lsa.obtain_words()
         filename = join_path(path_results,
                              file)
