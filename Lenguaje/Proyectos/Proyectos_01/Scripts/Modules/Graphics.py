@@ -1,8 +1,8 @@
 from .functions import join_path, obtain_name_place_from_filename
+from pandas import DataFrame, to_datetime
 from .datasets import parameters_model
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
-from pandas import DataFrame
 from numpy import arange
 
 
@@ -119,3 +119,120 @@ def plot_word_cloud(data: DataFrame, dataset: parameters_model, parameters: dict
         plt.savefig(filename,
                     bbox_inches="tight",
                     pad_inches=0,)
+
+
+def plot_monthly_results(data: DataFrame, dataset: parameters_model, parameters: dict,  show: bool = False) -> None:
+    fig, (ax1, ax2) = plt.subplots(2, 1,
+                                   figsize=(12, 4),
+                                   sharex=True)
+    years = sorted(set([date.year for date in data.index]))
+    dates = list(to_datetime(["{}-01-01".format(year) for year in years]))
+    dates += [to_datetime("{}-01-01".format(dates[-1].year+1))]
+    years += [dates[-1].year]
+    ax1.scatter(data.index,
+                data["0"],
+                marker=".",
+                label="Negativos",
+                color="#80b918")
+    ax1.scatter(data.index,
+                data["1"],
+                marker=".",
+                label="Neutro",
+                color="#52b69a")
+    ax1.scatter(data.index,
+                data["2"],
+                marker=".",
+                label="Positivo",
+                color="#1e6091")
+    ax2.fill_between(data.index,
+                     data["Escala mean"]-data["Escala std"],
+                     data["Escala mean"]+data["Escala std"],
+                     label="$\\sigma$ scores",
+                     color="#ff8500",
+                     alpha=0.5)
+    ax2.scatter(data.index,
+                data["Escala mean"],
+                marker='.',
+                #  markersize=5,
+                #  capsize=7,
+                color="#3c096c",
+                label="$\\mu$ scores")
+    ax1.set_ylim(0, 1)
+    ax1.grid(ls="--",
+             color="#000000",
+             alpha=0.5)
+    ax2.set_xlabel("Años")
+    ax1.set_ylabel("Frecuencia relativa (%)")
+    ax2.set_xlim(dates[0], to_datetime(dates[-1]))
+    ax2.set_xticks(dates)
+    ax2.set_xticklabels(years)
+    ax2.set_ylabel("Score")
+    ax2.set_ylim(0, 6)
+    ax2.set_yticks([value for value in range(7)])
+    ax2.grid(ls="--",
+             color="#000000",
+             alpha=0.5)
+    fig.legend(frameon=False,
+               ncol=5,
+               bbox_to_anchor=(0.75, 1))
+    plt.tight_layout(pad=2)
+    if show:
+        plt.show()
+    else:
+        filename = join_path(dataset.parameters["path graphics"],
+                             parameters["file graphics"])
+        plt.savefig(filename, dpi=300)
+
+
+def plot_yearly_results(data: DataFrame, dataset: parameters_model, parameters: dict,  show: bool = False) -> None:
+    fig, (ax1, ax2) = plt.subplots(2, 1,
+                                   figsize=(12, 4),
+                                   sharex=True)
+    ax1.plot(data.index,
+             data["0"],
+             marker="o",
+             label="Negativos",
+             color="#80b918")
+    ax1.plot(data.index,
+             data["1"],
+             marker="o",
+             label="Neutro",
+             color="#52b69a")
+    ax1.plot(data.index,
+             data["2"],
+             marker="o",
+             label="Positivo",
+             color="#1e6091")
+    ax2.errorbar(data.index,
+                 data["Escala mean"],
+                 data["Escala std"],
+                 fmt='o',
+                 markersize=8,
+                 capsize=10,
+                 color="#9d0208",
+                 label="$\\mu$ y $\\sigma$ scores")
+    ax1.set_ylim(0, 1)
+    ax1.grid(ls="--",
+             color="#000000",
+             alpha=0.5)
+    ax2.set_xlabel("Años")
+    ax1.set_ylabel("Frecuencia relativa (%)")
+    ax2.set_xlim(data.index[0], data.index[-1])
+    ax2.set_xticks(data.index)
+    ax2.set_xticklabels([date.year for date in data.index])
+    ax2.set_ylabel("Score")
+    ax2.set_ylim(0, 6)
+    ax2.set_yticks([value for value in range(7)])
+    ax2.grid(ls="--",
+             color="#000000",
+             alpha=0.5)
+    fig.legend(frameon=False,
+               ncol=4,
+               bbox_to_anchor=(0.7, 1))
+    plt.tight_layout(pad=2)
+    if show:
+        plt.show()
+    else:
+        filename = join_path(dataset.parameters["path graphics"],
+                             parameters["file graphics"])
+        plt.savefig(filename, dpi=300)

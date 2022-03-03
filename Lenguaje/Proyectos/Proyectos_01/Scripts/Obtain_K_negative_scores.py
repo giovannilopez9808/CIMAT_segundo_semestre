@@ -1,11 +1,8 @@
-from matplotlib.pyplot import show
-from pyparsing import restOfLine
 from Modules.functions import join_path, obtain_best_features, obtain_name_place_from_filename, ls
 from Modules.tripadvisor import tripadvisor_model
 from Modules.dictionary import dictionary_model
 from Modules.vocabulary import vocabulary_class
 from Modules.datasets import parameters_model
-from Modules.Graphics import plot_word_cloud
 from Modules.BoW import BoW_class
 from pandas import DataFrame
 

@@ -141,7 +141,6 @@ class tripadvisor_model:
 
     def obtain_only_negatives_scores(self):
         self.data_select = self.data[self.data["new scale"] == 0]
-        print(len(self.data_select))
         if len(self.data_select) < 10:
             self.data_select = self.data[self.data["new scale"] != 2]
 
