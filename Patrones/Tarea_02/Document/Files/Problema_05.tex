@@ -96,3 +96,23 @@ La intepretación que se le puede dar a la tercer componente de PCA es la siguie
 \begin{itemize}
     \item Las camisetas que se encuentren en la parte inferior contienen una cantidad nula de mangas. Las camisetas que se encuentren en la parte intemedia presentan un crecimiento en la parte superior de la camiseta. En la parte superior se encuentran camisetas con mangas.
 \end{itemize}
+
+\subsection*{Visualizaciones Isomap}
+
+En la figura \ref{fig:05_isomap} se muestran los reesultados de aplicar isomap a los datos contenidos en los archivo \file{fashion-mnist\_train.csv}. Se logra visualizar que existe una clasificación entre camisetas y blusas de color oscuro y blanco.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{16cm}
+        \includegraphics[width=16cm]{Graphics/Problema_3_1/isomap.png}
+        \caption{Resultados usando Isomap.}
+        \label{fig:problema5_isomap}
+    \end{subfigure}\\
+    \begin{subfigure}{16cm}
+        \includegraphics[width=16cm]{Graphics/Problema_3_1/T_shirts_isomap.png}
+        \caption{Camisetas señaladas en la figura \ref{fig:problema5_isomap}.}
+        \label{fig:problema5_isomap_camisetas}
+    \end{subfigure}
+    \caption{Resultados de las primeras tres componentes de PCA para el conjunto de datos contenido en \file{fashion-mnist\_train.csv}.}
+    \label{fig:05_isomap}
+\end{figure}
