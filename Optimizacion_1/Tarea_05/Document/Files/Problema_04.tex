@@ -18,3 +18,35 @@
 \subsection*{Parte 2}
 
 \textbf{Calcula el tamaño de paso exacto $\alpha_0$ si el punto incial es $x_0 = [0, 0]^T$?}
+
+Se tiene que se puede calcular el k-esimo tamaño de paso de la siguiente manera:
+
+\begin{equation*}
+    \alpha_k = \frac{g_k^Tg_k}{g_k^TQg_k}
+\end{equation*}
+
+En nuestro caso, el gradiente es:
+
+\begin{equation*}
+    g_k = Qx-b
+\end{equation*}
+
+para $x_0 = [0, 0]^T$, se tiene que $g_k$ es
+
+\begin{equation*}
+    g_k = \begin{bmatrix}
+        -3 \\ 1
+    \end{bmatrix}
+\end{equation*}
+
+por ende
+
+\begin{equation*}
+    g_k^T g_k = 10 \qquad g_k^TQg_k = 9
+\end{equation*}
+
+por lo tanto el tamaño de paso para $x_0$ es :
+
+\begin{equation*}
+    \alpha_k = \frac{10}{9}
+\end{equation*}

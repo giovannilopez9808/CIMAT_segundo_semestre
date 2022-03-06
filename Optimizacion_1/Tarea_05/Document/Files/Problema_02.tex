@@ -5,3 +5,37 @@
 \begin{equation*}
     A_{ij} < \frac{A_{ii}+A_{jj}}{2}
 \end{equation*}
+
+
+Sea $A'$ una matriz tal que sus elementos son submatrices de la matriz A tal que:
+
+\begin{equation*}
+    A' = \begin{bmatrix}
+        A_{ii} & A_{ij} \\
+        A_{ji} & A_{jj}
+    \end{bmatrix}
+\end{equation*}
+
+calculando el determinante de $A'$ se tiene lo siguiente:
+
+\begin{equation*}
+    det A' = A_{ii}A_{jj} - A_{ij}^2
+\end{equation*}
+
+lo cual es una descomposición de Schur de la matriz A. Como A es una matriz positiva definida entonces
+
+\begin{equation*}
+    A_{ii}A_{jj} - A_{ij}^2 > 0
+\end{equation*}
+
+por ende
+
+\begin{equation*}
+    A_{ij} < \sqrt{A_{ii}A_{jj}}
+\end{equation*}
+
+por la desigualdad de $\sqrt{A_{ii}A_{jj}} \leq \frac{A_{ii}+A_{jj}}{2}$ entonces:
+
+\begin{equation*}
+    A_{ij} < \frac{A_{ii}+A_{jj}}{2}
+\end{equation*}

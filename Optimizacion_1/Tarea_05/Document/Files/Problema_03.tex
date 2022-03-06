@@ -1,3 +1,4 @@
+
 \section*{Problema 03}
 
 \textbf{Sea $f:\mathbb{R}^n \rightarrow \mathbb{R}$ una función convexa. Muestra que para todo $x,y$ se cumple}
@@ -7,3 +8,41 @@
 \end{equation*}
 
 \textbf{donde $\alpha>0$ y $z=x+\frac{1}{\alpha}(x-y)$.}
+
+Sen dos parámetros $\beta_1,\beta_2$ tal que $\beta_1 >0$ , $\beta_2\leq 0$ y $\beta_1+\beta_2=1$. Con esto pueden definir de la siguiente manera:
+
+\begin{equation*}
+    \beta_1 = 1+\frac{1}{\alpha} \qquad \beta_2 = -\frac{1}{\alpha}
+\end{equation*}
+
+Se tiene la siguiente operación:
+
+\begin{align*}
+    \frac{1}{\beta_1} (\beta_1 x+\beta_2 y) + \left (1-\frac{1}{\beta_1}\right ) y & = x+ \frac{\beta_2}{\beta_1} y + y - \frac{1}{\beta_1} y \\
+                                                                                   & = x+y+\frac{\beta_2-1}{\beta_1} y                        \\
+                                                                                   & = x+y-\frac{\beta_1}{\beta_1} y                          \\
+                                                                                   & = x+y-y                                                  \\
+                                                                                   & = x
+\end{align*}
+
+Entonces, se tiene que:
+
+\begin{align*}
+    f(x) & = f\left (\frac{1}{\beta_1} (\beta_1 x+\beta_2 y) + \left (1-\frac{1}{\beta_1}\right ) y\right )
+\end{align*}
+
+como f es convexa y $0>\frac{1}{\beta_1}>1$, Entonces
+
+\begin{align*}
+    f(x)                                        & = f\left (\frac{1}{\beta_1} (\beta_1 x+\beta_2 y) + \left (1-\frac{1}{\beta_1}\right ) y\right ) \\[0.25cm]
+                                                & \leq \frac{1}{\beta_1} f(\beta_1 x+ \beta_2 y) + \left (1-\frac{1}{\beta_1}\right ) f(y)         \\[0.25cm]
+                                                & \leq \frac{1}{\beta_1} f(\beta_1 x+ \beta_2 y) - \frac{\beta_2}{\beta_1}  f(y)                   \\[0.25cm]
+    \beta_1 f(x)                                & \leq f(\beta_1 x+\beta_2 y) - \beta_2 f(y)                                                       \\[0.25cm]
+    \left (\frac{\alpha+1}{\alpha} \right )f(x) & \leq f\left (\frac{\alpha+1}{\alpha} x -\frac{1}{\alpha}  y\right ) + \frac{1}{\alpha} f(y)      \\[0.25cm]
+    (\alpha+1) f(x)                             & \leq \alpha f\left (x+\frac{1}{\alpha}x-\frac{1}{\alpha}y\right ) + f(y)                         \\[0.25cm]
+    f(y)                                        & \geq (\alpha+1) f(x) - \alpha f\left (x+\frac{1}{\alpha}x-\frac{1}{\alpha}y\right )              \\[0.25cm]
+    f(y)                                        & \geq f(x) + \alpha f(x) -\alpha f\left (x+\frac{1}{\alpha}(x-y)\right )                          \\[0.25cm]
+    f(y)                                        & \geq f(x) + \alpha f(x) -\alpha f\left (x+\frac{1}{\alpha}(x-y)\right )                          \\[0.25cm]
+    f(y)                                        & \geq f(x) + \alpha f(x)-\alpha f(z)                                                              \\[0.25cm]
+    f(y)                                        & \geq f(x) + \alpha \left (f(x)-f(z)\right)
+\end{align*}
