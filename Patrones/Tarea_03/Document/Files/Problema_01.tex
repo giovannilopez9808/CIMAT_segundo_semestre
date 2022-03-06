@@ -32,3 +32,17 @@ Entonces, la distancia de Kullback-Leibler para dos distribuciones de Bernoulli 
     d(P^1,P^2) & = \sum_{i=0}^1 \theta_1^i (1-\theta_1)^{1-i}\left [ i \left(\log (\theta_1)-\log (\theta_2)\right) + (1-i) \left (\log (1-\theta_1)-\log (1-\theta_2) \right ) \right ] \\
     d(P^1,P^2) & = (1-\theta_1) \left ( \log (1-\theta_1)- \log (1-\theta_2)\right ) + \theta_1 \left (\log (\theta_1)-\log (\theta_2) \right )
 \end{align*}
+
+Por lo tanto, la distancia de Kullback-Leibler para dos distribuciones de Bernoulli se puede calcular como en la ecuación \ref{eq:problema_01}.
+
+\begin{equation}
+    d(P^1,P^2)  = (1-\theta_1) \left ( \log (1-\theta_1)- \log (1-\theta_2)\right ) + \theta_1 \left (\log (\theta_1)-\log (\theta_2) \right ) \label{eq:problema_01}
+\end{equation}
+
+En la figura se visualiza la ecuación \ref{eq:problema_01} para diferentes valores de $\theta_1$. En esta se ve que la función alcanza un valor mínimo cuando $\theta_1$ y $\theta_2$ son muy semejantes. Por otro lado esta función tiende a infinito cuando los valores tienen una diferencia mayor.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=14cm]{Graphics/Kullback.png}
+    \caption{Resultados para diferentes valores de $\theta_1$ en la ecuación \ref{eq:problema_01}.}
+\end{figure}

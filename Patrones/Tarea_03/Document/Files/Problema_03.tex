@@ -1,0 +1,64 @@
+
+\section*{Problema 03}
+
+\textbf{Muestra que el incremento I\textsubscript{ij} en la suma de los errores al cuadrado, sum of squared errors (SSE), del método de mínima varianza de Ward (Ward's minimum variance method), i.e.,}
+
+\begin{align*}
+    I_{ij}   & = SSE_{ij} -(SSE_{i}+SSE_{j})         \\
+    SSE_i    & =\sum_{x\in C_i} ||x_i - \mu_i||^2    \\
+    SSE_j    & =\sum_{x\in C_i} ||x_i - \mu_j||^2    \\
+    SSE_{ij} & =\sum_{x\in C_i} ||x_i - \mu_{ij}||^2 \\
+\end{align*}
+
+\textbf{donde $\$mu_i$ , $\mu_j$ y $\mu_{ij}$ son los centroides de los clusters $C_i$ , $C_j$ y $C_i \cup Cj$ respectivamente, se puede escribir como sigue.}
+
+\begin{equation*}
+    I_{ij} = \frac{|C_i||C_j|}{|C_i|+|C_j|} ||\mu_i-\mu_j||^2
+\end{equation*}
+
+\textbf{donde $|C_i|$ y $|C_j|$ representan la cardinalidad de los clusters $C_i$ y $C_j$ respectivamente.}
+
+
+Calculando $SSE_{ij}$ se obtiene lo siguiente:
+
+\begin{align*}
+    SSE_{ij} & = \sum_{i\in C_{ij}} ||x_i-\mu_{ij}||^2                                     \\
+             & = \sum_{i \in C_i} ||x_i-\mu_{ij}||^2  +\sum_{i \in C_j} ||x_i-\mu_{ij}||^2
+\end{align*}
+
+
+Calculando $\sum_{i \in C_i} ||x_i-\mu_{ij}||^2$ se obtiene lo siguiente:
+
+\begin{align*}
+    \sum_{i \in C_i} ||x_i-\mu_{ij}||^2 & = \sum_{i \in C_i} ||x_i-\left (\mu_i - \frac{|C_j|}{|C_i|+|C_j|}(\mu_i-\mu_j)\right )||^2                                                                                                             \\
+                                        & = \sum_{i \in C_i}  ||(x_i-\mu_i) +\frac{|C_j|}{|C_i|+|C_j|}(\mu_i-\mu_j) ||^2                                                                                                                         \\
+                                        & = \sum_{i \in C_i} ||x_i-\mu_i||^2 +2\sum_{i \in C_i} (x_i-\mu_i) \left (\frac{|C_j|}{|C_i|+|C_j|}\right ) (\mu_i-\mu_j) + \sum_{i \in C_i} \left (\frac{|C_j|}{|C_i|+|C_j|}\right ) ||\mu_i-\mu_j||^2 \\
+                                        & =  \sum_{i \in C_i} ||x_i-\mu_i||^2 + |C_i|\left (\frac{|C_j|^2}{(|C_i|+|C_j|)^2}\right ) ||\mu_i-\mu_j||^2                                                                                            \\
+\end{align*}
+
+De forma semejante se puede calcular $\sum_{i \in C_j} ||x_i-\mu_{ij}||^2$:
+
+\begin{align*}
+    \sum_{i \in C_j} ||x_i-\mu_{ij}||^2 & = \sum_{i \in C_j} ||x_i-\left (\mu_j - \frac{|C_i|}{|C_i|+|C_j|}(\mu_i-\mu_j)\right )||^2                                                                                                             \\
+                                        & = \sum_{i \in C_j}  ||(x_i-\mu_j) +\frac{|C_i|}{|C_i|+|C_j|}(\mu_i-\mu_j) ||^2                                                                                                                         \\
+                                        & = \sum_{i \in C_j} ||x_i-\mu_j||^2 +2\sum_{i \in C_j} (x_i-\mu_j) \left (\frac{|C_i|}{|C_i|+|C_j|}\right ) (\mu_i-\mu_j) + \sum_{i \in C_j} \left (\frac{|C_i|}{|C_i|+|C_j|}\right ) ||\mu_i-\mu_j||^2 \\
+                                        & =  \sum_{i \in C_j} ||x_i-\mu_j||^2 + |C_j|\left (\frac{|C_i|^2}{(|C_i|+|C_j|)^2}\right ) ||\mu_j-\mu_j||^2                                                                                            \\
+\end{align*}
+
+Entonces $SSE_{ij}$ puede ser escrito de la siguiente manera:
+
+\begin{align*}
+    SSE_{ij} & = \sum_{x\in C_i} ||x_i - \mu_{ij}||^2                                                                                                    \\
+             & = \sum_{i \in C_i} ||x_i-\mu_{ij}||^2  +\sum_{i \in C_j} ||x_i-\mu_{ij}||^2                                                               \\
+             & = \sum_{i \in C_i} ||x_i-\mu_i||^2 +\sum_{i \in C_j} ||x_i-\mu_j||^2+ \frac{|C_j||C_i|^2+|C_j|^2|C_i|}{(|C_i|+|C_j|)^2} ||\mu_i-\mu_j||^2 \\
+             & = SSE_i + SSE_j + \frac{|C_j||C_i|}{|C_i|+|C_j|} ||\mu_i-\mu_j||^2
+\end{align*}
+
+por lo tanto, $I_{ij}$ es igual a:
+
+\begin{align*}
+    I_{ij} & =  SSE_{ij} - (SSE_{i}+SSE_{j})                                             \\
+           & =  SSE_{ij} - SSE_{i}-SSE_{j}                                               \\
+           & = SSE_i+SSE_J +\frac{|C_j||C_i|}{|C_i|+|C_j|} ||\mu_i-\mu_j||^2-SSE_i-SSE_j \\
+    I_{ij} & =  \frac{|C_j||C_i|}{|C_i|+|C_j|} ||\mu_i-\mu_j||^2
+\end{align*}
