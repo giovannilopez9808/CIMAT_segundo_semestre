@@ -1,15 +1,15 @@
-from .models import language_model_class, perplexity_model_class
+from .models import language_model_class, mask_unknow
 from nltk.tokenize import TweetTokenizer as tokenizer
 from sklearn.model_selection import train_test_split
 from .vocabulary import vocabulary_class
 from .dictionary import dictionary_class
 from .functions import join_path
+from tabulate import tabulate
 from numpy import exp
 
 
 class tweets_data:
     def __init__(self, parameters: dict) -> None:
-        self.language_model = language_model_class()
         self.vocabulary_model = vocabulary_class()
         self.dictionary = dictionary_class()
         self.tokenize = tokenizer().tokenize
@@ -99,23 +99,27 @@ class tweets_data:
     def mask_tweets(self, tweets: list) -> None:
         tweets_mask = []
         for tweet in tweets:
-            tweet_mask = self.language_model.mask_unknow(tweet,
-                                                         self.vocabulary.keys())
+            tweet_mask = mask_unknow(tweet,
+                                     self.vocabulary.keys())
             tweets_mask += [tweet_mask]
         return tweets_mask
-
-    def obtain_perplexity(self) -> None:
-        print("Calculando perplejidad")
-        self.obtain_data_test()
-        perplexity_model = perplexity_model_class(self.data_tr_mask,
-                                                  self.data_test_mask,
-                                                  self.vocabulary)
-        for lambda_i in self.parameters["lambda list"]:
-            perplexity = perplexity_model.compute_perplexity(lambda_i)
-            print(exp(perplexity))
 
     def obtain_data_test(self) -> None:
         self.data_tr_mask, self.data_test_mask = train_test_split(self.data_tr_mask,
                                                                   train_size=0.89,
                                                                   test_size=0.11,
                                                                   random_state=12345)
+
+    def obtain_perplexity(self, use_data_test: bool) -> None:
+        print("Calculando perplejidad")
+        self.obtain_data_test()
+        language_model = language_model_class(self.data_tr_mask,
+                                              self.data_test_mask,
+                                              self.data_val_mask,
+                                              self.vocabulary)
+        results = []
+        for lambda_i in self.parameters["lambda list"]:
+            perplexity = language_model.compute_perplexity(lambda_i,
+                                                           use_data_test=use_data_test)
+            results += [[lambda_i, exp(perplexity)]]
+        print(tabulate(results, headers=["Lambda", "Perplexity"]))
