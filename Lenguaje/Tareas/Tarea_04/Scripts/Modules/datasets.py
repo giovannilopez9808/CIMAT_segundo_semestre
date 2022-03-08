@@ -19,8 +19,6 @@ def obtain_parameters() -> dict:
         },
         "max words": 5000,
         "max bigrams": 1000,
-        "max similitud words": 10,
-        "max similitud documents": 10,
         "lambda list": [[1/3, 1/3, 1/3],
                         [0.4, 0.4, 0.2],
                         [0.2, 0.4, 0.4],
