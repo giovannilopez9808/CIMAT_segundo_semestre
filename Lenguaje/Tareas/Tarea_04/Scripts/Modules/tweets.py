@@ -1,5 +1,4 @@
 from .models import language_model_class, mask_unknow
-from nltk.tokenize import TweetTokenizer as tokenizer
 from sklearn.model_selection import train_test_split
 from .vocabulary import vocabulary_class
 from .dictionary import dictionary_class
@@ -12,9 +11,11 @@ class tweets_data:
     def __init__(self, parameters: dict) -> None:
         self.vocabulary_model = vocabulary_class()
         self.dictionary = dictionary_class()
-        self.tokenize = tokenizer().tokenize
         self.parameters = parameters
         self.read()
+        self.initialize()
+
+    def initialize(self):
         self.add_s_tokens()
         self.obtain_vocabulary(use_mask=True)
         self.obtain_word_index()
@@ -113,13 +114,13 @@ class tweets_data:
     def obtain_perplexity(self, use_data_test: bool) -> None:
         print("Calculando perplejidad")
         self.obtain_data_test()
-        language_model = language_model_class(self.data_tr_mask,
-                                              self.data_test_mask,
-                                              self.data_val_mask,
-                                              self.vocabulary)
+        self.language_model = language_model_class(self.data_tr_mask,
+                                                   self.data_test_mask,
+                                                   self.data_val_mask,
+                                                   self.vocabulary)
         results = []
         for lambda_i in self.parameters["lambda list"]:
-            perplexity = language_model.compute_perplexity(lambda_i,
-                                                           use_data_test=use_data_test)
+            perplexity = self.language_model.compute_perplexity(lambda_i,
+                                                                use_data_test=use_data_test)
             results += [[lambda_i, exp(perplexity)]]
         print(tabulate(results, headers=["Lambda", "Perplexity"]))

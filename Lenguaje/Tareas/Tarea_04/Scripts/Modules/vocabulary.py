@@ -1,12 +1,11 @@
-from nltk.tokenize import TweetTokenizer as tokenizer
 from .dictionary import dictionary_class
 from nltk import bigrams as bigrams_nltk
+from .functions import tokenize
 from nltk import FreqDist
 
 
 class vocabulary_class:
     def __init__(self) -> None:
-        self.tokenize = tokenizer().tokenize
         pass
 
     def obtain(self, data: list, max_words: int) -> dict:
@@ -17,7 +16,7 @@ class vocabulary_class:
         corpus = []
         for tweet in data:
             # Creacion y guardado de los tokens
-            corpus += self.tokenize(tweet)
+            corpus += tokenize(tweet)
         # Creacion de la distribucion de frecuencias
         vocabulary = FreqDist(corpus)
         vocabulary = self.sort_freqdist(vocabulary)
@@ -33,7 +32,7 @@ class vocabulary_class:
         corpus_bigrams = []
         for tweet in data:
             # Creacion y guardado de los tokens
-            corpus_bigrams += bigrams_nltk(tokenizer().tokenize(tweet))
+            corpus_bigrams += bigrams_nltk(tokenize(tweet))
         # Creacion de la distribucion de frecuencias
         vocabulary = FreqDist(corpus_bigrams)
         vocabulary = self.sort_freqdist(vocabulary)

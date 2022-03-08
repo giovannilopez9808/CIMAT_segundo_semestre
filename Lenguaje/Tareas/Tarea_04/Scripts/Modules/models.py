@@ -1,6 +1,9 @@
-from nltk.tokenize import TweetTokenizer as tokenizer
+from typing import final
+from numpy import array, log, zeros, exp
 from nltk import FreqDist, ngrams
-from numpy import log
+from .functions import tokenize
+from numpy.linalg import norm
+from tabulate import tabulate
 
 
 class probability_model_class:
@@ -9,7 +12,7 @@ class probability_model_class:
     """
 
     def __init__(self) -> None:
-        self.tokenize = tokenizer().tokenize
+        pass
 
     def obtain_unigram_probabilities_Laplace(self, data: list) -> dict:
         """
@@ -25,17 +28,17 @@ class probability_model_class:
         tokens = []
         for tweet in data:
             # Token de cada tweet
-            tokens += self.tokenize(tweet)
+            tokens += tokenize(tweet)
         # Numero de palabras en el documento
         self.words_len = len(tokens)
         # Frecuencias de las palabras
-        unigram_fdist = FreqDist(tokens)
+        self.unigram_fdist = FreqDist(tokens)
         # Tamaño del vocabulario
-        n_vocabulary = len(unigram_fdist)
+        n_vocabulary = len(self.unigram_fdist)
         # Probabilidades de unigramas
         probability = {
             word: (count + 1.0) / (self.words_len + n_vocabulary)
-            for word, count in unigram_fdist.items()
+            for word, count in self.unigram_fdist.items()
         }
         self.unigram_probability = probability.copy()
         return probability
@@ -55,7 +58,7 @@ class probability_model_class:
         tokens = []
         for tweet in data:
             # Tokens de cada tweet
-            tokens += self.tokenize(tweet)
+            tokens += tokenize(tweet)
         self.tokens = tokens.copy()
         # ngramas en el documento
         n_grams = ngrams(tokens, n=ngram)
@@ -67,8 +70,6 @@ class probability_model_class:
         probabilities = {}
         # Apartado para bigrama
         if ngram == 2:
-            # frecuencia de cada palabra
-            self.unigram_fdist = FreqDist(self.tokens)
             for (word_i, word_j), count in ngram_fdist.items():
                 # Frecuencia de la palabra anterior en el bigrama
                 count_word_i = self.unigram_fdist[word_i]
@@ -125,7 +126,7 @@ class probability_model_class:
         s_init = "<s>"
         s_fin = "</s>"
         tweet = "{}{}{}".format(s_init, tweet, s_fin)
-        tweet = self.tokenize(tweet)
+        tweet = tokenize(tweet)
         # Tamaño del vocabulario
         vocabulary_len = len(vocabulary)
         probability = 1
@@ -212,7 +213,6 @@ class language_model_class:
 
     def __init__(self, data_tr: list, data_test: list, data_val: list, vocabulary: dict):
         self.probability_model = probability_model_class()
-        self.tokenize = tokenizer().tokenize
         self.data_tr = data_tr
         self.data_test = data_test
         self.data_val = data_val
@@ -233,11 +233,11 @@ class language_model_class:
         # Preparo modelo para evaluación
         tokens = []
         for tweet in self.data_tr:
-            tokens += self.tokenize(tweet)
+            tokens += tokenize(tweet)
         # Total de palabras
         self.words_len = len(tokens)
-        # Frecuencias bigramas
         bigrams = ngrams(tokens, n=2)
+        # Frecuencias bigramas
         self.bigram_fdist = FreqDist(bigrams)
         # Frecuencias unigramas
         self.unigram_fdist = FreqDist(tokens)
@@ -249,7 +249,7 @@ class language_model_class:
         else:
             data = self.data_val
         for tweet in data:
-            tokens += self.tokenize(tweet)
+            tokens += tokenize(tweet)
         trigrams = ngrams(tokens, n=3)
         perplexity = 0.0
         for (word_i, word_j, word_k) in trigrams:
@@ -264,7 +264,7 @@ class language_model_class:
         perplexity = -perplexity / self.words_len
         return perplexity
 
-    def tweet_probability(self, tweet: str, lambda_values: list) -> float:
+    def tweet_probability(self, tweet: str, lambda_values: list, add_s_tokens: bool = True) -> float:
         """
         Calcula la probabilidad de un tweet por medio de la interpolacion
         ----------------
@@ -277,25 +277,101 @@ class language_model_class:
         + probability -> probabilidad del tweet dado
         """
         # Enmascaro palabras desconocidas
-        tweet = mask_unknow(tweet, self.vocabulary)
-        tweet = "<s>{}</s>".format(tweet)
-        tokens = self.tokenize(tweet)
+        if add_s_tokens:
+            tweet = mask_unknow(tweet, self.vocabulary)
+            tweet = "<s>{}</>".format(tweet)
+        tokens = tokenize(tweet)
         trigrams = ngrams(tokens, n=3)
         probability = 1.0
         for (word_i, word_j, word_k) in trigrams:
-            aux = 1
+            aux = 0
             # Compruebo valores de lambda
-            if lambda_values[0] != 0.0:
-                aux *= lambda_values[0] * self.probability_model.obtain_ngram_probability(
+            if lambda_values[0] != 0:
+                aux += lambda_values[0] * self.probability_model.obtain_ngram_probability(
                     (word_i, word_j, word_k),)
-            if lambda_values[1] != 0.0:
-                aux *= lambda_values[1] * self.probability_model.obtain_ngram_probability(
+            if lambda_values[1] != 0:
+                aux += lambda_values[1] * self.probability_model.obtain_ngram_probability(
                     (word_i, word_j),)
-            if lambda_values[2] != 0.0:
-                aux *= lambda_values[2] * self.probability_model.obtain_unigram_probability(
+            if lambda_values[2] != 0:
+                aux += lambda_values[2] * self.probability_model.obtain_unigram_probability(
                     word_i)
             probability *= aux
         return probability
+
+    def apply_expectation_maximization(self, iterations: int = 5) -> array:
+        results = []
+        ngrams = 3
+        # lambda_test = [1/ngrams for i in range(ngrams)]
+        lambda_test = [4/5, 1/10, 1/10]
+        perplexity = exp(self.compute_perplexity(lambda_test))
+        results += [["Inicio",
+                     lambda_test.copy(),
+                     sum(lambda_test),
+                     perplexity]]
+        data_len = len(self.data_val)
+        # Vectores de distribuciones q_m
+        dist = zeros((data_len, ngrams), dtype=float)
+        for iteration in range(iterations):
+            # Ciclo sobre tokens de validación
+            for i, tweet in enumerate(self.data_val):
+                dist[i, 0] = self.tweet_probability(tweet,
+                                                    [lambda_test[0], 0, 0],
+                                                    add_s_tokens=False)
+                dist[i, 1] = self.tweet_probability(tweet,
+                                                    [0, lambda_test[1], 0],
+                                                    add_s_tokens=False)
+                dist[i, 2] = self.tweet_probability(tweet,
+                                                    [0, 0, lambda_test[2]],
+                                                    add_s_tokens=False)
+                # Normalizo vector
+                dist[i] = dist[i] / norm(dist[i])
+            # Update lambdas
+            for i in range(ngrams):
+                lambda_test[i] = sum(dist[:, i]) / data_len
+            perplexity = exp(self.compute_perplexity(lambda_test))
+            results += [["Iteración {}".format(iteration+1),
+                         lambda_test.copy(),
+                         sum(lambda_test),
+                         perplexity]]
+
+        print(tabulate(results,
+                       headers=["Iteracion", "lambdas", "Suma", "Perplexidad"]))
+        return lambda_test
+
+
+class tweetear_model:
+    def __init__(self, language_model: language_model_class, lambdas: list):
+        self.language_model = language_model
+        self.lambdas = lambdas
+
+    def autocomplete(self, init_text: list):
+        # Creo todas las posibles oraciones
+        tweets = []
+        for word in self.language_model.vocabulary:
+            value = "{} {}".format(init_text, word)
+            tweets += [value]
+        probabilities = []
+        for i, tweet in enumerate(tweets):
+            probabilities += [[self.language_model.tweet_probability(tweet,
+                                                                     self.lambdas), i]]
+        # Ordeno oraciones por probabilidad
+        probabilities.sort(reverse=True)
+        # print(probabilities)
+        return tweets[probabilities[0][1]]
+
+    def write(self, init_text: list):
+        text = tokenize(init_text)
+        final_sentence = text.copy()
+        for i in range(50):
+            tweet = self.autocomplete(" ".join(text))
+            final_word = tokenize(tweet)
+            final_word = final_word[-1]
+            text.pop(0)
+            text.append(final_word)
+            final_sentence += [final_word]
+            if final_word == '</s>':
+                break
+        return final_sentence
 
 
 def mask_unknow(tweet: str, vocabulary: list) -> str:
@@ -311,7 +387,6 @@ def mask_unknow(tweet: str, vocabulary: list) -> str:
         tweet_mask -> string con el tweet enmascarado
         """
     # Tokens del tweet dado
-    tokenize = tokenizer().tokenize
     tokens = tokenize(tweet)
     # Enmascaramiento de los tokens
     tweet_mask = [word if word in vocabulary else "<unk>"
