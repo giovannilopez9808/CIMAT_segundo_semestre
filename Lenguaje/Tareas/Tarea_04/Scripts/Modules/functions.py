@@ -2,20 +2,29 @@ from nltk.tokenize import TweetTokenizer
 from unidecode import unidecode
 from os import listdir
 import re
-# Tokenizo oraciones
 
 
 def tokenize(text: str) -> list:
-    # Expresión para quitar caracteres
+    """
+    Realiza la tokenizacion de un texto dado
+    ------------
+    Inputs:
+    text -> string de texto
+
+    ------------
+    Outputs:
+    aux -> lista de tokens
+    """
+    # Expresión para obtener palabras
     reg_exp = r"<?/?[A-Z|a-z]+>?"
     tokenizer = TweetTokenizer().tokenize
     text = unidecode(text)
     # coniverto texto a minúsculas y limpio
-    tmp = re.findall(reg_exp, text.lower())
-    tmp = ' '.join(tmp)
+    aux = re.findall(reg_exp, text.lower())
+    aux = ' '.join(aux)
     # tokenizo
-    tmp = tokenizer(tmp)
-    return tmp
+    aux = tokenizer(aux)
+    return aux
 
 
 def ls(path: str) -> list:
@@ -31,16 +40,16 @@ def join_path(path: str, filename: str) -> str:
 
 def mask_unknow(tweet: str, vocabulary: list) -> str:
     """
-        Enmascaramiento de una oración dado un vocabulario
-        -----------
-        Inputs:
-        + tweet -> string con el tweet a enmascarar
-        + vocabulary -> vocabulario de los datos de entrenamiento
+    Enmascaramiento de una oración dado un vocabulario
+    -----------
+    Inputs:
+    + tweet -> string con el tweet a enmascarar
+    + vocabulary -> vocabulario de los datos de entrenamiento
 
-        ------------
-        Outputs:
-        tweet_mask -> string con el tweet enmascarado
-        """
+    ------------
+    Outputs:
+    tweet_mask -> string con el tweet enmascarado
+    """
     # Tokens del tweet dado
     tokens = tokenize(tweet)
     # Enmascaramiento de los tokens
