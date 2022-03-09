@@ -7,6 +7,7 @@ def obtain_parameters() -> dict:
         "path data": "Data/",
         "path graphics": "Graphics/",
         "path results": "Results/",
+        "path conferences": "Data/conferences/",
         # Archivos de entrenamiento
         "train": {
             "data": "mex_train.txt",

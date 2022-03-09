@@ -1,32 +1,25 @@
 from nltk.tokenize import TweetTokenizer
+from unidecode import unidecode
+from os import listdir
 import re
 # Tokenizo oraciones
 
 
-def tokenize(my_txt):
+def tokenize(text: str) -> list:
     # Expresión para quitar caracteres
     reg_exp = r"<?/?[A-Z|a-z]+>?"
     tokenizer = TweetTokenizer().tokenize
+    text = unidecode(text)
     # coniverto texto a minúsculas y limpio
-    tmp = re.findall(reg_exp, my_txt.lower())
+    tmp = re.findall(reg_exp, text.lower())
     tmp = ' '.join(tmp)
     # tokenizo
     tmp = tokenizer(tmp)
     return tmp
 
 
-# def tokenize(text: str):
-
-#     # print(text)
-#     tokenizer = TweetTokenizer().tokenize
-#     tokens = tokenizer(text)
-#     # text = text.lower()
-#     # stopwords = list(string.punctuation)
-#     # stopwords += [":", "(", ")"]
-#     # tokens = tokenizer(text)
-#     # tokens = [token for token in tokens
-#     #           if not token in stopwords]
-#     return tokens
+def ls(path: str) -> list:
+    return sorted(listdir(path))
 
 
 def join_path(path: str, filename: str) -> str:

@@ -1,9 +1,9 @@
-from typing import final
 from numpy import array, log, zeros, exp
 from nltk import FreqDist, ngrams
 from .functions import tokenize
 from numpy.linalg import norm
 from tabulate import tabulate
+from random import choice
 
 
 class probability_model_class:
@@ -298,11 +298,11 @@ class language_model_class:
             probability *= aux
         return probability
 
-    def apply_expectation_maximization(self, iterations: int = 5) -> array:
+    def apply_expectation_maximization(self, lambda_test: list = [], iterations: int = 5) -> array:
         results = []
         ngrams = 3
-        # lambda_test = [1/ngrams for i in range(ngrams)]
-        lambda_test = [4/5, 1/10, 1/10]
+        if not len(lambda_test):
+            lambda_test = [1/ngrams for i in range(ngrams)]
         perplexity = exp(self.compute_perplexity(lambda_test))
         results += [["Inicio",
                      lambda_test.copy(),
@@ -356,22 +356,23 @@ class tweetear_model:
                                                                      self.lambdas), i]]
         # Ordeno oraciones por probabilidad
         probabilities.sort(reverse=True)
-        # print(probabilities)
-        return tweets[probabilities[0][1]]
+        tweet = tweets[probabilities[0][1]]
+        return tweet
 
-    def write(self, init_text: list):
+    def write(self, init_text: list, max_words: int = 50) -> str:
         text = tokenize(init_text)
-        final_sentence = text.copy()
-        for i in range(50):
+        result = text.copy()
+        for i in range(max_words):
             tweet = self.autocomplete(" ".join(text))
-            final_word = tokenize(tweet)
-            final_word = final_word[-1]
+            words = tokenize(tweet)
+            word = words[-1]
             text.pop(0)
-            text.append(final_word)
-            final_sentence += [final_word]
-            if final_word == '</s>':
+            text.append(word)
+            result += [word]
+            if word == '</s>':
                 break
-        return final_sentence
+        result = " ".join(result)
+        return result
 
 
 def mask_unknow(tweet: str, vocabulary: list) -> str:

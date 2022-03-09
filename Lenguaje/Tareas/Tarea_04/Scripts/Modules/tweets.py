@@ -25,6 +25,11 @@ class tweets_data:
         self.obtain_vocabulary(use_mask=True)
         self.obtain_word_index()
         self.obtain_index_word()
+        self.obtain_data_test()
+        self.language_model = language_model_class(self.data_tr_mask,
+                                                   self.data_test_mask,
+                                                   self.data_val_mask,
+                                                   self.vocabulary)
 
     def get_texts_from_file(self, path_data: str, path_labels: str) -> tuple:
         """
@@ -112,12 +117,6 @@ class tweets_data:
                                                                   random_state=12345)
 
     def obtain_perplexity(self, use_data_test: bool) -> None:
-        print("Calculando perplejidad")
-        self.obtain_data_test()
-        self.language_model = language_model_class(self.data_tr_mask,
-                                                   self.data_test_mask,
-                                                   self.data_val_mask,
-                                                   self.vocabulary)
         results = []
         for lambda_i in self.parameters["lambda list"]:
             perplexity = self.language_model.compute_perplexity(lambda_i,
