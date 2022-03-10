@@ -87,11 +87,10 @@ class SOM_model_class:
 
 
 class cluster_model_class():
-    def __init__(self, clusters: int, linkage: str) -> None:
-        self.clusters = clusters
-        self.linkage = linkage
+    def __init__(self) -> None:
+        pass
 
-    def run(self, data: array):
-        clustering = AgglomerativeClustering(n_clusters=self.clusters,
-                                             linkage=self.linkage)
+    def run(self, data: array, clusters: int, linkage: str):
+        clustering = AgglomerativeClustering(n_clusters=clusters,
+                                             linkage=linkage)
         self.results = clustering.fit_predict(data)

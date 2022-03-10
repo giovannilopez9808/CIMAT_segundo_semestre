@@ -3,7 +3,8 @@ def obtain_parameters() -> dict:
                   "path graphics": "../Graphics/",
                   "path graphics animales": "../Graphics/Animals/",
                   "matrix file": "predicate-matrix-continuous.txt",
-                  "classes file": "classes.txt"}
+                  "classes file": "classes.txt",
+                  "linkage types": ["single", "complete", "ward"]}
     return parameters
 
 
