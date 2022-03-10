@@ -6,7 +6,7 @@ from Modules.graphics import plot
 parameters = obtain_parameters()
 parameters["file graphics"] = "TSNE.png"
 data = data_class(parameters)
-model = TSNE_model_class(2)
+model = TSNE_model_class()
 model.run(data.matrix)
 plot(model,
      data.names,

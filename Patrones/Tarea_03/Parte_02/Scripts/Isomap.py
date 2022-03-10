@@ -6,7 +6,7 @@ from Modules.graphics import plot
 parameters = obtain_parameters()
 parameters["file graphics"] = "Isomap.png"
 data = data_class(parameters)
-model = Isomap_model_class(3, 2)
+model = Isomap_model_class()
 model.run(data.matrix)
 plot(model,
      data.names,

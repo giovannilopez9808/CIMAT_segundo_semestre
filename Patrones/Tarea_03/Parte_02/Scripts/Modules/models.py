@@ -1,4 +1,5 @@
 from sklearn.manifold import LocallyLinearEmbedding, Isomap, TSNE
+from sklearn.cluster import AgglomerativeClustering
 from sklearn.manifold import Isomap
 from pandas import DataFrame
 from somlearn import SOM
@@ -21,7 +22,7 @@ class LLE_model_class:
 
 
 class Isomap_model_class:
-    def __init__(self, neighbors: int, components: int) -> None:
+    def __init__(self, neighbors: int = 3, components: int = 2) -> None:
         self.components = components
         self.neighbors = neighbors
         self.obtain_index_plot_animals()
@@ -41,7 +42,7 @@ class Isomap_model_class:
 
 
 class TSNE_model_class:
-    def __init__(self, components: int) -> None:
+    def __init__(self, components: int = 2) -> None:
         self.components = components
         self.obtain_index_plot_animals()
 
@@ -83,3 +84,14 @@ class SOM_model_class:
         self.classes.index = self.classes["Names"]
         self.classes = self.classes.drop(columns="Names")
         self.classes = self.classes.sort_values("Classes")
+
+
+class cluster_model_class():
+    def __init__(self, clusters: int, linkage: str) -> None:
+        self.clusters = clusters
+        self.linkage = linkage
+
+    def run(self, data: array):
+        clustering = AgglomerativeClustering(n_clusters=self.clusters,
+                                             linkage=self.linkage)
+        self.results = clustering.fit_predict(data)
