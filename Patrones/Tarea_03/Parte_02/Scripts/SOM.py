@@ -14,7 +14,7 @@ data = data_class(parameters)
 SOM_model = SOM_model_class()
 SOM_model.run(data.matrix)
 SOM_model.create_classes_dataframe(data.names)
-print(SOM_model.classes)
+SOM_model.classes.to_csv("../Results/SOM_labels.csv")
 
 for model_name in models_set:
     model_set = models_set[model_name]

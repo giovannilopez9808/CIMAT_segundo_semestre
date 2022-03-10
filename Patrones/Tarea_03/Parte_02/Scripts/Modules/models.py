@@ -83,7 +83,6 @@ class SOM_model_class:
         self.classes["Classes"] = self.results
         self.classes.index = self.classes["Names"]
         self.classes = self.classes.drop(columns="Names")
-        self.classes = self.classes.sort_values("Classes")
 
 
 class cluster_model_class():
@@ -94,3 +93,10 @@ class cluster_model_class():
         clustering = AgglomerativeClustering(n_clusters=clusters,
                                              linkage=linkage)
         self.results = clustering.fit_predict(data)
+
+    def create_classes_dataframe(self, names: array) -> DataFrame:
+        self.classes = DataFrame(names,
+                                 columns=["Names"])
+        self.classes["Classes"] = self.results
+        self.classes.index = self.classes["Names"]
+        self.classes = self.classes.drop(columns="Names")
