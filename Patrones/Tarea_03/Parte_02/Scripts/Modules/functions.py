@@ -1,5 +1,6 @@
 def obtain_parameters() -> dict:
     parameters = {"path data": "../Data/",
+                  "path results": "../Results/",
                   "path graphics": "../Graphics/",
                   "path graphics animales": "../Graphics/Animals/",
                   "matrix file": "predicate-matrix-continuous.txt",

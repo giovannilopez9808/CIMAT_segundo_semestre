@@ -80,7 +80,7 @@ class SOM_model_class:
     def create_classes_dataframe(self, names: array) -> DataFrame:
         self.classes = DataFrame(names,
                                  columns=["Names"])
-        self.classes["Classes"] = self.results
+        self.classes["SOM"] = self.results
         self.classes.index = self.classes["Names"]
         self.classes = self.classes.drop(columns="Names")
 
