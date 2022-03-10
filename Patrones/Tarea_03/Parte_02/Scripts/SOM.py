@@ -14,15 +14,6 @@ fig, ax = plt.subplots(figsize=(10, 6))
 ax.scatter(data.matrix[:, 0],
            data.matrix[:, 1],
            c=SOM_model.results)
-# for index in SOM_model.animals_index:
-#     animal_image = "{}.jpg".format(data.names[index])
-#     position = [data.matrix[index, 0],
-#                 data.matrix[index, 1]]
-#     plot_image(parameters["path graphics animales"],
-#                animal_image,
-#                ax,
-#                position
-#                )
 plt.axis("off")
 plt.tight_layout()
 plt.savefig(join_path(parameters["path graphics"],

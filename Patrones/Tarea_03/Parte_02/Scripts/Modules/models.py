@@ -2,7 +2,7 @@ from sklearn.manifold import LocallyLinearEmbedding, Isomap, TSNE
 from sklearn.manifold import Isomap
 from pandas import DataFrame
 from somlearn import SOM
-from numpy import array, shape
+from numpy import array
 
 
 class LLE_model_class:
@@ -12,8 +12,8 @@ class LLE_model_class:
     def run(self, data: array) -> DataFrame:
         model = LocallyLinearEmbedding(n_components=2)
         results = model.fit_transform(data)
-        self.results = {"x": results[:, 0],
-                        "y": results[:, 1]}
+        self.results = {"Component 1": results[:, 0],
+                        "Component 2": results[:, 1]}
         self.results = DataFrame(self.results)
 
     def obtain_index_plot_animals(self):
@@ -51,8 +51,8 @@ class TSNE_model_class:
                      init="pca",
                      learning_rate="auto")
         results = model.fit_transform(data)
-        self.results = {"x": results[:, 0],
-                        "y": results[:, 1]}
+        self.results = {"Component 1": results[:, 0],
+                        "Component 2": results[:, 1]}
         self.results = DataFrame(self.results)
 
     def obtain_index_plot_animals(self):
