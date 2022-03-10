@@ -23,7 +23,7 @@ for index in Isomap_model.animals_index:
                ax,
                position
                )
-# plt.axis("off")
+plt.axis("off")
 plt.tight_layout()
 plt.savefig(join_path(parameters["path graphics"],
                       parameters["file graphics"]))
