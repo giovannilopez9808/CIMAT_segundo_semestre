@@ -1,5 +1,5 @@
 from Modules.models import Isomap_model_class, TSNE_model_class, LLE_model_class, SOM_model_class
-from Modules.functions import join_path, obtain_parameters
+from Modules.functions import obtain_parameters
 from Modules.dataset import data_class
 from Modules.graphics import plot
 

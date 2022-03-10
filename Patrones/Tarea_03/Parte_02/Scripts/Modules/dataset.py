@@ -1,5 +1,4 @@
 from .functions import join_path
-from pandas import DataFrame
 from numpy import loadtxt
 
 
