@@ -67,7 +67,7 @@ class SOM_model_class:
 
     def run(self, data: array) -> DataFrame:
         model = SOM(n_columns=2,
-                    n_rows=3,
+                    n_rows=2,
                     random_state=1)
         self.results = model.fit_predict(data)
 
