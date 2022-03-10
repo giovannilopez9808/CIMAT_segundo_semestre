@@ -1,4 +1,5 @@
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
+from scipy.cluster.hierarchy import dendrogram, linkage
 from .functions import join_path
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
@@ -48,6 +49,25 @@ def plot_clusters(parameters: dict, cluster_model, model, data):
                    alpha=1,
                    c=cluster_model.results)
         ax.set_xticks([])
+        ax.set_yticks([])
+    plt.tight_layout()
+    plt.savefig(join_path(parameters["path graphics"],
+                          parameters["file graphics"]))
+
+
+def plot_denograma(parameters: dict, data) -> None:
+    fig, axs = plt.subplots(1, 3,
+                            sharey=True,
+                            figsize=(18, 6))
+    for ax, linkage_name in zip(axs, parameters["linkage types"]):
+        linked = linkage(data.matrix, linkage_name)
+        ax.set_title("Linkage {}".format(linkage_name))
+        dendrogram(linked,
+                   orientation='top',
+                   labels=data.names,
+                   distance_sort='descending',
+                   show_leaf_counts=True,
+                   ax=ax)
         ax.set_yticks([])
     plt.tight_layout()
     plt.savefig(join_path(parameters["path graphics"],
