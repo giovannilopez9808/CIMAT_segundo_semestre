@@ -4,8 +4,8 @@
 
 \begin{equation*}
     f(x) = \frac{1}{2}x^T \begin{bmatrix}
-        \frac{3}{2} & 2 \\
-        0 \frac{3}{2}
+        \frac{3}{2} & 2           \\
+        0           & \frac{3}{2}
     \end{bmatrix}x + x^T \begin{bmatrix}
         3 \\ -1
     \end{bmatrix} -22
@@ -14,6 +14,30 @@
 \subsection*{Parte 1}
 
 \textbf{Si se usa al algoritmo de gradiente descendente con tamaño de paso fijo para mininizar la funcion anterior, diga el rango de valores que puede tomar el tamaño de paso para que el algoritmo converja al minimizador.}
+
+
+Al ser $Q$ una matriz no simétrica, entonces llevaremos a la función $f$ a una función cuadraica con $Q$ simétrica como se encuentra en la siguiente ecuación:
+
+\begin{equation*}
+    f(x) = \frac{1}{2}x^T \begin{bmatrix}
+        \frac{3}{2} & 1           \\
+        1           & \frac{3}{2}
+    \end{bmatrix}x + x^T \begin{bmatrix}
+        3 \\ -1
+    \end{bmatrix} -22
+\end{equation*}
+
+donde los eigenvalores de la matriz son $\lambda=\{1/2,5/2\}$. Se tiene que para el descenso del gradiente, el rango del paso fijo con convergencia de una ecuación cuadratica esta dado por la ecuación:
+
+\begin{equation*}
+    0 < \alpha < \frac{2}{A}
+\end{equation*}
+
+donde $A$ es el máximo eigenvalor de la matriz Q. En este caso $A=5/2$. Por lo tanto el paso fijo esta acotado por
+
+\begin{equation*}
+    0 < \alpha < \frac{4}{5}
+\end{equation*}
 
 \subsection*{Parte 2}
 

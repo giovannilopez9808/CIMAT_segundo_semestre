@@ -15,10 +15,16 @@ x = linspace(-1, 1, 100)
 y = x.reshape(-1, 1)
 z = f(x, y)
 x, y = meshgrid(x, y)
-plt.xticks(arange(-1, 1.25, 0.25))
-plt.yticks(arange(-1, 1.25, 0.25))
-plt.contourf(x, y, z, cmap="inferno")
-plt.colorbar()
+#plt.xticks(arange(-1, 1.25, 0.25))
+#plt.yticks(arange(-1, 1.25, 0.25))
+plt.scatter(
+    [0, 0, 0, 1, -1],
+    [1, -1, 0, 0, 0],
+    marker="*",
+    s=100,
+    color="green",
+)
+plt.contour(x, y, z, cmap="inferno")
 plt.grid(ls="--", color="#000000", alpha=0.5)
 plt.tight_layout()
 plt.savefig("{}{}".format(parameters["path graphics"],
