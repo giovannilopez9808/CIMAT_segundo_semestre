@@ -3,12 +3,20 @@ from Modules.functions import obtain_parameters
 from Modules.dataset import data_class
 from Modules.graphics import plot
 
-models_set = {"LLE": {"model": LLE_model_class(),
-                      "file graphics": "SOM_LLE.png"},
-              "Isomap": {"model": TSNE_model_class(),
-                         "file graphics": "SOM_isomap.png"},
-              "TSNE": {"model": Isomap_model_class(),
-                       "file graphics": "SOM_TSNE.png"}}
+models_set = {
+    "LLE": {
+        "model": LLE_model_class(),
+        "file graphics": "SOM_LLE.png"
+    },
+    "Isomap": {
+        "model": Isomap_model_class(),
+        "file graphics": "SOM_isomap.png"
+    },
+    "TSNE": {
+        "model": TSNE_model_class(),
+        "file graphics": "SOM_TSNE.png"
+    }
+}
 
 parameters = obtain_parameters()
 parameters["file results"] = "SOM_labels.csv"
