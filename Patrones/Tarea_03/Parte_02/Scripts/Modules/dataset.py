@@ -32,6 +32,9 @@ class data_class:
         self.matrix = data
 
     def read_classes(self):
+        """
+        Lectura de los nombres de cada animal
+        """
         filename = join_path(self.parameters["path data"],
                              self.parameters["classes file"])
         colors, data = loadtxt(filename,
