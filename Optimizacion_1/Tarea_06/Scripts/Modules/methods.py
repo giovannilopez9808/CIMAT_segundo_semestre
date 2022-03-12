@@ -44,8 +44,9 @@ class problem_class:
         filename = obtain_filename(self.parameters)
         self.algorithm.results.to_csv(join_path(self.parameters["path results"],
                                                 filename))
+        filename = "beta_{}".format(filename)
         self.algorithm.beta_j.tofile(join_path(self.parameters["path results"],
-                                               "beta.csv"),
+                                               filename),
                                      ",")
 
 
