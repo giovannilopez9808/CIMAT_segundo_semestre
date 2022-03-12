@@ -85,7 +85,7 @@ class algorithm_class:
             # Calculo del gradiente en el paso i
             gradient = -function.gradient(x, y, beta_i)
             # Siguiente paso
-            alpha = self.obtain_alpha.bisection(
+            alpha = self.obtain_alpha.method(
                 function, x, y, beta_i, gradient)
             self.beta_j = beta_i + alpha * gradient
             # Guardado de los resultados
@@ -158,6 +158,8 @@ class obtain_alpha():
 
     def __init__(self, parameters: dict) -> None:
         self.parameters = parameters
+        if parameters["search name"] == "bisection":
+            self.method = self.bisection
 
     def bisection(self, function: functions_class, x: array, y: array, beta: array, d: array) -> float:
         # Inicialización
