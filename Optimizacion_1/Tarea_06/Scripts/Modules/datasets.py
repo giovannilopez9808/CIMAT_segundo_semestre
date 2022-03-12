@@ -19,7 +19,7 @@ class datasets_class:
                                       "file data": "mnist.pkl.gz",
                                       "path results": "../Results/",
                                       "tau": 1e-6,
-                                      "c1": 0.1,
+                                      "c1": 1e-4,
                                       "c2": 0.9,
                                       "alpha": 1e-3,
                                       "problem name": "log likehood",

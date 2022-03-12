@@ -1,3 +1,4 @@
+from ntpath import join
 from .functions import functions_class, join_path, obtain_filename
 from numpy.linalg import norm, solve
 from .mnist import mnist_model
@@ -45,6 +46,9 @@ class problem_class:
         filename = obtain_filename(self.parameters)
         self.algorithm.results.to_csv(join_path(self.parameters["path results"],
                                                 filename))
+        self.algorithm.beta_j.tofile(join_path(self.parameters["path results"],
+                                               "beta.csv"),
+                                     ",")
 
 
 class algorithm_class:
@@ -125,13 +129,13 @@ class algorithm_class:
             gradient = function.gradient(x, y, beta_i)
             # print(norm(gradient))
             # Siguiente paso
-            # alpha = self.obtain_alpha.bisection(function,
-            #                                     x,
-            #                                     y,
-            #                                     beta_i,
-            #                                     gradient)
-            # self.beta_j = beta_i + alpha * gradient
-            self.beta_j = beta_i + self.parameters["alpha"] * gradient
+            alpha = self.obtain_alpha.bisection(function,
+                                                x,
+                                                y,
+                                                beta_i,
+                                                gradient)
+            self.beta_j = beta_i - alpha * gradient
+            # self.beta_j = beta_i - self.parameters["alpha"] * gradient
             # Guardado de los resultados
             self.results.loc[i] = self.obtain_fx_and_dfx_norm(
                 function,
@@ -146,9 +150,9 @@ class algorithm_class:
                     y,
                     self.beta_j):
                 break
-            print(i,
+            print("{:>4}\t{:>30}\t{:>30}".format(i,
                   function.f(x, y, self.beta_j),
-                  norm(function.gradient(x, y, self.beta_j)))
+                  norm(function.gradient(x, y, self.beta_j))))
             i += 1
 
     def obtain_fx_and_dfx_norm(self, function: functions_class, x: array, y: array, beta: array) -> tuple:
@@ -230,7 +234,6 @@ class obtain_alpha():
                                                           dot_grad,
                                                           d,
                                                           alpha_i)
-            print(alpha_i)
             if(armijo_condition or wolfe_condition):
                 if armijo_condition:
                     beta_i = alpha_i
@@ -249,7 +252,6 @@ class obtain_alpha():
         """
         Condicion de armijo
         """
-        print("aqui")
         fx_alpha = function.f(x, y, beta+alpha*d)
         fx_alphagrad = function.f(x, y, beta)
         fx_alphagrad += self.parameters["c1"]*alpha*dot_grad

@@ -31,12 +31,12 @@ class functions_class:
         pi2 = 1-pi
         pi[pi == 0] = 1e-6
         pi2[pi2 == 0] = 1e-6
-        fx = sum(y * log(pi) + (1.0 - y) * log(1-pi))
+        fx = -sum(y * log(pi) + (1.0 - y) * log(1-pi))
         return fx
 
     def grad_log_likehood(self, x: array, y: array, beta: array) -> array:
         pi = self.pi_log_likehood(x, beta)
-        grad = sum((y - pi)*x.T, axis=1)
+        grad = -sum((y - pi)*x.T, axis=1)
         return grad
 
     def pi_log_likehood(self, x: array, beta: array) -> float:
