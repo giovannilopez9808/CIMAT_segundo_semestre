@@ -1,6 +1,5 @@
-from numpy import array, concatenate
+from numpy import array, concatenate, logical_or, zeros
 from .functions import join_path
-from numpy.linalg import norm
 import pickle
 import gzip
 
@@ -23,13 +22,10 @@ class mnist_model:
         # Obtiene el nombre y direccion del archivo
         filename = join_path(self.parameters["path data"],
                              self.parameters["file data"])
-        # Apertura del archivo
-        file = gzip.open(filename, "rb")
-        # Codificacion y lectura de los datos
-        u = pickle._Unpickler(file)
-        u.encoding = "latin1"
-        train, val, test = u.load()
-        file.close()
+        with gzip.open(filename, 'rb') as file:
+            u = pickle._Unpickler(file)
+            u.encoding = 'latin1'
+            train, val, test = u.load()
         # Split de los datos
         self.train_data, self.train_label = self.clean_data(train)
         self.val_data, self.val_label = self.clean_data(val)
@@ -47,19 +43,11 @@ class mnist_model:
         + vectors -> matriz de las imagenes
         + lables -> etiquetas de 0 y 1 de cada imagen
         """
-        vectors = []
-        labels = []
-        matrix = data[0]
-        vector = data[1]
-        n = len(vector)
-        for i in range(n):
-            if vector[i] in [0, 1]:
-                vectors += [matrix[i]]
-                labels += [vector[i]]
-        vectors = vectors/norm(vectors, axis=1)[:, None]
-        vectors_copy = []
-        for i in range(len(vectors)):
-            vectors_copy += [concatenate((vectors[i], [1.0]))]
-        vectors_copy = array(vectors_copy)
-        labels = array(labels)
-        return vectors_copy, labels
+        index = logical_or(data[1] == 1, data[1] == 0)
+        vectors = data[0][index]
+        labels = data[1][index]
+        vectors_aumented = zeros((vectors.shape[0],
+                                  vectors.shape[1] + 1))
+        for i in range(vectors.shape[0]):
+            vectors_aumented[i] = concatenate((vectors[i], [1.0]))
+        return vectors_aumented, labels

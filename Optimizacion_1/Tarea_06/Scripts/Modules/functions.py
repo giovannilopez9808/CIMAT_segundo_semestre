@@ -7,7 +7,7 @@ def obtain_filename(parameters: dict) -> str:
     Obtiene el nombre del archivo en base a el dataset dado
     """
     problem = parameters["problem name"].replace(" ", "_")
-    algorithm = parameters["algorithm name"].replace(" ", "_")
+    algorithm = parameters["search name"].replace(" ", "_")
     return "{}_{}.csv".format(problem,
                               algorithm)
 
@@ -26,12 +26,12 @@ class functions_class:
             self.gradient = self.grad_log_likehood
 
     def function_log_likehood(self, x: array, y: array, beta: array) -> float:
-        # fx = 0
+        epsilon = 1e-6
         pi = self.pi_log_likehood(x, beta)
         pi2 = 1-pi
-        pi[pi == 0] = 1e-6
-        pi2[pi2 == 0] = 1e-6
-        fx = -sum(y * log(pi) + (1.0 - y) * log(1-pi))
+        pi[abs(pi) < epsilon] = epsilon
+        pi2[abs(pi2) < epsilon] = epsilon
+        fx = -sum(y * log(pi) + (1.0 - y) * log(pi2))
         return fx
 
     def grad_log_likehood(self, x: array, y: array, beta: array) -> array:

@@ -1,11 +1,9 @@
-from ntpath import join
 from .functions import functions_class, join_path, obtain_filename
 from numpy.linalg import norm, solve
+from numpy import array, ones, inf
 from .mnist import mnist_model
 from numpy.linalg import solve
-from numpy import array, ones
 from pandas import DataFrame
-import numpy as np
 
 
 class problem_class:
@@ -67,48 +65,7 @@ class algorithm_class:
         # Funciones para detener el metodo
         self.stop_functions = stop_functios_class(parameters["tau"])
         # Eleccion del metodo
-        if self.parameters["algorithm name"] == "newton":
-            self.method = self.newton
-        if self.parameters["algorithm name"] == "descent gradient":
-            self.method = self.descent_gradient
-
-    def newton(self, function: functions_class, beta: array, x: array, y: array) -> array:
-        """
-        Metodo de newton
-        """
-        # Inicializacion del vector de resultado
-        self.betaj = beta.copy()
-        # Guardado del punto inicial
-        self.results.loc[0] = self.obtain_fx_and_dfx_norm(function,
-                                                          x,
-                                                          y,
-                                                          self.betaj)
-        i = 1
-        while(True):
-            # Copia a la posicion anterior
-            beta_i = self.betaj.copy()
-            # Solucion al sistema de ecuaciones
-            di = solve_system(function.hessian(beta_i),
-                              function.gradient(x, y, beta_i))
-            #   Obtener un alpha con el metodo de biseccion
-            alpha = self.obtain_alpha.bisection(function, x, y, beta_i, -di)
-            # Cambio en la posicion
-            self.betaj = beta_i-alpha*di
-            # Guardado de los resultados
-            self.results.loc[i] = self.obtain_fx_and_dfx_norm(
-                function,
-                x, y,
-                self.betaj)
-            # Comprobacion del metodo
-            if self.stop_functions.vectors(beta_i, self.betaj):
-                break
-            if self.stop_functions.gradient(
-                    function,
-                    x,
-                    y,
-                    self.betaj):
-                break
-            i += 1
+        self.method = self.descent_gradient
 
     def descent_gradient(self, function: functions_class, beta: array, x: array, y: array):
         """
@@ -126,33 +83,22 @@ class algorithm_class:
             # Guardado del paso anterior
             beta_i = self.beta_j.copy()
             # Calculo del gradiente en el paso i
-            gradient = function.gradient(x, y, beta_i)
-            # print(norm(gradient))
+            gradient = -function.gradient(x, y, beta_i)
             # Siguiente paso
-            alpha = self.obtain_alpha.bisection(function,
-                                                x,
-                                                y,
-                                                beta_i,
-                                                gradient)
-            self.beta_j = beta_i - alpha * gradient
-            # self.beta_j = beta_i - self.parameters["alpha"] * gradient
+            alpha = self.obtain_alpha.bisection(
+                function, x, y, beta_i, gradient)
+            self.beta_j = beta_i + alpha * gradient
             # Guardado de los resultados
             self.results.loc[i] = self.obtain_fx_and_dfx_norm(
                 function,
                 x, y,
                 self.beta_j)
-            # Compobacion del metodo
-            if self.stop_functions.vectors(beta_i, self.beta_j):
-                break
             if self.stop_functions.gradient(
                     function,
                     x,
                     y,
                     self.beta_j):
                 break
-            print("{:>4}\t{:>30}\t{:>30}".format(i,
-                  function.f(x, y, self.beta_j),
-                  norm(function.gradient(x, y, self.beta_j))))
             i += 1
 
     def obtain_fx_and_dfx_norm(self, function: functions_class, x: array, y: array, beta: array) -> tuple:
@@ -214,47 +160,37 @@ class obtain_alpha():
         self.parameters = parameters
 
     def bisection(self, function: functions_class, x: array, y: array, beta: array, d: array) -> float:
-        alpha = 0
-        alpha_i = 1
-        beta_i = np.inf
-        dfx = function.gradient(x, y, beta)
-        dot_grad = dfx @ d
-        while(True):
-            armijo_condition = self.obtain_armijo_conditon(function,
-                                                           dot_grad,
-                                                           x,
-                                                           y,
-                                                           beta,
-                                                           d,
-                                                           alpha_i)
-            wolfe_condition = self.obtain_wolfe_condition(function,
-                                                          x,
-                                                          y,
-                                                          beta,
-                                                          dot_grad,
-                                                          d,
-                                                          alpha_i)
-            if(armijo_condition or wolfe_condition):
+        # Inicialización
+        alpha = 0.0
+        beta_i = inf
+        alpha_k = 1
+        dot_grad = function.gradient(x, y, beta) @ d
+        while True:
+            armijo_condition = self.obtain_armijo_condition(
+                function, dot_grad, x, y, beta, d, alpha_k)
+            wolfe_condition = self.obtain_wolfe_condition(
+                function, x, y, beta, dot_grad, d, alpha_k)
+            if armijo_condition or wolfe_condition:
                 if armijo_condition:
-                    beta_i = alpha_i
-                    alpha_i = 0.5*(alpha+beta_i)
-                elif wolfe_condition:
-                    alpha = alpha_i
-                    if beta_i == np.inf:
-                        alpha_i = 2*alpha
+                    beta_i = alpha_k
+                    alpha_k = 0.5*(alpha + beta_i)
+                else:
+                    alpha = alpha_k
+                    if beta_i == inf:
+                        alpha_k = 2.0 * alpha
                     else:
-                        alpha_i = 0.5*(alpha+beta_i)
+                        alpha_k = 0.5 * (alpha + beta_i)
             else:
                 break
-        return alpha_i
+        return alpha_k
 
-    def obtain_armijo_conditon(self, function: functions_class, dot_grad: float, x: array, y: array, beta: array, d: array, alpha: float):
+    def obtain_armijo_condition(self, function: functions_class, dot_grad: float, x: array, y: array, beta: array, d: array, alpha: float):
         """
         Condicion de armijo
         """
         fx_alpha = function.f(x, y, beta+alpha*d)
-        fx_alphagrad = function.f(x, y, beta)
-        fx_alphagrad += self.parameters["c1"]*alpha*dot_grad
+        fx_alphagrad = function.f(x, y, beta) + \
+            self.parameters["c1"]*alpha*dot_grad
         armijo_condition = fx_alpha > fx_alphagrad
         return armijo_condition
 
@@ -263,7 +199,6 @@ class obtain_alpha():
         Condicion de Wolfe
         """
         dfx_alpha = function.gradient(x, y, beta+alpha*d)
-        # dfx_alpha = np.dot((dfx_alpha, d))
         dfx_alpha = dfx_alpha @ d
         wolfe_condition = dfx_alpha < self.parameters["c2"]*dot_grad
         return wolfe_condition
