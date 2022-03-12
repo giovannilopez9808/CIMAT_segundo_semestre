@@ -28,7 +28,9 @@ class functions_class:
     def function_log_likehood(self, x: array, y: array, beta: array) -> float:
         # fx = 0
         pi = self.pi_log_likehood(x, beta)
-        pi[abs(pi) < 1e-3] = 1e-3
+        pi2 = 1-pi
+        pi[pi == 0] = 1e-6
+        pi2[pi2 == 0] = 1e-6
         fx = sum(y * log(pi) + (1.0 - y) * log(1-pi))
         return fx
 
