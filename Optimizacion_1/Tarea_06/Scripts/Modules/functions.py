@@ -1,5 +1,5 @@
+from numpy import array, log, sum, abs, mean
 from scipy.special import expit as sigmod
-from numpy import array,  log, sum, abs
 
 
 def obtain_filename(parameters: dict) -> str:
@@ -42,3 +42,7 @@ class functions_class:
     def pi_log_likehood(self, x: array, beta: array) -> float:
         pi = array(sigmod(x@beta))
         return pi
+
+    def error(self, beta: array, x: array, y: array) -> float:
+        pi_ = self.pi_log_likehood(x, beta)
+        return mean(abs((pi_ > 0.5) - y))
