@@ -15,12 +15,12 @@ class problem_class:
         self.parameters = parameters
         # Eleccion de la funcion
         self.function = functions_class(parameters["problem name"])
-        if parameters["problem name"] == "log likehood":
-            self.use_log_likehood()
+        if parameters["problem name"] == "log likelihood":
+            self.use_log_likelihood()
 
-    def use_log_likehood(self) -> None:
+    def use_log_likelihood(self) -> None:
         """
-        Vector inicial predefinido de log likehood
+        Vector inicial predefinido de log likelihood
         """
         mnist = mnist_model(self.parameters)
         self.beta = ones(785)
@@ -100,6 +100,7 @@ class algorithm_class:
                     y,
                     self.beta_j):
                 break
+            print(function.f(x, y, self.beta_j), alpha)
             i += 1
 
     def obtain_fx_and_dfx_norm(self, function: functions_class, x: array, y: array, beta: array) -> tuple:
@@ -161,6 +162,8 @@ class obtain_alpha():
         self.parameters = parameters
         if parameters["search name"] == "bisection":
             self.method = self.bisection
+        if parameters["search name"] == "back tracking":
+            self.method = self.back_tracking
 
     def bisection(self, function: functions_class, x: array, y: array, beta: array, d: array) -> float:
         # Inicialización
@@ -183,6 +186,36 @@ class obtain_alpha():
                         alpha_k = 2.0 * alpha
                     else:
                         alpha_k = 0.5 * (alpha + beta_i)
+            else:
+                break
+        return alpha_k
+
+    def back_tracking(self, function: functions_class, x: array, y: array, beta: array, d: array):
+        """
+        Calcula tamaño de paso alpha
+
+            Parámetros
+            -----------
+                x_k     : Vector de valores [x_1, x_2, ..., x_n]
+                d_k     : Dirección de descenso
+                f       : Función f(x)
+                f_grad  : Función que calcula gradiente
+                alpha   : Tamaño inicial de paso
+                ro      : Ponderación de actualización
+                c1      : Condición de Armijo
+            Regresa
+            -----------
+                alpha_k : Tamaño actualizado de paso
+        """
+        # Inicialización
+        alpha_k = self.parameters["alpha"]
+        dot_grad = (-function.gradient(x, y, beta)) @ d
+        # Repetir hasta que se cumpla la condición de armijo
+        while True:
+            armijo_condition = self.obtain_armijo_condition(
+                function, dot_grad, x, y, beta, d, alpha_k)
+            if armijo_condition:
+                alpha_k = self.parameters["rho"] * alpha_k
             else:
                 break
         return alpha_k

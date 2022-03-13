@@ -21,28 +21,28 @@ def join_path(path: str, filename: str) -> str:
 
 class functions_class:
     def __init__(self, name: str) -> None:
-        if name == "log likehood":
-            self.f = self.function_log_likehood
-            self.gradient = self.grad_log_likehood
+        if name == "log likelihood":
+            self.f = self.function_log_likelihood
+            self.gradient = self.grad_log_likelihood
 
-    def function_log_likehood(self, x: array, y: array, beta: array) -> float:
+    def function_log_likelihood(self, x: array, y: array, beta: array) -> float:
         epsilon = 1e-6
-        pi = self.pi_log_likehood(x, beta)
+        pi = self.pi_log_likelihood(x, beta)
         pi2 = 1-pi
         pi[abs(pi) < epsilon] = epsilon
         pi2[abs(pi2) < epsilon] = epsilon
         fx = -sum(y * log(pi) + (1.0 - y) * log(pi2))
         return fx
 
-    def grad_log_likehood(self, x: array, y: array, beta: array) -> array:
-        pi = self.pi_log_likehood(x, beta)
+    def grad_log_likelihood(self, x: array, y: array, beta: array) -> array:
+        pi = self.pi_log_likelihood(x, beta)
         grad = -sum((y - pi)*x.T, axis=1)
         return grad
 
-    def pi_log_likehood(self, x: array, beta: array) -> float:
+    def pi_log_likelihood(self, x: array, beta: array) -> float:
         pi = array(sigmod(x@beta))
         return pi
 
     def error(self, beta: array, x: array, y: array) -> float:
-        pi_ = self.pi_log_likehood(x, beta)
+        pi_ = self.pi_log_likelihood(x, beta)
         return mean(abs((pi_ > 0.5) - y))
