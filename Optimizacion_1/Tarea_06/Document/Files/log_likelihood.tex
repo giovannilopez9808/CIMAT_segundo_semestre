@@ -1,0 +1,64 @@
+\subsection{Función Log likelihood}
+
+Definimos como la función log likelihood en la ecuación \ref{eq:log_likelihood}.
+
+\begin{equation}
+    h(\beta,\beta_0) = \sum_{i=1}^n y_i \log (\pi_i) +(1-y_i) \log (1-\pi_i) \qquad \pi_i(\beta,\beta_0) =  \frac{1}{1+exp(-x_i^T\beta -\beta_0)} \label{eq:log_likelihood}
+\end{equation}
+
+donde $x_i \in \Real^n$ y $y_i \in \{0,1,\dots,9\}$. En nuestro caso $n=784$ y $y \in \{0,1\}$. Para obtener una reducción de parametros en la ecuación \ref{eq:log_likelihood} aplicaremos un aumento de dimensión al vector x de tal forma que
+
+\begin{equation*}
+    x = [x_0,x_1,\dots,x_{784},1]^T
+\end{equation*}
+
+Entonces
+
+\begin{equation*}
+    x^T\beta -\beta_0 \rightarrow x^T\beta
+\end{equation*}
+
+donde
+
+\begin{equation*}
+    \beta = [\beta_1,\beta_2,\dots,\beta_{785},\beta_0]^T
+\end{equation*}
+
+por lo que el vector $x$ es ahora elemento del conjunto $\Real^{785}$. Entonces la ecuación \ref{eq:log_likelihood} puede escribirse como en la ecuación .
+
+\begin{equation}
+    h(\beta) = \sum_{i=1}^n y_i \log (\pi_i) +(1-y_i) \log (1-\pi_i) \qquad \pi_i(\beta) =  \frac{1}{1+exp(-x_i^T\beta)} \label{eq:log_likelihood_2}
+\end{equation}
+
+
+Calculando el gradiente de la función con respecto a $\beta$ se obtiene lo siguiente:
+
+\begin{align*}
+    \dpartial{h}{\beta_j} = \sum_{i=1}^n \frac{y_i}{\pi_i} \dpartial{\pi_i}{\beta_j} + \frac{1-y_i}{1-\pi_i} \dpartial{\pi_i}{\beta_j}
+\end{align*}
+
+calculando $\dpartial{\pi_i}{\beta_j}$ se obtiene lo siguiente:
+
+\begin{align*}
+    \dpartial{\pi_i}{\beta_j} & = \frac{x_j exp(-x^T_i\beta)}{(1+exp(-x_i^T\beta))^2} \\
+                              & = x_j exp(-x_i^T\beta) \pi_i^2                        \\
+                              & = x_j (1-\pi_i) \pi_i
+\end{align*}
+
+entonces
+
+\begin{align*}
+    \dpartial{h}{\beta_j} & =\sum_{i=1}^n \frac{y_i}{\pi_i} \dpartial{\pi_i}{\beta_j} + \frac{1-y_i}{1-\pi_i} \dpartial{\pi_i}{\beta_j} \\
+                          & =\sum_{i=1}^n \frac{y_i}{\pi_i} (x_j (1-\pi_i) \pi_i) + \frac{1-y_i}{1-\pi_i} (x_j (1-\pi_i) \pi_i)         \\
+                          & =\sum_{i=1}^n x_j y_i(1-\pi_i) - x_j (1-y_i)\pi_i                                                           \\
+                          & = \sum_{i=1}^n x_j (y_i-\pi_iy_i+\pi_iy_i-\pi_i)                                                            \\
+    \dpartial{h}{\beta_j} & = \sum_{i=1}^n x_j (y_i-\pi_i)
+\end{align*}
+
+por lo tanto
+
+\begin{equation}
+    \dpartial{h}{\beta_j}  = \sum_{i=1}^n x_j (y_i-\pi_i)   \label{eq:grad_log_likelihood}
+\end{equation}
+
+Con su función y gradientes definidos podemos llegar a aplicar el método de descenso de gradiente con una busqueda lineal empleando el algoritmo \ref{alg:alpha_algorithm}.
