@@ -1,0 +1,174 @@
+\section*{Problema 01}
+
+\textbf{Supongamos que (X,Y) son variables aleatorias discretas con la siguiente distribución conjunta:}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ccccc} \hline
+            & X=1  & X=2  & X=3  & X=4  \\  \hline
+        Y=0 & 0.1  & 0.05 & 0.05 & 0.15 \\
+        Y=1 & 0.12 & 0.1  & 0.25 & 0.18 \\ \hline
+    \end{tabular}
+\end{table}
+
+\textbf{Queremos predecir Y en base del valor observado para X.}
+
+\begin{itemize}
+    \item \textbf{Calcula el clasificador Bayesiano Optimo si equivocarse de categoría tiene costo 1 y no equivocarse tiene costo 0. ¿Cuál es el costo (error) promedio para este clasificador?}
+    \item \textbf{Calcula el clasificador Bayesiano Optimo si clasificar una observación mal cuando el verdadero valor es Y = 1 tiene un costo 3 y en el otro caso tiene costo 2.}
+\end{itemize}
+
+Para una x fija buscamos la asignación $\hat{Y}(x)$ que minimiza el error mostrado en la ecuación \ref{eq:error}.
+
+\begin{equation}
+    E_{Y|X=x} [L(Y,\hat{Y}(x))] \label{eq:error}
+\end{equation}
+
+Para este problema se tiene que
+
+\begin{equation*}
+    E_{Y|X=x} [L(Y,\hat{Y}(x))] = L(0,\hat{Y}(x)) P(Y=0|X=x) + L(1,\hat{Y}(x)) P(Y=1|X=x)
+\end{equation*}
+
+con $L(Y,Y)=0$.
+
+\begin{align*}
+    \text{Si } \hat{Y}(x)=0 & \Rightarrow E_{Y|X=x} [L(Y,\hat{Y}(x))]  = L(1,0)P(Y=1|X=x) \\[0.25cm]
+    \text{Si } \hat{Y}(x)=1 & \Rightarrow E_{Y|X=x} [L(Y,\hat{Y}(x))]  = L(0,1)P(Y=1|X=x)
+\end{align*}
+
+Si
+
+\begin{equation*}
+    \frac{L(1,0)P(Y=1|X=x)}{L(0,1)P(Y=1|X=x)} > 1
+\end{equation*}
+
+entonces $\hat{Y}(x)=1$ minimiza el error. De lo contrario $\hat{Y}(x)=0$ obtiene el mínimo. Si el cociente es igual a 1 entonces las dos opciones minimizan. En particular elegimos $\hat{Y}(x)=0$.
+
+Por lo tanto el clasificador tiene la siguiente forma:
+
+\begin{align*}
+    \hat{Y}(x) & = \mathbb{I} \left [\frac{L(1,0)P(Y=1|X=x)}{L(0,1)P(Y=1|X=x)} > 1 \right ]
+    \hat{Y}(x) & = \mathbb{I} \left [\frac{P(Y=1|X=x)}{P(Y=1|X=x)} > \frac{L(0,1)}{L(1,0)} \right ]
+\end{align*}
+
+por el teorema de bayes, se obtiene lo siguiente:
+
+\begin{align*}
+    \hat{Y}(x) & = \mathbb{I} \left [\frac{P(Y=1|X=x)}{P(Y=1|X=x)} > \frac{L(0,1)}{L(1,0)} \right ]                                           \\
+               & = \mathbb{I} \left [\frac{\frac{P(X=x|Y=1)P(Y=1)}{P(X=x)}}{\frac{P(X=x|Y=0)P(Y=0)}{P(X=x)}} > \frac{L(0,1)}{L(1,0)} \right ] \\
+               & = \mathbb{I} \left [ \frac{P(X=x|Y=1)}{P(X=x|Y=0)}  > \frac{L(0,1)P(Y=0)}{L(1,0)P(Y=1)}\right ]
+\end{align*}
+
+Usando la ley de la probabilidad total, se tiene el siguiente resultado
+
+\begin{align*}
+    P(Y=0) & = \sum P(Y=0|X=x)P(X=x) = \sum P(Y=0,X=x) = 0.35 \\
+    P(Y=1) & = \sum P(Y=1|X=x)P(X=x) = \sum P(Y=1,X=x) = 0.65
+\end{align*}
+
+Calculando las probabilidades condicionales se tiene lo siguiente
+
+\begin{align*}
+    \pxy{1}{1}=\frac{12}{65} & \qquad \pxy{1}{0}=\frac{10}{35} \\
+    \pxy{2}{1}=\frac{10}{65} & \qquad \pxy{2}{0}=\frac{5}{35}  \\
+    \pxy{3}{1}=\frac{25}{65} & \qquad \pxy{3}{0}=\frac{5}{35}  \\
+    \pxy{4}{1}=\frac{18}{65} & \qquad \pxy{4}{0}=\frac{15}{35}
+\end{align*}
+
+por lo tanto, los coeficientes son
+
+\begin{align*}
+    \frac{\pxy{1}{1}}{\pxy{1}{0}} = \frac{420}{650} & \qquad \frac{\pxy{1}{1}}{\pxy{1}{0}} = \frac{875}{325} \\
+    \frac{\pxy{2}{1}}{\pxy{2}{0}} = \frac{350}{325} & \qquad \frac{\pxy{1}{1}}{\pxy{1}{0}} = \frac{630}{975}
+\end{align*}
+
+Supongamos que el costo de equivocarse es 1, entonces
+
+\begin{equation*}
+    \frac{L(0,1)}{L(1,0)} = \frac{1}{1} = 1
+\end{equation*}
+
+Con estos resultados obtener que el clasificador esta definido por:
+
+si $x=1$
+
+\begin{align*}
+    \hat{y}(x) & = \mathbb{I} \left [\frac{\pxy{1}{1}}{\pxy{1}{0}} > \frac{L(0,1)P(Y=0)}{L(1,0)P(Y=1)}\right ] \\
+               & = \mathbb{I} \left [\frac{420}{650}  > \frac{35}{65}\right ]                                  \\
+               & = 1
+\end{align*}
+
+si $x=2$
+
+\begin{align*}
+    \hat{y}(x) & = \mathbb{I} \left [\frac{\pxy{2}{1}}{\pxy{2}{0}} > \frac{L(0,1)P(Y=0)}{L(1,0)P(Y=1)}\right ] \\
+               & = \mathbb{I} \left [\frac{70}{65}  > \frac{35}{65}\right ]                                    \\
+               & = 1
+\end{align*}
+
+si $x=3$
+
+\begin{align*}
+    \hat{y}(x) & = \mathbb{I} \left [\frac{\pxy{3}{1}}{\pxy{3}{0}} > \frac{L(0,1)P(Y=0)}{L(1,0)P(Y=1)}\right ] \\
+               & = \mathbb{I} \left [\frac{175}{65}  > \frac{35}{65}\right ]                                   \\
+               & = 1
+\end{align*}
+
+si $x=4$
+
+\begin{align*}
+    \hat{y}(x) & = \mathbb{I} \left [\frac{\pxy{4}{1}}{\pxy{4}{0}} > \frac{L(0,1)P(Y=0)}{L(1,0)P(Y=1)}\right ] \\
+               & = \mathbb{I} \left [\frac{42}{65}  > \frac{35}{65}\right ]                                    \\
+               & = 1
+\end{align*}
+
+Calculando el error se tiene lo siguiente:
+
+Si $\hat{y}(x)=1$, entonces
+
+\begin{equation*}
+    E_{Y|X=x} [L(y,\hat{y}(x))] = L(0,1)P(Y=0) = P(Y=0) = 0.35
+\end{equation*}
+
+Supongamos que $L(y,\hat{y}(x))$ esta dada por
+
+\begin{equation*}
+    L(1,0) = 3 \qquad L(0,1) = 2
+\end{equation*}
+
+es decir, clasificar mal cuando el verdadero valor de y es 1 tiene un costo de 3, en otro caso tiene un costo de 2.
+
+por lo tanto el clasificador esta dado por
+
+si $x=1$
+
+\begin{align*}
+    \hat{y}(x) & = \mathbb{I} \left [\frac{\pxy{1}{1}}{\pxy{1}{0}} > \frac{L(0,1)P(Y=0)}{L(1,0)P(Y=1)}\right ] \\
+               & = \mathbb{I} \left [\frac{420}{650}  > \frac{70}{195}\right ]                                 \\
+               & = 1
+\end{align*}
+
+si $x=2$
+
+\begin{align*}
+    \hat{y}(x) & = \mathbb{I} \left [\frac{\pxy{2}{1}}{\pxy{2}{0}} > \frac{L(0,1)P(Y=0)}{L(1,0)P(Y=1)}\right ] \\
+               & = \mathbb{I} \left [\frac{70}{65}  > \frac{70}{195}\right ]                                   \\
+               & = 1
+\end{align*}
+
+si $x=3$
+
+\begin{align*}
+    \hat{y}(x) & = \mathbb{I} \left [\frac{\pxy{3}{1}}{\pxy{3}{0}} > \frac{L(0,1)P(Y=0)}{L(1,0)P(Y=1)}\right ] \\
+               & = \mathbb{I} \left [\frac{175}{65}  > \frac{70}{195}\right ]                                  \\
+               & = 1
+\end{align*}
+
+si $x=4$
+
+\begin{align*}
+    \hat{y}(x) & = \mathbb{I} \left [\frac{\pxy{4}{1}}{\pxy{4}{0}} > \frac{L(0,1)P(Y=0)}{L(1,0)P(Y=1)}\right ] \\
+               & = \mathbb{I} \left [\frac{42}{65}  > \frac{70}{195}\right ]                                   \\
+               & = 1
+\end{align*}
