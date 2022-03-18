@@ -17,4 +17,5 @@ Rplots.pdf
 .vscode/
 build/
 .ipynb_checkpoints/
+creditcard.csv
 __pycache__/
