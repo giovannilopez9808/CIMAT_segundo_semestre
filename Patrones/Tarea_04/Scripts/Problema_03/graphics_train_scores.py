@@ -20,7 +20,7 @@ plt.xlim(2, 15)
 plt.ylim(0, 600)
 plt.xticks(linspace(2, 15, 14))
 plt.yticks(linspace(0, 600, 13))
-plt.ylabel("Calinski Harabasz score")
+plt.ylabel("Función objetivo")
 plt.xlabel("Clusters")
 plt.grid(ls="--",
          color="#000000",
