@@ -30,6 +30,9 @@ for k in params["k values"]:
         results[k] += [score]
 results = DataFrame(results)
 mean = results.mean()
+filename = join_path(params["path graphics"],
+                     "fowlkes_mallows_score.png")
+plt.subplots(figsize=(9, 4))
 plt.plot(params["k values"],
          mean,
          ls="--",
@@ -44,4 +47,5 @@ plt.grid(ls="--",
          color="#000000",
          alpha=0.5)
 plt.tight_layout()
-plt.show()
+plt.savefig(filename,
+            dpi=300)
