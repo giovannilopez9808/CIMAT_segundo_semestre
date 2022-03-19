@@ -20,10 +20,10 @@ for file in files:
     init = init.replace("_", "-")
     data = read_csv(filename,
                     index_col=0)
-    mean = data.mean()
-    data_len = len(mean)
+    minimum = data.min()
+    data_len = len(minimum)
     plt.plot(range(data_len),
-             mean,
+             minimum,
              label=init,
              alpha=0.5,
              ls=dataset[init]["ls"],
@@ -42,6 +42,6 @@ plt.grid(ls="--",
          alpha=0.5)
 plt.tight_layout()
 filename = join_path(params["path graphics"],
-                     "mean_scores.png")
+                     "minimum_scores.png")
 plt.savefig(filename,
             dpi=300)

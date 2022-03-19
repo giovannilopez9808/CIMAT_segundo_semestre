@@ -1,3 +1,6 @@
+from xml.dom import minicompat
+
+from torch import minimum
 from Modules.models import KMeans_model_class
 from numpy import array, reshape, shape
 from .functions import join_path
@@ -19,6 +22,9 @@ class image_class:
         self.params = params
         self.iterations = 5
         self.k_values = [2, 4, 8, 16, 32]
+        self.init = ["k-means++",
+                     "random",
+                     "array"]
         self.read()
 
     def read(self) -> array:
@@ -33,37 +39,48 @@ class image_class:
     def run_kmeans(self) -> dict:
         kmean_model = KMeans_model_class()
         results = {}
-        for k in self.k_values:
-            print("Resolviendo {} cluster".format(k))
-            results[k] = {"scores": [],
-                          "model": []}
-            for i in range(self.iterations):
-                model = kmean_model.run(k, self.data)
-                results[k]["scores"] += [model.inertia_]
-                results[k]["model"] += [model]
+        for init in self.init:
+            print("Resolviendo para el init {}".format(init))
+            results[init] = {}
+            for k in self.k_values:
+                results[init][k] = {}
+                for i in range(self.iterations):
+                    results[init][k][i] = {}
+                    model = kmean_model.run(k, self.data, init)
+                    results[init][k][i]["score"] = model.inertia_
+                    results[init][k][i]["model"] = model
         self.results = results
 
     def compress(self) -> dict:
         self.images = {}
         for k in self.k_values:
-            models = self.results[k]["model"]
             self.images[k] = {}
-            for i, model in enumerate(models):
+            for init in self.init:
+                models = self.results[init][k]
+                minimum_model = min(models.items(),
+                                    key=lambda x: x[0])
+                minimum_model = minimum_model[1]
+                model = minimum_model["model"]
                 image = model.cluster_centers_[model.predict(self.data)]
                 image = reshape(image, (self.dim))
                 image = image
-                self.images[k][i] = image
+                self.images[k][init] = image
         self.plot_images()
 
     def save(self) -> None:
-        filename = join_path(self.params["path results"],
-                             "kmean.csv")
-        scores = {}
-        for k in self.k_values:
-            scores[k] = self.results[k]["scores"]
-        scores = DataFrame(scores)
-        scores.index.name = "Attempt"
-        scores.to_csv(filename)
+        for init in self.init:
+            filename = init.replace("-", "_")
+            filename = "{}.csv".format(filename)
+            filename = join_path(self.params["path results"],
+                                 filename)
+            scores = {}
+            for k in self.k_values:
+                scores[k] = []
+                for i in range(self.iterations):
+                    scores[k] += [self.results[init][k][i]["score"]]
+            scores = DataFrame(scores)
+            scores.index.name = "Attempt"
+            scores.to_csv(filename)
 
     def plot_images(self) -> None:
         for k in self.k_values:
@@ -71,11 +88,12 @@ class image_class:
             filename = join_path(self.params["path graphics"],
                                  filename)
             images = self.images[k]
-            fig, axs = plt.subplots(1, self.iterations,
+            fig, axs = plt.subplots(1, len(self.init),
                                     figsize=(18, 4))
-            for i in range(self.iterations):
+            for i, init in enumerate(self.init):
                 ax = axs[i]
-                ax.imshow(images[i])
+                ax.set_title("init = {}".format(init))
+                ax.imshow(images[init])
                 ax.axis("off")
             plt.tight_layout(pad=0.5)
             plt.savefig(filename,
