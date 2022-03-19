@@ -13,11 +13,13 @@ def obtain_calinski_harabasz_score(data: array, labels: DataFrame) -> array:
 
 
 params = obtain_params()
+# Nombre de cada archivo
 params["file train labels"] = "train_labels.csv"
 params["file train data"] = "train_data.csv"
 params["file validation labels"] = "validation_labels.csv"
 params["file validation data"] = "validation_data.csv"
 params["file graphics"] = "calinski_harabasz_score.png"
+# Formato de los datos
 train_data = loadtxt(join_path(params["path results"],
                                params["file train data"]),
                      delimiter=",")

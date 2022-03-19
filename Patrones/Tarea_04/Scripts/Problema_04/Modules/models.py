@@ -4,6 +4,9 @@ from numpy import array
 
 class KMeans_model_class:
     def __init__(self) -> None:
+        """
+        Generalizacion del modelo de kmeans para su mejor uso
+        """
         pass
 
     def run(self, clusters: int,  data: array, init: str = "k-means++"):
