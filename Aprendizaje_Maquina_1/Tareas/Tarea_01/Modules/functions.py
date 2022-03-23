@@ -1,12 +1,12 @@
-from numpy import exp, zeros, ones, mean, ones_like
+from numpy import exp, ones, mean, ones_like
 
 
 class function_class:
     def __init__(self) -> None:
         pass
 
-    def update_phi(self, Y, mu, sigma, n):
-        '''
+    def phi(self, Y, mu, sigma):
+        """
         Construye  Matriz de Kerneles Phi
 
         Parámetros
@@ -18,14 +18,13 @@ class function_class:
         Regresa
         -----------
             phi          : matriz de kerneles
-        '''
-        phi = zeros((Y.shape[0], n))
-        for i in range(n):
-            phi[:, i] = exp(- 1.0 / (2*sigma**2) * (Y - mu[i])**2)
+        """
+        mu_aux = mu.reshape(-1, 1)
+        phi = exp(-(Y-mu_aux)**2/(2*sigma**2))
         return phi
 
     def grad_gaussian_radial_mu(self, theta, f_params):
-        '''
+        """
         Calcula el gradiente respecto a mu
         Parámetros
         -----------
@@ -38,7 +37,7 @@ class function_class:
         Regresa
         -----------
             Array gradiente
-        '''
+        """
         # Obtengo Parámetros
         phi = f_params['X']
         alpha = f_params['Alpha']
@@ -53,7 +52,7 @@ class function_class:
         return mean(gradient, axis=0)
 
     def grad_gaussian_radial_alpha(self, theta, f_params):
-        '''
+        """
         Calcula el gradiente respecto a alpha
         Parámetros
         -----------
@@ -66,7 +65,7 @@ class function_class:
         Regresa
         -----------
             Array gradiente
-        '''
+        """
         # Obtengo Parámetros
         phi = f_params['X']
         Y = f_params['y']

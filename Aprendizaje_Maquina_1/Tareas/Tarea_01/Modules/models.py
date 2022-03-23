@@ -38,7 +38,6 @@ class model_class:
                         batch_size = gd_params['batch_size'] tamaño de la muestra
 
         f_params  :   lista de parametros para la funcion objetivo,
-                        kappa = f_params['kappa'] parametro de escala (rechazo de outliers)
                         X     = f_params['X'] Variable independiente
                         y     = f_params['y'] Variable dependiente
 
@@ -62,8 +61,7 @@ class model_class:
             smpX = f_params['X'][smpIdx]
             smpy = f_params['y'][smpIdx]
             # parametros de la funcion objetivo
-            smpf_params = {'kappa': f_params['kappa'],
-                           "Alpha": f_params["Alpha"],
+            smpf_params = {"Alpha": f_params["Alpha"],
                            "mu": f_params["mu"],
                            "n": f_params["n"],
                            'X': smpX,
