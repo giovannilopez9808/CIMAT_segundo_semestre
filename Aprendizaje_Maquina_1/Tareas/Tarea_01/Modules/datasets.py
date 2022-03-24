@@ -1,9 +1,13 @@
-from numpy.random import normal
-
-
 def obtain_all_params() -> dict:
+    """
+    Funcion que reune los parámtros de la función y el gradiente. Devuelve estos dos parámetros en forma de diccionarios.
+    """
     params = {
-        "max_iter": 100,
+        "models": ["SGD",
+                   "NAG",
+                   "ADAM",
+                   "ADADELTA"],
+        "max iteration": 100,
         "n": 100,
         "sigma": 1,
         "epsilon": 0.01

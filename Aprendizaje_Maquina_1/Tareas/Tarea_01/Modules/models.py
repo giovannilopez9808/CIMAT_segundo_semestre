@@ -41,7 +41,7 @@ class model_class:
                         X     = f_params['X'] Variable independiente
                         y     = f_params['y'] Variable dependiente
 
-        Regresa
+        Output
         -----------
         Theta     :   trayectoria de los parametros
                         Theta[-1] es el valor alcanzado en la ultima iteracion
@@ -89,7 +89,7 @@ class model_class:
                         X     = f_params['X'] Variable independiente
                         y     = f_params['y'] Variable dependiente
 
-        Regresa
+        Output
         -----------
         Theta     :   trayectoria de los parametros
                         Theta[-1] es el valor alcanzado en la ultima iteracion
@@ -125,7 +125,7 @@ class model_class:
                         X     = f_params['X'] Variable independiente
                         y     = f_params['y'] Variable dependiente
 
-        Regresa
+        Output
         -----------
         Theta     :   trayectoria de los parametros
                         Theta[-1] es el valor alcanzado en la ultima iteracion
@@ -166,7 +166,7 @@ class model_class:
                         X     = f_params['X'] Variable independiente
                         y     = f_params['y'] Variable dependiente
 
-        Regresa
+        Output
         -----------
         Theta     :   trayectoria de los parametros
                         Theta[-1] es el valor alcanzado en la ultima iteracion
