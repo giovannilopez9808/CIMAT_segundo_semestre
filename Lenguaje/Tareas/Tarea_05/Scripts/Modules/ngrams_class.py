@@ -1,6 +1,7 @@
 from nltk.tokenize import TweetTokenizer as tokenizer
-from numpy.random import rand, array, empty
 from nltk import FreqDist, ngrams
+from numpy import array, empty
+from numpy.random import rand
 
 
 class ngram_model:
