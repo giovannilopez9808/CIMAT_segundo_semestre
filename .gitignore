@@ -18,4 +18,5 @@ Rplots.pdf
 build/
 .ipynb_checkpoints/
 creditcard.csv
+word2vec.zip
 __pycache__/
