@@ -1,10 +1,12 @@
+from numpy import array, mean, asanyarray, sum, exp, argmax, log
 from torch.utils.data import DataLoader, TensorDataset
+from nltk.tokenize import TweetTokenizer as tokenizer
+from Modules.ngrams_class import ngram_model
 from sklearn.metrics import accuracy_score
-from .ngrams_class import ngram_model
+from numpy.random import multinomial
 import torch.nn.functional as F
 from argparse import Namespace
 from tabulate import tabulate
-from numpy import array, mean
 from pandas import read_csv
 from shutil import copyfile
 from os.path import join
@@ -108,16 +110,21 @@ class model_class:
         preds = [e for l in preds for e in l]
         return accuracy_score(tgts, preds)
 
-    def save_checkpoint(state, is_best: bool, checkpoint_path: str, filename: str = 'checkpoint.pt', best_model_name: str = 'model_best.pt') -> None:
-        filename = join(checkpoint_path,
-                        filename)
+    def save_checkpoint(self, state,
+                        is_best: bool,
+                        checkpoint_path: str,
+                        filename: str = 'checkpoint.pt',
+                        best_model_name: str = 'model_best.pt') -> None:
+        print(checkpoint_path, filename)
+        name = join(checkpoint_path,
+                    filename)
         torch.save(state,
-                   filename)
+                   name)
         if is_best:
-            filename = join(checkpoint_path,
-                            best_model_name)
-            copyfile(filename,
-                     filename)
+            filename_best = join(checkpoint_path,
+                                 best_model_name)
+            copyfile(name,
+                     filename_best)
 
     def run(self):
         start_time = time.time()
@@ -165,16 +172,16 @@ class model_class:
             else:
                 n_no_improve += 1
             # Save best model if metric improved
-            self.save_checkpoint({
+            state = {
                 'epoch': epoch + 1,
                 'state_dict': self.model.state_dict(),
                 'optimizer': optimizer.state_dict(),
                 'scheduler': scheduler.state_dict(),
-                'best_metric': best_metric, },
+                'best_metric': best_metric, }
+            self.save_checkpoint(
+                state,
                 is_improvement,
                 self.args.savedir,
-                filename='checkpoint.pt',
-                best_model_name='best_model'
             )
             # Early stopping
             if n_no_improve >= self.args.patience:
@@ -188,6 +195,50 @@ class model_class:
                 tuning_metric,
                 time.time() - epoch_start_time))
             print('--- %s seconds ---' % (time.time() - start_time))
+
+
+class generate_text_class:
+    def __init__(self, ngram_data: ngram_model, model: neural_language_model, tokenize: tokenizer) -> None:
+        self.ngram_data = ngram_data
+        self.tokenize = tokenize
+        self.model = model
+
+    def parse_text(self, text: str) -> tuple:
+        tokens = self.tokenize(text)
+        all_tokens = [word.lower()
+                      if word in self.ngram_data.word_index else self.ngram_data.unk
+                      for word in tokens]
+        tokens_id = [self.ngram_data.word_index[word.lower()]
+                     for word in all_tokens]
+        return tokens, tokens_id
+
+    def sample_next_word(self, logits, temperature: float):
+        logits = asanyarray(logits).astype("float64")
+        preds = logits/temperature
+        exp_preds = exp(preds)
+        preds = exp_preds/sum(exp_preds)
+        probability = multinomial(1, preds)
+        return argmax(probability)
+
+    def predict_next_token(self, tokens_id):
+        word_index_tensor = torch.LongTensor(tokens_id).unsqueeze(0)
+        y_raw_predict = self.model(
+            word_index_tensor).squeeze(0).detach().numpy()
+        y_pred = self.sample_next_word(y_raw_predict, 1.0)
+        return y_pred
+
+    def run(self, initial_text: str):
+        tokens, window_word_index = self.parse_text(initial_text)
+        for i in range(100):
+            y_pred = self.predict_next_token(window_word_index)
+            next_word = self.ngram_data.index_word[y_pred]
+            tokens.append(next_word)
+            if next_word == self.ngram_data.eos:
+                break
+            else:
+                window_word_index.pop(0)
+                window_word_index.append(y_pred)
+        return " ".join(tokens)
 
 
 def init_models_parameters(model: neural_language_model, args: Namespace) -> tuple:
@@ -230,3 +281,13 @@ def obtain_loader(data: array, labels: array, args: Namespace) -> DataLoader:
                         num_workers=args.num_workers,
                         shuffle=True)
     return loader
+
+
+def log_likelihood(model: neural_language_model, text: str, ngram_data: ngram_model) -> float:
+    x, y = ngram_data.transform(text)
+    x, y = x[2:], y[2:]
+    x = torch.LongTensor(x).unsqueeze(0)
+    logits = model(x).detach()
+    probability = F.softmax(logits, dim=1).numpy()
+    return sum(log([probability[i][w]
+                    for i, w in enumerate(y)]))
