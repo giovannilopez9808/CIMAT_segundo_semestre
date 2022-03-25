@@ -6,12 +6,17 @@ import torch
 
 
 def get_params() -> dict:
-    params = {"path data": "Data",
-              "train data": "mex_train.txt",
-              "train labels": "mex_train_labels.txt",
-              "validation data": "mex_val.txt",
-              "validation labels": "mex_val_labels.txt",
-              }
+    params = {
+        # "path data": "/content/drive/MyDrive/data",
+        "path data": "Data",
+        "train data": "mex_train.txt",
+        "train labels": "mex_train_labels.txt",
+        "validation data": "mex_val.txt",
+        "validation labels": "mex_val_labels.txt",
+        # "model path": "/content/drive/MyDrive/data/model_2",
+        "model path": "Data",
+        "file model": "model_best.pt",
+    }
     return params
 
 
@@ -19,7 +24,7 @@ def get_args() -> Namespace:
     args = Namespace()
     args.batch_size = 64
     args.num_workers = 2
-    args.N = 4
+    args.N = 6
     # Dimension of word Embeddings
     args.d = 100
     # Dimension for Hidden Layer

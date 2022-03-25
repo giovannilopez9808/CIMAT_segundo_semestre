@@ -34,12 +34,11 @@ class ngram_model:
         return sorted(freq_dict, key=freq_dict.get, reverse=True)
 
     def get_vocabulary(self, corpus: list) -> set:
-        freq_dist = FreqDist([word.lower()
+        freq_dist = FreqDist([letter.lower()
                               for sentence in corpus
-                              for word in self.tokenize(sentence)
-                              if not self.remove_word(word)])
+                              for letter in sentence
+                              if not self.remove_word(letter)])
         sorted_words = self.sortFreqDisct(freq_dist)
-        sorted_words = sorted_words[:self.vocab_max-3]
         return set(sorted_words)
 
     def fit(self, corpus: list) -> None:
@@ -57,7 +56,7 @@ class ngram_model:
     def make_data(self, corpus: str) -> tuple:
         id = 0
         for doc in corpus:
-            for word in self.tokenize(doc):
+            for word in doc:
                 word = word.lower()
                 if word in self.vocabulary and not word in self.word_index:
                     self.word_index[word] = id
@@ -65,9 +64,6 @@ class ngram_model:
                     if self.embeddings_model is not None:
                         if word in self.embeddings_model:
                             self.embedding_matrix[id] = self.embeddings_model[word]
-                        else:
-                            self.embeddings_matrix[id] = rand(
-                                self.embeddings_model.vector_size)
                     id += 1
         # Always add special tokens
         self.word_index.update({
@@ -82,7 +78,7 @@ class ngram_model:
         })
 
     def get_ngram_doc(self, doc: str) -> list:
-        doc_tokens = self.tokenize(doc)
+        doc_tokens = list(doc)
         doc_tokens = self.replace_unk(doc_tokens)
         doc_tokens = [word.lower() for word in doc_tokens]
         doc_tokens = [self.sos] * (self.N - 1) + doc_tokens + [self.eos]

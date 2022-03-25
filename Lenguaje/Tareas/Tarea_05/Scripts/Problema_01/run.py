@@ -1,8 +1,6 @@
-from Modules.models import Mex_data_class, model_class, neural_language_model, generate_text_class
-from Modules.datasets import get_args, get_params, init_seeds
+from Modules.datasets import init_seeds, get_args, get_params
+from Modules.models import Mex_data_class, ngram_model, neural_language_model, model_class, generate_text_class
 from nltk.tokenize import TweetTokenizer as tokenizer
-from Modules.ngrams_class import ngram_model
-
 
 init_seeds()
 params = get_params()
@@ -23,9 +21,9 @@ model = model_class(neural_model,
                     mex_data.validation_loader)
 print("Train neural model")
 # model.run()
-neural_model.read_model(params["path data"],
+neural_model.read_model(params["model path"],
                         params["file model"])
 generate_text = generate_text_class(ngram,
                                     neural_model,
                                     tokenize)
-generate_text.run("<s> <s> <s>")
+print(generate_text.run("pende"))

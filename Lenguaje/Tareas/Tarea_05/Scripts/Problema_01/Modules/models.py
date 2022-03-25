@@ -1,8 +1,8 @@
 from numpy import array, mean, asanyarray, sum, exp, argmax, log
 from torch.utils.data import DataLoader, TensorDataset
 from nltk.tokenize import TweetTokenizer as tokenizer
-from Modules.ngrams_class import ngram_model
 from sklearn.metrics import accuracy_score
+from .ngrams_class import ngram_model
 from numpy.random import multinomial
 import torch.nn.functional as F
 from argparse import Namespace
@@ -67,6 +67,7 @@ class neural_language_model(nn.Module):
         self.fc2 = nn.Linear(args.d_h,
                              args.vocabulary_size,
                              bias=False)
+        self.args = args
 
     def forward(self, x):
         x = self.emb(x)
@@ -77,7 +78,11 @@ class neural_language_model(nn.Module):
 
     def read_model(self, path: str, name: str) -> None:
         filename = join(path, name)
-        self.load_state_dict(torch.load(filename)["state_dict"])
+        if torch.cuda.is_available():
+            self.load_state_dict(torch.load(filename)["state_dict"])
+        else:
+            self.load_state_dict(torch.load(filename,
+                                            map_location=torch.device('cpu'))["state_dict"])
         self.train(False)
 
 
@@ -90,7 +95,7 @@ class model_class:
 
     def get_pred(self, raw_logits):
         probs = F.softmax(raw_logits.detach(), dim=1)
-        y_pred = torch.argmax(probs, dim=1).cpu().numpy()
+        y_pred = torch.argmax(probs, dim=1).numpy()
         return y_pred
 
     def model_eval(self, data):
@@ -205,12 +210,20 @@ class generate_text_class:
 
     def parse_text(self, text: str) -> tuple:
         tokens = self.tokenize(text)
-        all_tokens = [word.lower()
-                      if word in self.ngram_data.word_index else self.ngram_data.unk
-                      for word in tokens]
-        tokens_id = [self.ngram_data.word_index[word.lower()]
-                     for word in all_tokens]
-        return tokens, tokens_id
+        all_tokens = []
+        for word in tokens:
+            if word == self.ngram_data.sos:
+                all_tokens += [word]
+                all_tokens += [" "]
+        # División entre dos  porque se estan añadiendo dos elementos por <s> encontrado
+        n = len(all_tokens)//2
+        sentence = " ".join(tokens[n:])
+        all_tokens += [letter.lower()
+                       if letter in self.ngram_data.word_index else self.ngram_data.unk
+                       for letter in sentence]
+        tokens_id = [self.ngram_data.word_index[letter]
+                     for letter in all_tokens]
+        return all_tokens, tokens_id
 
     def sample_next_word(self, logits, temperature: float):
         logits = asanyarray(logits).astype("float64")
@@ -229,7 +242,7 @@ class generate_text_class:
 
     def run(self, initial_text: str):
         tokens, window_word_index = self.parse_text(initial_text)
-        for i in range(100):
+        for i in range(300):
             y_pred = self.predict_next_token(window_word_index)
             next_word = self.ngram_data.index_word[y_pred]
             tokens.append(next_word)
@@ -238,7 +251,7 @@ class generate_text_class:
             else:
                 window_word_index.pop(0)
                 window_word_index.append(y_pred)
-        return " ".join(tokens)
+        return "".join(tokens)
 
 
 def init_models_parameters(model: neural_language_model, args: Namespace) -> tuple:
