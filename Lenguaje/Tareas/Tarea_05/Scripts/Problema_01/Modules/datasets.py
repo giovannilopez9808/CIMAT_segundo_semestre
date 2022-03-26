@@ -7,12 +7,12 @@ import torch
 
 def get_params() -> dict:
     params = {
-        "path data": "Data",
+        "path data": "../Data",
         "train data": "mex_train.txt",
         "train labels": "mex_train_labels.txt",
         "validation data": "mex_val.txt",
         "validation labels": "mex_val_labels.txt",
-        "model path": "Data",
+        "model path": "../Data/Model_01",
         "file model": "model_best.pt",
     }
     return params
@@ -37,8 +37,7 @@ def get_args() -> Namespace:
     args.lr_factor = 0.5
     # Save directory
     args.savedir = "model"
-    makedirs(args.savedir,
-             exist_ok=True)
+    makedirs(args.savedir, exist_ok=True)
     return args
 
 
