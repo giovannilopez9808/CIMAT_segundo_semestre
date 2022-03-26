@@ -56,12 +56,16 @@ class Mex_data_class:
 
 
 class neural_language_model(nn.Module):
-    def __init__(self, args, embeddings=None) -> None:
+    def __init__(self, args, embeddings: array = None) -> None:
         super(neural_language_model, self).__init__()
         self.window_size = args.N-1
         self.embeding_size = args.d
         self.emb = nn.Embedding(args.vocabulary_size,
                                 args.d)
+        if embeddings is not None:
+            for i in range(embeddings.shape[0]):
+                for j in range(embeddings.shape[1]):
+                    self.emb.weight.data[i][j] = embeddings[i][j]
         self.fc1 = nn.Linear(args.d*(args.N-1),
                              args.d_h)
         self.drop1 = nn.Dropout(p=args.dropout)
@@ -96,7 +100,7 @@ class model_class:
 
     def get_pred(self, raw_logits):
         probs = F.softmax(raw_logits.detach(), dim=1)
-        y_pred = torch.argmax(probs, dim=1).numpy()
+        y_pred = torch.argmax(probs, dim=1).cpu().numpy()
         return y_pred
 
     def model_eval(self, data):
@@ -210,20 +214,11 @@ class generate_text_class:
         self.model = model
 
     def parse_text(self, text: str) -> tuple:
-        tokens = self.tokenize(text)
-        all_tokens = []
-        for word in tokens:
-            if word == self.ngram_data.sos:
-                all_tokens += [word]
-                all_tokens += [" "]
-        # División entre dos  porque se estan añadiendo dos elementos por <s> encontrado
-        n = len(all_tokens)//2
-        sentence = " ".join(tokens[n:])
-        all_tokens += [letter.lower()
-                       if letter in self.ngram_data.word_index else self.ngram_data.unk
-                       for letter in sentence]
-        tokens_id = [self.ngram_data.word_index[letter]
-                     for letter in all_tokens]
+        all_tokens = [word.lower()
+                      if word in self.ngram_data.word_index else self.ngram_data.eos
+                      for word in self.tokenize(text)]
+        tokens_id = [self.ngram_data.word_index[word]
+                     for word in all_tokens]
         return all_tokens, tokens_id
 
     def sample_next_word(self, logits: array, temperature: float) -> int:
@@ -252,7 +247,23 @@ class generate_text_class:
             else:
                 window_word_index.pop(0)
                 window_word_index.append(y_pred)
-        return "".join(tokens)
+        return " ".join(tokens)
+
+    def obtain_closet_words(self, word: str, n: int) -> None:
+        print("Palabras cercanas a {}".format(word))
+        word_id = torch.LongTensor([self.ngram_data.word_index[word]])
+        word_embed = self.model.emb(word_id)
+        # Compute distances to all words
+        dist = torch.norm(self.model.emb.weight-word_embed, dim=1).detach()
+        lst = sorted(enumerate(dist.numpy()),
+                     key=lambda x: x[1])
+        table = []
+        for idx, difference in lst[1:n+1]:
+            table += [[self.ngram_data.index_word[idx],
+                       difference]]
+        print(tabulate(table,
+                       headers=["Word", "Difference"]))
+        print()
 
 
 def init_models_parameters(model: neural_language_model, args: Namespace) -> tuple:
@@ -268,21 +279,6 @@ def init_models_parameters(model: neural_language_model, args: Namespace) -> tup
                                                            verbose=True,
                                                            factor=args.lr_factor)
     return criterion, optimizer, scheduler
-
-
-def print_closet_words(embeddings, ngram_data, word, n) -> None:
-    word_id = torch.LongTensor([ngram_data.word_index[word]])
-    word_embed = embeddings(word_id)
-    # Compute distances to all words
-    dist = torch.norm(embeddings.weight-word_embed, dim=1).detach()
-    lst = sorted(enumerate(dist.numpy()),
-                 key=lambda x: x[1])
-    table = []
-    for idx, difference in lst[1:n+1]:
-        table += [[ngram_data.index_word[idx],
-                   difference]]
-    print(tabulate(table,
-                   headers=["Word", "Difference"]))
 
 
 def obtain_loader(data: array, labels: array, args: Namespace) -> DataLoader:
@@ -313,8 +309,9 @@ def perplexity(model: neural_language_model, text: str, ngram_data: ngram_model)
     return perplexity_value
 
 
-def syntax_structure(model: neural_language_model, ngram_data: ngram_model, word: str) -> None:
-    perms = ["".join(perm) for perm in permutations(word)]
+def syntax_structure(model: neural_language_model, ngram_data: ngram_model, word: str, tokenize: tokenizer) -> None:
+    words = tokenize(word)
+    perms = [" ".join(perm) for perm in permutations(words)]
     best_log_likelihood = [(log_likelihood(model,
                                            pharse,
                                            ngram_data),
