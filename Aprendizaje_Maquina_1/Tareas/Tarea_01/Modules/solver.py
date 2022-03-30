@@ -1,7 +1,7 @@
-from .functions import function_class
 from numpy.random import uniform
-from .models import model_class
 from numpy.linalg import norm
+from Modules.functions import function_class
+from Modules.models import model_class
 from numpy import linspace
 import time
 
@@ -39,7 +39,7 @@ def solver(models: model_class, y: list, params: dict, gd_params: dict) -> tuple
     while iteration < max_iteration:
         # descenso para alpha
         alpha = models.method(alpha,
-                              grad=functions.grad_gaussian_radial_alpha,
+                              grad=functions.gradient_gaussian_alpha,
                               gd_params=gd_params,
                               f_params=f_params)[-1]
         if norm(phi @ alpha - y) < epsilon:
@@ -47,7 +47,7 @@ def solver(models: model_class, y: list, params: dict, gd_params: dict) -> tuple
         # descenso para mu
         mu_old = mu
         mu = models.method(mu,
-                           grad=functions.grad_gaussian_radial_mu,
+                           grad=functions.gradient_gaussian_mu,
                            gd_params=gd_params,
                            f_params=f_params)[-1]
         # actualizacion

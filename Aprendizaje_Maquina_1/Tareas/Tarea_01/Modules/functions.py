@@ -35,7 +35,7 @@ class function_class:
         phi = exp(-(y-mu_aux)**2/(2*sigma**2))
         return phi
 
-    def grad_gaussian_radial_mu(self, theta: None, f_params: dict) -> array:
+    def gradient_gaussian_mu(self, theta: None, f_params: dict) -> array:
         """
         Calcula el gradiente respecto a mu
         Parámetros
@@ -62,16 +62,15 @@ class function_class:
             (y @ ones((1, n)) - ones_like(y) @ mu.T)
         return mean(gradient, axis=0)
 
-    def grad_gaussian_radial_alpha(self, theta: None, f_params: dict) -> array:
+    def gradient_gaussian_alpha(self, theta: None, f_params: dict) -> array:
         """
         Calcula el gradiente respecto a alpha
         Parámetros
         -----------
             theta
             f_params : lista de parametros para la funcion objetivo,
-                        kappa = f_params['kappa'] parametro de escala (rechazo de outliers)
-                        X     = f_params['X'] Variable independiente
-                        y     = f_params['y'] Variable dependiente
+                        X -> f_params['X'] Variable independiente
+                        y -> f_params['y'] Variable dependiente
 
         Output
         -----------

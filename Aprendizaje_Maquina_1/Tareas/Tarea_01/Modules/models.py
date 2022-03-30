@@ -85,7 +85,6 @@ class model_class:
                         alpha = gd_params['alpha'] tamaño de paso alpha
                         eta   = gd_params['eta']  parametro de inercia (0,1]
         f_params  :   lista de parametros para la funcion objetivo,
-                        kappa = f_params['kappa'] parametro de escala (rechazo de outliers)
                         X     = f_params['X'] Variable independiente
                         y     = f_params['y'] Variable dependiente
 
@@ -121,7 +120,6 @@ class model_class:
                         alphaADA = gd_params['alphaADADELTA'] tamaño de paso alpha
                         eta      = gd_params['eta']  parametro adaptación del alpha
         f_params  :   lista de parametros para la funcion objetivo,
-                        kappa = f_params['kappa'] parametro de escala (rechazo de outliers)
                         X     = f_params['X'] Variable independiente
                         y     = f_params['y'] Variable dependiente
 
