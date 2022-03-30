@@ -40,6 +40,7 @@ def solver(models: model_class, params: dict, gd_params: dict) -> tuple:
     }
     iteration = 0
     while iteration < max_iteration:
+        print(iteration)
         # descenso para alpha
         alpha = models.method(alpha,
                               grad=functions.gradient_gaussian_alpha,

@@ -4,9 +4,9 @@ def obtain_all_params() -> dict:
     """
     params = {
         "models": [
-            "SGD",
+            # "SGD",
             # "NAG",
-            # "ADAM",
+            "ADAM",
             # "ADADELTA",
         ],
         "max iteration": 100,
