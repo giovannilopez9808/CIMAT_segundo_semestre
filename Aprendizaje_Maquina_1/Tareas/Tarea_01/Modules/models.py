@@ -5,7 +5,7 @@ from numpy.random import randint
 class model_class:
     def __init__(self) -> None:
         """
-        Modelo que reune los metodos de 
+        Modelo que reune los metodos de
         + Descenso de gradiente estocástico.
         + Descenso de gradiente estoc ́astico accelerado de tipo Nesterov.
         + AdaDelta
@@ -38,7 +38,7 @@ class model_class:
                         batch_size = gd_params['batch_size'] tamaño de la muestra
 
         f_params  :   lista de parametros para la funcion objetivo,
-                        X     = f_params['X'] Variable independiente
+                        X     = f_params["x"] Variable independiente
                         y     = f_params['y'] Variable dependiente
 
         Output
@@ -46,7 +46,7 @@ class model_class:
         Theta     :   trayectoria de los parametros
                         Theta[-1] es el valor alcanzado en la ultima iteracion
         """
-        (high, dim) = f_params['X'].shape
+        high = f_params["x"].shape
         batch_size = gd_params['batch_size']
         nIter = gd_params['nIter']
         alpha = gd_params['alpha']
@@ -58,13 +58,15 @@ class model_class:
                              size=batch_size,
                              dtype='int32')
             # sample
-            smpX = f_params['X'][smpIdx]
+            smpX = f_params['x'][smpIdx]
             smpy = f_params['y'][smpIdx]
             # parametros de la funcion objetivo
-            smpf_params = {"Alpha": f_params["Alpha"],
+            smpf_params = {"alpha": f_params["alpha"],
                            "mu": f_params["mu"],
+                           "m": f_params["m"],
+                           "sigma": f_params["sigma"],
                            "n": f_params["n"],
-                           'X': smpX,
+                           "x": smpX,
                            'y': smpy}
             p = grad(theta,
                      f_params=smpf_params)
@@ -85,7 +87,7 @@ class model_class:
                         alpha = gd_params['alpha'] tamaño de paso alpha
                         eta   = gd_params['eta']  parametro de inercia (0,1]
         f_params  :   lista de parametros para la funcion objetivo,
-                        X     = f_params['X'] Variable independiente
+                        X     = f_params["x"] Variable independiente
                         y     = f_params['y'] Variable dependiente
 
         Output
@@ -120,7 +122,7 @@ class model_class:
                         alphaADA = gd_params['alphaADADELTA'] tamaño de paso alpha
                         eta      = gd_params['eta']  parametro adaptación del alpha
         f_params  :   lista de parametros para la funcion objetivo,
-                        X     = f_params['X'] Variable independiente
+                        X     = f_params["x"] Variable independiente
                         y     = f_params['y'] Variable dependiente
 
         Output
@@ -161,7 +163,7 @@ class model_class:
                                     tamaño de paso (0,1)
         f_params  :   lista de parametros para la funcion objetivo,
                         kappa = f_params['kappa'] parametro de escala (rechazo de outliers)
-                        X     = f_params['X'] Variable independiente
+                        X     = f_params["x"] Variable independiente
                         y     = f_params['y'] Variable dependiente
 
         Output

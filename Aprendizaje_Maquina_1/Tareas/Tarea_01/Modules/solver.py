@@ -1,12 +1,11 @@
-from numpy.random import uniform
-from numpy.linalg import norm
 from Modules.functions import function_class
 from Modules.models import model_class
+from numpy.random import rand
 from numpy import linspace
 import time
 
 
-def solver(models: model_class, y: list, params: dict, gd_params: dict) -> tuple:
+def solver(models: model_class, params: dict, gd_params: dict) -> tuple:
     """
     Funcion que ejecuta un algoritmo para realizar la optimización de la función dado un diccionario de parametros
 
@@ -21,18 +20,22 @@ def solver(models: model_class, y: list, params: dict, gd_params: dict) -> tuple
     epsilon = params["epsilon"]
     sigma = params["sigma"]
     n = params["n"]
+    m = params["m"]
+    x = params["x"]
+    y = params["y"]
     functions = function_class()
     t_init = time.clock_gettime(0)
     # Valores Iniciales
-    mu = linspace(0, 100, n)
-    phi = functions.phi(y, mu, sigma)
-    alpha = uniform(0, sigma, n)
+    mu = linspace(0, x[-1], m)
+    alpha = rand(m)
     # Parámetros para el gradiente
     f_params = {
         'mu': mu,
-        'X': phi,
+        'x': x,
         'y': y,
-        'Alpha': alpha,
+        "m": m,
+        'alpha': alpha,
+        "sigma": sigma,
         'n': n
     }
     iteration = 0
@@ -42,21 +45,16 @@ def solver(models: model_class, y: list, params: dict, gd_params: dict) -> tuple
                               grad=functions.gradient_gaussian_alpha,
                               gd_params=gd_params,
                               f_params=f_params)[-1]
-        if norm(phi @ alpha - y) < epsilon:
-            break
+        f_params["alpha"] = alpha
         # descenso para mu
-        mu_old = mu
         mu = models.method(mu,
                            grad=functions.gradient_gaussian_mu,
                            gd_params=gd_params,
                            f_params=f_params)[-1]
-        # actualizacion
-        phi = functions.phi(y, mu, sigma)
         # Criterio de parada
-        if norm(mu - mu_old) < epsilon:
-            break
+        f_params["mu"] = mu
         # Número máximo de iteraciones si no hay convergencia
         iteration += 1
     t_end = time.clock_gettime(0)
     total_time = t_end - t_init
-    return phi, alpha, total_time
+    return alpha, mu, total_time

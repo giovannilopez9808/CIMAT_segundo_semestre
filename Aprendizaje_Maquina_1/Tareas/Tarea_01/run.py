@@ -1,19 +1,33 @@
+from Modules.functions import print_results, function_class
 from Modules.datasets import obtain_all_params
-from Modules.functions import print_results
 from Modules.models import model_class
 from Modules.solver import solver
 from numpy.random import uniform
-
+import matplotlib.pyplot as plt
+from pandas import read_csv
+from numpy import array, linspace
 results = {}
+function = function_class()
 params, gd_params = obtain_all_params()
 models = model_class()
-y = uniform(0, 1, params["n"])
+y = read_csv("Data/data.csv")
+y = array(y["T (degC)"][::120])
+x = linspace(1, len(y), len(y))
+params["x"] = x
+params["y"] = y
+params["n"] = 120
 for model_name in params["models"]:
     print("Resolviendo por medio de {}".format(model_name))
     results[model_name] = {}
     models.select_method(model_name)
-    phi, alpha, time_solver = solver(models, y, params, gd_params)
+    alpha, mu, time_solver = solver(models, params, gd_params)
+    phi = function.phi(x, mu, params["sigma"])
     error = round(((phi @ alpha - y)**2).mean(), 8)
     results[model_name]["time"] = time_solver
     results[model_name]["error"] = error
+    plt.plot(x, y,
+             marker=".")
+    plt.plot(x, phi@alpha,
+             marker=".")
+    plt.show()
 print_results(params, results)

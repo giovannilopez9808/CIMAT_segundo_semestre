@@ -1,4 +1,4 @@
-from numpy import exp, ones, mean, ones_like, array
+from numpy import exp, ones, mean, ones_like, array, outer
 from tabulate import tabulate
 
 
@@ -18,24 +18,24 @@ class function_class:
     def __init__(self) -> None:
         pass
 
-    def phi(self, y: array, mu: array, sigma: array) -> array:
+    def phi(self, x: array, mu: array, sigma: array) -> array:
         """
 
 
         Parámetros
         -----------
-        y -> Patrones a Aproximar
+        x -> Patrones a Aproximar
         mu -> Array de medias
-        sigma -> Vector de Desviaciones
-        Output
+        sigma -> Vector de Desviacionesalpha
         -----------
         phi          : matriz de kerneles
         """
-        mu_aux = mu.reshape(-1, 1)
-        phi = exp(-(y-mu_aux)**2/(2*sigma**2))
+        x = x.reshape((-1, 1))
+        mu = mu.reshape((-1, 1))
+        phi = exp(-(x-mu.T)**2/(2*sigma**2))
         return phi
 
-    def gradient_gaussian_mu(self, theta: None, f_params: dict) -> array:
+    def gradient_gaussian_mu(self, mu: None, f_params: dict) -> array:
         """
         Calcula el gradiente respecto a mu
         Parámetros
@@ -50,19 +50,22 @@ class function_class:
             Array gradiente
         """
         # Obtengo Parámetros
-        phi = f_params['X']
-        alpha = f_params['Alpha']
-        n = f_params['n']
+        x = f_params['x']
+        alpha = f_params['alpha']
+        n = x.shape
+        m = f_params["m"]
+        m = alpha.shape
         y = f_params['y']
-        mu = f_params['mu']
-        alpha = alpha.reshape((-1, 1))
-        mu = mu.reshape((-1, 1))
-        y = y.reshape((-1, 1))
-        gradient = (phi @ alpha - y) @ alpha.T * \
-            (y @ ones((1, n)) - ones_like(y) @ mu.T)
-        return mean(gradient, axis=0)
+        # print(n, m)
+        sigma = f_params["sigma"]
+        phi = self.phi(x, mu, sigma)
+        Alpha = outer(ones(n), alpha)
+        beta = outer(x, ones(m))-outer(ones(n), mu)
+        gradient = (phi*Alpha*beta).T @ (phi@alpha-y)
+        gradient = gradient/sigma**2
+        return gradient
 
-    def gradient_gaussian_alpha(self, theta: None, f_params: dict) -> array:
+    def gradient_gaussian_alpha(self, alpha: array, f_params: dict) -> array:
         """
         Calcula el gradiente respecto a alpha
         Parámetros
@@ -77,8 +80,11 @@ class function_class:
             Array gradiente
         """
         # Obtengo Parámetros
-        phi = f_params['X']
+        x = f_params['x']
         y = f_params['y']
-        alpha = f_params['Alpha']
-        gradient = phi.T @ (phi @ alpha - y)
-        return mean(gradient, axis=0)
+        mu = f_params["mu"]
+        sigma = f_params["sigma"]
+        phi = self.phi(x, mu, sigma)
+        # gradient = phi.T @ (phi @ alpha - y)
+        gradient = phi.T @ phi @ alpha - phi.T @ y
+        return gradient
