@@ -11,8 +11,10 @@ function = function_class()
 params, gd_params = obtain_all_params()
 models = model_class()
 y = read_csv("Data/data.csv")
-y = array(y["T (degC)"][::params["n"]])
-x = linspace(1, len(y), len(y))
+y = y.dropna(axis=0)
+y = array(y["Max"])
+params["n"] = len(y)
+x = linspace(1, params["n"], params["n"])
 params["x"] = x
 params["y"] = y
 for model_name in params["models"]:
