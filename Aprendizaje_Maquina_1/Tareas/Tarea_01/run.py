@@ -1,18 +1,20 @@
-from Modules.functions import print_results, function_class
+from Modules.functions import print_results, function_class, write_results
 from Modules.datasets import obtain_all_params
 from Modules.models import model_class
 from Modules.solver import solver
-from numpy.random import uniform
-import matplotlib.pyplot as plt
-from pandas import read_csv
 from numpy import array, linspace
+from pandas import read_csv
+from os.path import join
+
 results = {}
 function = function_class()
 params, gd_params = obtain_all_params()
 models = model_class()
-y = read_csv("Data/data.csv")
+filename = join(params["path data"],
+                params["file data"])
+y = read_csv(filename)
 y = y.dropna(axis=0)
-y = array(y["Max"])
+y = array(y[params["data column"]])
 params["n"] = len(y)
 x = linspace(1, params["n"], params["n"])
 params["x"] = x
@@ -26,9 +28,8 @@ for model_name in params["models"]:
     error = round(((phi @ alpha - y)**2).mean(), 8)
     results[model_name]["time"] = time_solver
     results[model_name]["error"] = error
-    plt.plot(x, y,
-             marker=".")
-    plt.plot(x, phi@alpha,
-             marker=".")
-    plt.show()
+    write_results(params,
+                  model_name,
+                  alpha,
+                  mu)
 print_results(params, results)
