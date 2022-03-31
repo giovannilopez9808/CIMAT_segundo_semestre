@@ -1,5 +1,7 @@
-from numpy import exp, ones, mean, ones_like, array, outer
+from numpy import exp, ones, array, outer
 from tabulate import tabulate
+from pandas import DataFrame
+from os.path import join
 
 
 def print_results(params: dict, results: array) -> None:
@@ -12,6 +14,17 @@ def print_results(params: dict, results: array) -> None:
                    headers=["Model",
                             "Time",
                             "Error"]))
+
+
+def write_results(params: dict, model: str, alpha: array, mu: array) -> None:
+    filename = "{}.csv".format(model)
+    filename = join(params["path results"],
+                    filename)
+    data = DataFrame()
+    data["alpha"] = alpha
+    data["mu"] = mu
+    data.to_csv(filename,
+                index=False)
 
 
 class function_class:
