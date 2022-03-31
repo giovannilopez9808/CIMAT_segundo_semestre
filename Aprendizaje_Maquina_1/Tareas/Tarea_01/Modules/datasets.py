@@ -4,20 +4,20 @@ def obtain_all_params() -> dict:
     """
     params = {
         "models": [
-            # "SGD",
+            "SGD",
             "NAG",
-            # "ADAM",
-            # "ADADELTA",
+            "ADAM",
+            "ADADELTA",
         ],
         "n": 120,
-        "max iteration": 10,
+        "max iteration": 100,
         "m": 20,
         "sigma": 200,
     }
 
     # parámetros del algoritmo
     gd_params = {
-        'alpha': 1e-3,
+        'alpha': 1e-4,
         'alphaADADELTA': 1e-3,
         'alphaADAM': 0.95,
         'nIter': 300,
