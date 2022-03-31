@@ -11,11 +11,10 @@ function = function_class()
 params, gd_params = obtain_all_params()
 models = model_class()
 y = read_csv("Data/data.csv")
-y = array(y["T (degC)"][::120])
+y = array(y["T (degC)"][::params["n"]])
 x = linspace(1, len(y), len(y))
 params["x"] = x
 params["y"] = y
-params["n"] = 120
 for model_name in params["models"]:
     print("Resolviendo por medio de {}".format(model_name))
     results[model_name] = {}

@@ -17,7 +17,6 @@ def solver(models: model_class, params: dict, gd_params: dict) -> tuple:
     gd_params -> diccionario que contiene los parametros del modelo
     """
     max_iteration = params["max iteration"]
-    epsilon = params["epsilon"]
     sigma = params["sigma"]
     n = params["n"]
     m = params["m"]
