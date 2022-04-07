@@ -11,8 +11,16 @@ Un método empleado para acotar las soluciones del problema es usar una región 
     \label{eq:quadratic_model}
 \end{equation}
 
-donde su mínimo se encuentra dentro de la región de confianza. Se denomina al arco de Cauchy al segmento tal que:
+donde su mínimo se encuentra dentro de la región de confianza. Se denomina al arco de Cauchy al segmento tal que cumple la ecuación \ref{eq:cauchy_arc}.
 
-\begin{equation*}
+\begin{equation}
     x_k^C(t) = \{x: x=x_k + t\nabla f(x_k), t\leq 0, ||t\nabla f(x_k)|| < \Delta_k \}
-\end{equation*}
+    \label{eq:cauchy_arc}
+\end{equation}
+
+El punto de Cauchy se encuentra definido en la ecuación \ref{eq:cauchy_point}.
+
+\begin{equation}
+    x_k^C = x_k + t_k^C \nabla f(x_k) = \underset{\tiny \begin{matrix}t\geq 0 \\ x_k + t \nabla f(x_k) \in B(x_k,\Delta_k) \end{matrix}}{arg\; min} m_k(t\nabla f(x_k)) \label{eq:cauchy_point}
+\end{equation}
+

@@ -12,8 +12,8 @@ def get_datasets() -> dict:
             "cauchy"
         ],
         "functions": [
-            # "wood",
-            # "rosembrock",
+            "wood",
+            "rosembrock",
             "branin"
         ]
     }
@@ -72,7 +72,8 @@ def get_function_params(function_name: str) -> dict:
             'tau vector': 1e-6,
             'tau function': 1e-6,
             'tau gradient': 1e-6,
-            'delta k': 0.5,
+            'delta k': 0.1,
+            'delta max': 0.2,
             'delta max': 1,
             'eta': 0.1,
             'eta min': 0.25,

@@ -65,7 +65,6 @@ class problem_model:
             x_i = x_k.copy()
             f_i = f_k
             p_k = self.step.model(g_k, h_k, delta_k)
-            # print(f_k)
             # Calculo métrica ro para evaluar modelo
             m_kp = f_k + g_k.dot(p_k) + 0.5 * p_k.dot(h_k).dot(p_k)
             ro_k = f_k - function(x_k + p_k, function_params)
