@@ -16,7 +16,7 @@ class problem_model:
         self._inital_position()
         self.step = step_model()
         self.step.select_model(dataset["step model"])
-        self.stop = stop_model(self.params)
+        self.stop = stop_model(self.function_params)
 
     def _inital_position(self) -> array:
         """
@@ -42,13 +42,13 @@ class problem_model:
         function = self.function.f
         gradient = self.function.gradient
         hessian = self.function.hessian
-        eta = self.params["eta"]
-        eta_min = self.params["eta min"]
-        eta_max = self.params["eta max"]
-        eta1_hat = self.params["eta1 hat"]
-        eta2_hat = self.params["eta2 hat"]
-        delta_k = self.params["delta k"]
-        delta_max = self.params["delta max"]
+        eta = function_params["eta"]
+        eta_min = function_params["eta min"]
+        eta_max = function_params["eta max"]
+        eta1_hat = function_params["eta1 hat"]
+        eta2_hat = function_params["eta2 hat"]
+        delta_k = function_params["delta k"]
+        delta_max = function_params["delta max"]
         # paso inicial
         x_k = function_params["x"]
         # calculo de la funcion en el paso inicial
@@ -65,6 +65,7 @@ class problem_model:
             x_i = x_k.copy()
             f_i = f_k
             p_k = self.step.model(g_k, h_k, delta_k)
+            # print(f_k)
             # Calculo métrica ro para evaluar modelo
             m_kp = f_k + g_k.dot(p_k) + 0.5 * p_k.dot(h_k).dot(p_k)
             ro_k = f_k - function(x_k + p_k, function_params)

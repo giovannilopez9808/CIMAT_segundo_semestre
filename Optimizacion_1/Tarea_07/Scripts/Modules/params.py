@@ -12,8 +12,8 @@ def get_datasets() -> dict:
             "cauchy"
         ],
         "functions": [
-            "wood",
-            "rosembrock",
+            # "wood",
+            # "rosembrock",
             "branin"
         ]
     }
@@ -24,16 +24,6 @@ def get_params() -> dict:
     params = {
         "path results": "../Results",
         "path graphics": "../Graphics",
-        'tau vector': 1e-6,
-        'tau function': 1e-6,
-        'tau gradient': 1e-6,
-        'delta k': 0.1,
-        'delta max': 0.2,
-        'eta': 0.2,
-        'eta min': 0.25,
-        'eta max': 0.75,
-        'eta1 hat': 0.25,
-        'eta2 hat': 2.0
     }
     mkdir(params["path results"])
     mkdir(params["path graphics"])
@@ -45,10 +35,30 @@ def get_function_params(function_name: str) -> dict:
         "wood": {
             "n": 4,
             "optimal position": ones(4),
+            'tau vector': 1e-6,
+            'tau function': 1e-6,
+            'tau gradient': 1e-6,
+            'delta k': 0.1,
+            'delta max': 0.2,
+            'eta': 0.2,
+            'eta min': 0.25,
+            'eta max': 0.75,
+            'eta1 hat': 0.25,
+            'eta2 hat': 2.0
         },
         "rosembrock": {
             "n": 100,
             "optimal position": ones(100),
+            'tau vector': 1e-6,
+            'tau function': 1e-6,
+            'tau gradient': 1e-6,
+            'delta k': 0.1,
+            'delta max': 0.2,
+            'eta': 0.2,
+            'eta min': 0.25,
+            'eta max': 0.75,
+            'eta1 hat': 0.25,
+            'eta2 hat': 2.0
         },
         "branin": {
             "n": 2,
@@ -59,6 +69,16 @@ def get_function_params(function_name: str) -> dict:
             "r": 6,
             "s": 10,
             "t": 1/(8*pi),
+            'tau vector': 1e-6,
+            'tau function': 1e-6,
+            'tau gradient': 1e-6,
+            'delta k': 0.5,
+            'delta max': 1,
+            'eta': 0.1,
+            'eta min': 0.25,
+            'eta max': 0.75,
+            'eta1 hat': 0.25,
+            'eta2 hat': 2.0
         }
     }
     return params[function_name]
