@@ -24,6 +24,7 @@ def get_params() -> dict:
     params = {
         "path results": "../Results",
         "path graphics": "../Graphics",
+        "file stadistics": "time_iterations.csv",
     }
     mkdir(params["path results"])
     mkdir(params["path graphics"])

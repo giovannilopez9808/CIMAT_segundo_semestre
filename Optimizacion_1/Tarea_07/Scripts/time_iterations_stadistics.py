@@ -26,6 +26,6 @@ for function in datasets["functions"]:
                                       ]
         path = obtain_path(params, dataset)
         filename = join(path,
-                        "time_iterations.csv")
+                        params["file stadistics"])
         results.to_csv(filename,
                        index=False)
