@@ -1,10 +1,13 @@
-from Modules.params import get_datasets, get_params, obtain_filename_iteration, obtain_path, join
-from pandas import DataFrame, read_csv
+from Modules.params import get_datasets, get_params, obtain_path
 from tabulate import tabulate
+from pandas import read_csv
+from os.path import join
 
 params = get_params()
 datasets = get_datasets()
-columns = ["Time", "Function", "Iterations"]
+columns = ["Time",
+           "Function",
+           "Iterations"]
 header = ["Funcion"]
 header += [step_model
            for step_model in datasets["step models"]]

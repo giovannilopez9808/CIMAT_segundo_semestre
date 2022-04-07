@@ -1,5 +1,6 @@
-from Modules.params import get_datasets, get_params, obtain_filename_iteration, obtain_path, join
+from Modules.params import get_datasets, get_params, obtain_filename_iteration, obtain_path
 from pandas import DataFrame, read_csv
+from os.path import join
 
 
 params = get_params()
