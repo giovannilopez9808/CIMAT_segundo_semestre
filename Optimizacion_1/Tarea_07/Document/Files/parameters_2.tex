@@ -1,0 +1,21 @@
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cccccccc}
+        \hline
+        Función                     & Métodos                                    & Tipo de vector               & \begin{tabular}[c]{@{}c@{}}Tamaño del\\ vector\end{tabular} & Tolerancia   & c\textsubscript{1} & c\textsubscript{2} & $\lambda_0$ \\ \hline
+        \multirow{8}{*}{Rosenbrock} & \multirow{4}{*}{Newton}                    & \multirow{2}{*}{Predefinido} & 2                         & $1x10^{-6}$  & 0.1                & 0.9                &             \\
+                                    &                                            &                              & 100                       & $1x10^{-12}$ & 0.1                & 0.9                &             \\
+                                    &                                            & \multirow{2}{*}{Aleatorio}   & 2                         & $1x10^{-7}$  & 0.1                & 0.9                &             \\
+                                    &                                            &                              & 100                       & $1x10^{-8}$  & 0.1                & 0.9                &             \\ \cline{2-8}
+                                    &                                            & \multirow{2}{*}{Predefinido} & 2                         & $1x10^{-6}$  &                    &                    & $1x10^{-3}$ \\
+                                    &                                            &                              & 100                       & $1x10^{-6}$  &                    &                    & $1x10^3$    \\
+                                    &                                            & \multirow{2}{*}{Aleatorio}   & 2                         & $1x10^{-6}$  &                    &                    & $1x10^4$    \\
+                                    &                                            &                              & 100                       & $1x10^{-8}$  &                    &                    & $1x10^3$    \\ \hline
+        \multirow{4}{*}{Wood}       & \multirow{2}{*}{Newton}                    & Predefinido                  & 4                         & $1x10^{-6}$  & 0.1                & 0.9                &             \\
+                                    &                                            & Aleatorio                    & 4                         & $1x10^{-8}$  & 0.1                & 0.9                &             \\ \cline{2-8}
+                                    & \multirow{2}{*}{\begin{tabular}[c]{@{}c@{}}Descenso\\ del gradiente\end{tabular}} & Predefido                    & 4                         & $1x10^{-6}$  &                    &                    & $1x10^{-4}$ \\
+                                    &                                            & Aleatorio                    & 4                         & 1$x10^{-6}$  &                    &                    & $1x10^{-4}$ \\ \hline
+    \end{tabular}
+    \caption{Parametros usados para evaluar las funciones de Wood y Rosembrock para el método de Newton y el el descenso del gradiente dado un vector definido y aleatorio dado por las ecuaciones \ref{eq:rosembrock_vector}, \ref{eq:wood_vector} y \ref{eq:random_vector}.}
+    \label{table:parameters_wood_rosembrock}
+\end{table}

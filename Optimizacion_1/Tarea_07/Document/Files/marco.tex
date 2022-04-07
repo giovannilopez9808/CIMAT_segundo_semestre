@@ -1,0 +1,18 @@
+\section{Marco teórico}
+
+Una técnica para la optimización de funciones es definir la función de objetivo, generalmente para obtener alguna solución del problema se escogen pasos de búsqueda unidireccionales.
+
+\subsection{Región de confianza}
+
+Un método empleado para acotar las soluciones del problema es usar una región de confianza dado un punto. Para formalizar este método se define un modelo que aproxima a la función objetivo en un punto. El modelo se encuentra descrito en la ecuación \ref{eq:quadratic_model}.
+
+\begin{equation}
+    m_k (p) = f(x_k) + \nabla f(x_k)^T p + \frac{1}{2} p^T \nabla^2 f(x_k) p
+    \label{eq:quadratic_model}
+\end{equation}
+
+donde su mínimo se encuentra dentro de la región de confianza. Se denomina al arco de Cauchy al segmento tal que:
+
+\begin{equation*}
+    x_k^C(t) = \{x: x=x_k + t\nabla f(x_k), t\leq 0, ||t\nabla f(x_k)|| < \Delta_k \}
+\end{equation*}
