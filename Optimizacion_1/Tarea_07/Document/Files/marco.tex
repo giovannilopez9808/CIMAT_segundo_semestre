@@ -74,4 +74,25 @@ Por lo tanto, el punto de Cauchy se obtiene como en la ecuación \ref{eq:cauchy_
     p_k^C = -\tau_k \frac{\Delta_k}{||g_k||} g_k \label{eq:cauchy_p_k}
 \end{equation}
 
-\section{Método Dogleg}
+\subsection{Método Dogleg}
+
+La idea del método Dogleg es minimizar el modelo cuadrático sin restricciones a lo largo del gradiente. La trayectoria Dogleg toma como primera instancia el punto $p_k^U$ y como segunda linea va desde $p_k^U$ hasta $p_k^B$. Lo anterior puede resumirse en la ecuación \ref{eq:dogleg_point}.
+
+\begin{equation}
+    \check{p}(\tau) = \left\{ \begin{matrix}
+        \tau p_k^U                   & \text{si } 0 \leq \tau \leq 1 \\
+        p_k^U+ (\tau-1)(p_k^B-p_k^U) & \text{si } 1 \leq \tau \leq 2
+    \end{matrix} \right. \label{eq:dogleg_point}
+\end{equation}
+
+Si se toma a $p_k^U$ en dirección al gradiente, de tal manera que $p_k^U = \alpha \nabla f_k $, entonces el problema será encontrar $\alpha$ tal que $p_k^U$ minimiza al modelo cuadrático (ecuación \ref*{eq:quadratic_model}). Llegando a que $\alpha$ debe tener el valor descrito en la ecuación .
+
+\begin{equation}
+    \alpha^* = -\frac{||\nabla f_k||}{\nabla^T f_k B_k \nabla f_k}
+\end{equation}
+
+Por lo tanto, los puntos $p_k^U$ y $p_k^B$ son:
+
+\begin{equation*}
+    p_k^U = -\frac{||\nabla f_k||}{\nabla^T f_k B_k \nabla f_k} \nabla f_k \qquad p_k^B = -B_k^{-1}\nabla f_k
+\end{equation*}
