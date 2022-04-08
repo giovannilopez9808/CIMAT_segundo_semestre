@@ -2,7 +2,7 @@
 
 Una técnica para la optimización de funciones es definir la función de objetivo, generalmente para obtener alguna solución del problema se escogen pasos de búsqueda unidireccionales.
 
-\subsection{Región de confianza}
+\subsection{Región de confianza \label{sec:trust_region}}
 
 Un método empleado para acotar las soluciones del problema es usar una región de confianza dado un punto. Para formalizar este método se define un modelo que aproxima a la función objetivo en un punto. El modelo se encuentra descrito en la ecuación \ref{eq:quadratic_model}.
 
@@ -11,7 +11,19 @@ Un método empleado para acotar las soluciones del problema es usar una región 
     \label{eq:quadratic_model}
 \end{equation}
 
-donde su mínimo se encuentra dentro de la región de confianza. Se denomina al arco de Cauchy al segmento tal que cumple la ecuación \ref{eq:cauchy_arc}.
+donde su mínimo se encuentra dentro de la región de confianza.
+
+Une medida para calcular el radio de la región de confianza  $\Delta_k$ es la medida de ajuste que esta definida en la ecuación \ref{eq:adjustment_equation}.
+
+\begin{equation*}
+    \rho_k = \frac{f(x_k)-f(x+p_k)}{m_k(0)+m_k(p_k)}  \label{eq:adjustment_equation}
+\end{equation*}
+
+Donde el numerador representa la reducción en la función y el denominador la reducción en el modelo. El denominador siempre es positivo debido a que $p_k$ minimiza el modelo en cada iteración. En el caso en que $\rho_k$ sea un valor negativo este representa un incremento en la función $f$. Por lo que el paso deberá rechazarse. Si $\rho_k$ es muy cercano a uno, entonces el comportamiento de la función $f$ y el modelo $m_k$ tienen una semejanza, por lo que se optaría a incrementar la región de confianza. Si $\rho_k$ se encuentra entre 0 y 1, entoces se opta por no realizar modificaciones en la región de confianza. Si $\rho_k$ es cercano a cero o negativo se propone una reducción en la región de confianza.
+
+\subsection{Punto de Cauchy}
+
+Se denomina al arco de Cauchy al segmento tal que cumple la ecuación \ref{eq:cauchy_arc}.
 
 \begin{equation}
     x_k^C(t) = \{x: x=x_k + t\nabla f(x_k), t\leq 0, ||t\nabla f(x_k)|| < \Delta_k \}
@@ -21,6 +33,45 @@ donde su mínimo se encuentra dentro de la región de confianza. Se denomina al 
 El punto de Cauchy se encuentra definido en la ecuación \ref{eq:cauchy_point}.
 
 \begin{equation}
-    x_k^C = x_k + t_k^C \nabla f(x_k) = \underset{\tiny \begin{matrix}t\geq 0 \\ x_k + t \nabla f(x_k) \in B(x_k,\Delta_k) \end{matrix}}{arg\; min} m_k(t\nabla f(x_k)) \label{eq:cauchy_point}
+    p_k^S = \argmin{||p||<\Delta_k} m_k(p) \label{eq:cauchy_point}
 \end{equation}
 
+donde $\Delta_k$ es la región de confianza.
+
+Teniendo el punto $p_k^S$, se buscará un parámetro $\tau_k$, el cual mínimize el modelo de la ecuación \ref*{eq:quadratic_model} en la región de confianza (ecuación \ref{eq:tau_cauchy}).
+
+\begin{equation}
+    \tau_k = \argmin{\tau_k \geq 0} m_k(\tau p_k^S) \leq \Delta_k \label{eq:tau_cauchy}
+\end{equation}
+
+por lo que el punto de Cauchy, lo estaremos calculando de tal manera que $p_k^C = \tau_k p_k^S$.
+
+Tomando a $p_k$ como $-\lambda_k g_k$, sujeto a la región de confianza, se tiene que
+
+\begin{equation*}
+    ||p|| = ||-\lambda_k g_k|| \Rightarrow \lambda_k \leq \frac{\Delta_k}{||g_k||}
+\end{equation*}
+
+
+Por lo que la ecuación \ref{eq:tau_cauchy} se puede escribir como en la ecuación .
+
+\begin{equation}
+    \lambda_k = \argmin{\lambda \in [0,\hat{\lambda}]}  m(-\lambda g_l) \label{eq:lambda_cauchy}
+\end{equation}
+
+La solución al problema planteado en la ecuación \ref{eq:lambda_cauchy} se encuentra descrita en la ecuación \ref{eq:lambda_k_cauchy}.
+
+\begin{equation}
+    \lambda_k = \hat{\lambda} \left\{\begin{matrix}
+        1                                                            & \text{si } g^T_k B_k g_k      \\
+        min\left(1, \frac{||g_k||^3}{\Delta_k g_k^T B_k g_k} \right) & \text{en cualquier otro caso}
+    \end{matrix}\right. \label{eq:lambda_k_cauchy}
+\end{equation}
+
+Por lo tanto, el punto de Cauchy se obtiene como en la ecuación \ref{eq:cauchy_p_k}.
+
+\begin{equation}
+    p_k^C = -\tau_k \frac{\Delta_k}{||g_k||} g_k \label{eq:cauchy_p_k}
+\end{equation}
+
+\section{Método Dogleg}
