@@ -7,6 +7,7 @@ params = get_params()
 datasets = get_datasets()
 columns = ["Time",
            "Function",
+           "Gradient",
            "Iterations"]
 header = ["Funcion"]
 header += [step_model.replace("-", " ")

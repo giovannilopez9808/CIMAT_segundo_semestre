@@ -8,6 +8,7 @@ datasets = get_datasets()
 for function in datasets["functions"]:
     for step_model in datasets["step models"]:
         results = DataFrame(columns=["Function",
+                                     "Gradient",
                                      "Iterations",
                                      "Time"])
         dataset = {
@@ -22,6 +23,7 @@ for function in datasets["functions"]:
                             index_col=0)
             n = len(data)-1
             results.loc[iteration] = [data["Function"][n],
+                                      data["Gradient"][n],
                                       n,
                                       data["Time"][n]
                                       ]
