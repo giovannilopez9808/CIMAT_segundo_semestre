@@ -21,6 +21,27 @@ Une medida para calcular el radio de la región de confianza  $\Delta_k$ es la m
 
 Donde el numerador representa la reducción en la función y el denominador la reducción en el modelo. El denominador siempre es positivo debido a que $p_k$ minimiza el modelo en cada iteración. En el caso en que $\rho_k$ sea un valor negativo este representa un incremento en la función $f$. Por lo que el paso deberá rechazarse. Si $\rho_k$ es muy cercano a uno, entonces el comportamiento de la función $f$ y el modelo $m_k$ tienen una semejanza, por lo que se optaría a incrementar la región de confianza. Si $\rho_k$ se encuentra entre 0 y 1, entoces se opta por no realizar modificaciones en la región de confianza. Si $\rho_k$ es cercano a cero o negativo se propone una reducción en la región de confianza.
 
+El algoritmo \ref{alg:trust_region} describe este método.
+
+\begin{algorithm}
+    \caption{Región de confianza}
+    \label{alg:trust_region}
+    \KwIn{$\hat{\Delta}$,$\Delta_0 \in (0,\hat{\Delta})$ y $\eta \in [0,\frac{1}{4}]$}
+    \For{k=0,1,2,3}{
+        $p_k \gets arg\; min$ ecuación \ref{eq:quadratic_model}\\
+        $\rho_k \gets $ ecuación \ref{eq:adjustment_equation}\\
+        \If{$\rho_k < \eta_1 $}{
+            $\Delta_{k+1} \gets \hat{\eta}_1\Delta_k$\\
+            \ElseIf{$\rho_k > \eta_2$ y $||p_k|| = \Delta_k$}{
+                $\Delta_{k+1} \gets min\{\hat{n}_2\Delta_k,\hat{\Delta}\}$\\
+                \Else{
+                    $\Delta_{k+1}\gets\Delta_k$
+                }
+            }
+        }
+    }
+\end{algorithm}
+
 \subsection{Punto de Cauchy}
 
 Se denomina al arco de Cauchy al segmento tal que cumple la ecuación \ref{eq:cauchy_arc}.
@@ -74,6 +95,25 @@ Por lo tanto, el punto de Cauchy se obtiene como en la ecuación \ref{eq:cauchy_
     p_k^C = -\tau_k \frac{\Delta_k}{||g_k||} g_k \label{eq:cauchy_p_k}
 \end{equation}
 
+El algoritmo \ref{alg:dogleg} describe este método.
+
+\begin{algorithm}
+    \caption{Método de Dogleg con región de confianza}
+    \label{alg:dogleg}
+    \KwIn{$\hat{\Delta}>0$, $\Delta_0 \in (0,\hat{\Delta})$ y $\eta \in [0,\frac{1}{4}]$}
+    \For{$k=0,1,2,3,\dots$}{
+        $p_k \gets$ ecuación \ref{eq:dogleg_point}\\
+        $\rho_k \gets $ ecuación \ref{eq:adjustment_equation}\\
+        \If{$\rho_k>\eta $}{
+            $x_{k+1}\gets x_k+p_k$
+            \Else{
+                $x_{k+1}=x_k$
+            }
+        }
+        $\Delta_{k+1} \gets $ algoritmo \ref{alg:trust_region}
+    }
+\end{algorithm}
+
 \subsection{Método Dogleg \label{sec:dogleg}}
 
 La idea del método Dogleg es minimizar el modelo cuadrático sin restricciones a lo largo del gradiente. La trayectoria Dogleg toma como primera instancia el punto $p_k^U$ y como segunda linea va desde $p_k^U$ hasta $p_k^B$. Lo anterior puede resumirse en la ecuación \ref{eq:dogleg_point}.
@@ -97,4 +137,91 @@ Por lo tanto, los puntos $p_k^U$ y $p_k^B$ son:
     p_k^U = -\frac{||\nabla f_k||}{\nabla^T f_k B_k \nabla f_k} \nabla f_k \qquad p_k^B = -B_k^{-1}\nabla f_k
 \end{equation*}
 
+\subsection{Método de Newton con Cauchy}
+
+El método de Newton para sistemas no lineales supone que existe una función $f$ definida en $\Real^n$ y de clase $C^2$ tal que tiene un mínimo relativo en $x^*$. Suponemos que el eigenvalor menor del hessiano $H(x^*)$ de $f$ es mayor a cero. Esto provoca que $H(x^*)$ sea positva definida. Entonces el método de newton se puede obtener resolviendo el sistema matricial descrito en la ecuación \ref{eq:newton_system}.
+
+\begin{equation}
+    H(x_k) d_k = -g(x_k) \label{eq:newton_system}
+\end{equation}
+
+Donde $g(x_k)$ y $H(x_k)$ son el hessiano y el gradiente de $f$ en el paso $x_k$. Con esta dirección obtenida se puede calcular el siguiente paso del método (ecuación \ref{eq:newton_step}).
+
+\begin{equation}
+    x_{k+1} = x_k + d_k \label{eq:newton_step}
+\end{equation}
+
+Las desventajas de usar el método de Newton es que no se suele obtener una soluciones globales. El costo computacional de calcular el hessiano y el calculo de la solución de la ecuación \ref{eq:newton_system} en cada iteración es grande.
+
+Al incorporar una región de confianza al método de Newton, se estimaría si el paso obtenido en la solución de la ecuación \ref*{eq:newton_system} sale de la región de confianza Si este es mayor, entonces se toma el paso de Cauchy descrito en la ecuación \ref*{eq:cauchy_p_k}, si no se toma el paso de Newton calculado. A esto se le conoce como el método de Newton-Cauchy.
+
+
+
 \subsection{Método de Newton modificado}
+
+
+Una manera de mejorar el método de Newton es el uso de una búsqueda en linea de un parámetro $\alpha$ que regule el paso $d_k$ para que se garantize una convergencia.
+
+Si se llaga a obtener un hessiano que sea no singular, entonces existe una $\beta$ y $\eta$ tal que
+
+\begin{equation*}
+    ||H(x_0)|| \leq \beta \qquad ||H(x_0)^{-1}g(x_0)|| \leq \eta
+\end{equation*}
+
+Si definimos a $\alpha$ como $\alpha=\beta \gamma \eta$ y $r\geq r_0\equiv (1-2\sqrt{1-2\alpha})/(2\beta \gamma)$, entonces al secuencia ${x_k}$ obtenida del método de Newton esta bien definida y converge a $x^*$, el único cero de $f$ en $B(x_0,r_0)$. Si $\beta \gamma \eta <\frac{1}{2}$, entonces $x^*$ es el único cero en $B(x_0,r_1)$ donde
+
+\begin{equation*}
+    r_1 = min\left(r, \frac{1+\sqrt{1-2\alpha}}{\beta \gamma}\right)  \qquad ||x_k x^*|| \leq (2\alpha)^{2k} \;\;\; k=1,2,\dots
+\end{equation*}
+
+Si se obtiene un hessiano que no sea positivo definido en la dirección de newton, entonces su paso puede no ser de un descenso. Una alternativa es modificar el hessiano tal que
+
+\begin{equation*}
+    B_k = H(x_k) + E_k
+\end{equation*}
+
+tal que $B_k \succ 0$ y la dirección usando esta matriz sea de descenso. Para simplificar la elección de $E_k$, se propone el siguiente calculo:
+
+\begin{equation*}
+    E_k = \tau_k \mathbf{I} \qquad \tau_k > 0
+\end{equation*}
+
+En el algoritmo \ref{alg:cholesky} se encuentra el calculo de $B_k$.
+
+\begin{algorithm}
+    \caption{Calculo de la matriz $B_k$ usando la factorización de Cholesky}
+    \label{alg:cholesky}
+    \KwIn{$H$}
+    $\beta \gets 10^{-3}$\\
+    $\lambda \gets$ eigenvalues(H)\\
+    \If{min($\lambda>0$)}{
+        $\tau_0 =0$\\
+        \Else{
+            $\tau_0 \gets \beta - min(\lambda)$
+        }
+    }
+    \For{$k=1,2,\dots$}{
+        $LL^T \gets A + \tau_k \mathbf{I}$
+        \If{$L \exists$}{
+            \Return{$L$}\\
+            \Else{
+                $\tau_{k+1} \gets max(2\tau_k,\beta)$
+            }
+        }
+    }
+\end{algorithm}
+
+El uso de la matriz $B_k$, la búsqueda de linea y el método de Newton se le llama método de Newton modificado (algoritmo \ref{alg:newton_modificado}).
+
+\begin{algorithm}
+    \caption{Método de Newton modificado}
+    \label{alg:newton_modificado}
+    \KwIn{$x_0$}
+    \KwOut{$x^*$}
+    \While{$||\nabla f_k||>\tau_g$}{
+        $B_k \gets \nabla^2 f(x_k) + E_k$\\
+        Solve $B_k d_k = -g_k$\\
+        Compute $\alpha_k$ with line search\\
+        $x_{k+1}\gets x_{k} + \alpha_k d_k$
+    }
+\end{algorithm}
