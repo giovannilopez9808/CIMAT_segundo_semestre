@@ -74,7 +74,7 @@ Por lo tanto, el punto de Cauchy se obtiene como en la ecuación \ref{eq:cauchy_
     p_k^C = -\tau_k \frac{\Delta_k}{||g_k||} g_k \label{eq:cauchy_p_k}
 \end{equation}
 
-\subsection{Método Dogleg}
+\subsection{Método Dogleg \label{sec:dogleg}}
 
 La idea del método Dogleg es minimizar el modelo cuadrático sin restricciones a lo largo del gradiente. La trayectoria Dogleg toma como primera instancia el punto $p_k^U$ y como segunda linea va desde $p_k^U$ hasta $p_k^B$. Lo anterior puede resumirse en la ecuación \ref{eq:dogleg_point}.
 
@@ -96,3 +96,5 @@ Por lo tanto, los puntos $p_k^U$ y $p_k^B$ son:
 \begin{equation*}
     p_k^U = -\frac{||\nabla f_k||}{\nabla^T f_k B_k \nabla f_k} \nabla f_k \qquad p_k^B = -B_k^{-1}\nabla f_k
 \end{equation*}
+
+\subsection{Método de Newton modificado}

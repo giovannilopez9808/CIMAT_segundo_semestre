@@ -1,11 +1,11 @@
-from numpy.linalg import solve, norm
-from numpy import array, sqrt
+from numpy.linalg import solve, norm, eigvals, cholesky, LinAlgError
+from numpy import array, eye, sqrt, inf
 from typing import Callable
 
 
 class step_model:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, function: Callable, params: dict) -> None:
+        self.obtain_alpha = obtain_alpha(function, params)
 
     def select_model(self, model_name: str) -> Callable:
         """
@@ -19,10 +19,12 @@ class step_model:
             self.model = self.dogleg
         if model_name == "cauchy":
             self.model = self.cauchy
-        if model_name == "newton":
-            self.model = self.newton
+        if model_name == "newton-cauchy":
+            self.model = self.newton_cauchy
+        if model_name == "newton-modification":
+            self.model = self.newton_modification
 
-    def dogleg(self, g_k, h_k, delta_k) -> array:
+    def dogleg(self, x_k: array, g_k: array, h_k: array, delta_k: float) -> array:
         """
         Calcula el tamaño de paso de acuerdo a dogleg
 
@@ -39,7 +41,7 @@ class step_model:
         # Modelo cuadrático a lo largo del gradiente
         p_ku = - g_k.dot(g_k) * g_k / (g_k.dot(h_k).dot(g_k))
         # Modelo cuadrático si h_k es positiva definida
-        p_kb = self.newton_step(h_k, g_k)
+        p_kb = self._newton_step(h_k, g_k)
         # p_kb está en el interior de la región de confianza
         if norm(p_kb) <= delta_k:
             p_k = p_kb
@@ -60,7 +62,7 @@ class step_model:
                 p_k = p_ku + (tau_k - 1.0) * diff
         return p_k
 
-    def cauchy(self, g_k, h_k, delta_k) -> array:
+    def cauchy(self, x_k: array, g_k: array, h_k: array, delta_k: float) -> array:
         """
         Inputs
         -----------
@@ -83,7 +85,7 @@ class step_model:
         p_ks = tau_k*p_ks
         return p_ks
 
-    def newton(self, g_k, h_k, delta_k):
+    def newton_cauchy(self, x_k: array, g_k: array, h_k: array, delta_k: float) -> array:
         """
         Inputs
         -----------
@@ -93,15 +95,40 @@ class step_model:
 
         Output
         -----------
-        p_k -> paso calculado por newton
+        p_k -> paso calculado por newton_cauchy
         """
-        p_k = self.newton_step(h_k, g_k)
-        # Tomo paso de Cauchy si paso de Newton está fuera de la region
+        p_k = self._newton_step(h_k, g_k)
+        # Tomo paso de Cauchy si paso de newton_cauchy está fuera de la region
         if norm(p_k) >= delta_k:
-            p_k = self.cauchy(g_k, h_k, delta_k)
+            p_k = self.cauchy(x_k, g_k, h_k, delta_k)
         return p_k
 
-    def newton_step(self, h_k, g_k):
+    def newton_modification(self, x_k: array, g_k: array, h_k: array, delta_k: float) -> array:
+        l_matrix = self._cholesky_modification(h_k)
+        # l_matrix = h_k
+        d_k = self._newton_step(l_matrix, g_k)
+        alpha_k = self.obtain_alpha.method(x_k, d_k)
+        p_k = alpha_k*d_k
+        return p_k
+
+    def _cholesky_modification(self, h_k: array) -> array:
+        beta = 1e-3
+        n = h_k.shape[0]
+        eigenvalues = eigvals(h_k)
+        min_eigenvalue = min(eigenvalues)
+        if min_eigenvalue > 0:
+            return h_k
+        else:
+            tau = beta - min_eigenvalue
+        while(True):
+            b_k = h_k + tau*eye(n)
+            try:
+                l = cholesky(b_k)
+                return l
+            except LinAlgError:
+                tau = max(2*tau, beta)
+
+    def _newton_step(self, h_k, g_k) -> array:
         """
         Calculo del tamaño de paso
 
@@ -167,3 +194,91 @@ class stop_model:
         Booleano que indica si se cumple la condicion o no
         """
         return norm(g) < self.tau_gradient
+
+
+class obtain_alpha():
+    """
+    Obtiene el alpha siguiendo las condiciones de armijo y Wolfe
+    """
+
+    def __init__(self, function: Callable, params: dict) -> None:
+        self.params = params
+        self.function = function
+        if params["search name"] == "bisection":
+            self.method = self.bisection
+        if params["search name"] == "back tracking":
+            self.method = self.back_tracking
+
+    def bisection(self,  x: array, d: array) -> float:
+        # Inicialización
+        alpha = 0.0
+        beta_i = inf
+        alpha_k = 1
+        dot_grad = self.function.gradient(x, self.params) @ d
+        while True:
+            armijo_condition = self.obtain_armijo_condition(
+                dot_grad, x, d, alpha_k)
+            wolfe_condition = self.obtain_wolfe_condition(
+                x, dot_grad, d, alpha_k)
+            if armijo_condition or wolfe_condition:
+                if armijo_condition:
+                    beta_i = alpha_k
+                    alpha_k = 0.5*(alpha + beta_i)
+                else:
+                    alpha = alpha_k
+                    if beta_i == inf:
+                        alpha_k = 2.0 * alpha
+                    else:
+                        alpha_k = 0.5 * (alpha + beta_i)
+            else:
+                break
+        return alpha_k
+
+    def back_tracking(self, x: array,  d: array):
+        """
+        Calcula tamaño de paso alpha
+
+            Parámetros
+            -----------
+                x_k     : Vector de valores [x_1, x_2, ..., x_n]
+                d_k     : Dirección de descenso
+                f       : Función f(x)
+                f_grad  : Función que calcula gradiente
+                alpha   : Tamaño inicial de paso
+                ro      : Ponderación de actualización
+                c1      : Condición de Armijo
+            Regresa
+            -----------
+                alpha_k : Tamaño actualizado de paso
+        """
+        # Inicialización
+        alpha_k = self.params["alpha"]
+        dot_grad = (-self.function.gradient(x, self.params)) @ d
+        # Repetir hasta que se cumpla la condición de armijo
+        while True:
+            armijo_condition = self.obtain_armijo_condition(
+                dot_grad, x,  d, alpha_k)
+            if armijo_condition:
+                alpha_k = self.params["rho"] * alpha_k
+            else:
+                break
+        return alpha_k
+
+    def obtain_armijo_condition(self,  dot_grad: float, x: array, d: array, alpha: float):
+        """
+        Condicion de armijo
+        """
+        fx_alpha = self.function.f(x+alpha*d, self.params)
+        fx_alphagrad = self.function.f(x, self.params) + \
+            self.params["c1"]*alpha*dot_grad
+        armijo_condition = fx_alpha > fx_alphagrad
+        return armijo_condition
+
+    def obtain_wolfe_condition(self,  x: array, dot_grad: float, d: array, alpha: float):
+        """
+        Condicion de Wolfe
+        """
+        dfx_alpha = self.function.gradient(x+alpha*d, self.params)
+        dfx_alpha = dfx_alpha @ d
+        wolfe_condition = dfx_alpha < self.params["c2"]*dot_grad
+        return wolfe_condition

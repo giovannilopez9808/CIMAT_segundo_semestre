@@ -9,12 +9,12 @@ columns = ["Time",
            "Function",
            "Iterations"]
 header = ["Funcion"]
-header += [step_model
+header += [step_model.replace("-", " ")
            for step_model in datasets["step models"]]
 for column in columns:
-    print("-"*50)
-    print("\t\t", column)
-    print("-"*50)
+    print("-"*80)
+    print("\t\t\t\t", column)
+    print("-"*80)
     table = []
     for function in datasets["functions"]:
         data_function = [function]

@@ -21,17 +21,26 @@ El método descrito en la sección \ref{sec:trust_region} puede reducirse en el 
                 }
             }
         }
-        \If{$\rho_k > \eta $}{
-            $x_{k+1}\gets x_k +p_k$\\
-            \Else{
-                $x_{k+1} \gets x$
-            }
-        }
     }
 \end{algorithm}
 
 \subsection{Método Dogleg con Región de confianza}
 
+El método descrito en la sección \ref{sec:dogleg}
+
 \begin{algorithm}
+    \caption{Método de Dogleg con región de confianza}
+    \label{alg:dogleg}
     \KwIn{$\hat{\Delta}>0$, $\Delta_0 \in (0,\hat{\Delta})$ y $\eta \in [0,\frac{1}{4}]$}
+    \For{$k=0,1,2,3,\dots$}{
+        $p_k \gets$ ecuación \ref{eq:dogleg_point}\\
+        $\rho_k \gets $ ecuación \ref{eq:adjustment_equation}\\
+        \If{$\rho_k>\eta $}{
+            $x_{k+1}\gets x_k+p_k$
+            \Else{
+                $x_{k+1}=x_k$
+            }
+        }
+        $\Delta_{k+1} \gets $ algoritmo \ref{alg:trust_region}
+    }
 \end{algorithm}

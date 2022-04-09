@@ -14,8 +14,10 @@ class problem_model:
         self.function = functions_class(dataset["function"])
         self.params = get_params()
         self._inital_position()
-        self.step = step_model()
+        self.step = step_model(self.function,
+                               self.function_params)
         self.step.select_model(dataset["step model"])
+        self.step_model = dataset["step model"]
         self.stop = stop_model(self.function_params)
 
     def _inital_position(self) -> array:
@@ -64,19 +66,22 @@ class problem_model:
             # Copia el paso anterior
             x_i = x_k.copy()
             f_i = f_k
-            p_k = self.step.model(g_k, h_k, delta_k)
-            # Calculo métrica ro para evaluar modelo
-            m_kp = f_k + g_k.dot(p_k) + 0.5 * p_k.dot(h_k).dot(p_k)
-            ro_k = f_k - function(x_k + p_k, function_params)
-            ro_k = ro_k / (f_k - m_kp)
-            # Actualizo radio de la región de confianza
-            if ro_k < eta_min:
-                delta_k = eta1_hat * delta_k
-            elif ro_k > eta_max and abs((norm(p_k)-delta_k)) < 1e-6:
-                delta_k = min(eta2_hat * delta_k, delta_max)
-            # Actualizo valor del punto
-            if ro_k > eta:
-                x_k = x_k + p_k
+            p_k = self.step.model(x_k, g_k, h_k, delta_k)
+            if step_model != "newton_modification":
+                # Calculo métrica ro para evaluar modelo
+                m_kp = f_k + g_k.dot(p_k) + 0.5 * p_k.dot(h_k).dot(p_k)
+                ro_k = f_k - function(x_k + p_k, function_params)
+                ro_k = ro_k / max((f_k - m_kp), 1)
+                # Actualizo radio de la región de confianza
+                if ro_k < eta_min:
+                    delta_k = eta1_hat * delta_k
+                elif ro_k > eta_max and abs((norm(p_k)-delta_k)) < 1e-6:
+                    delta_k = min(eta2_hat * delta_k, delta_max)
+                # Actualizo valor del punto
+                if ro_k > eta:
+                    x_k = x_k + p_k
+            else:
+                x_k = x_k+p_k
             # Calculo valores de f, gradiente y Hessiano
             f_k = function(x_k, function_params)
             g_k = gradient(x_k, function_params)
