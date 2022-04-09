@@ -107,6 +107,7 @@ class step_model:
         l_matrix = self._cholesky_modification(h_k)
         # l_matrix = h_k
         d_k = self._newton_step(l_matrix, g_k)
+        d_k = solve(l_matrix.T, d_k)
         alpha_k = self.obtain_alpha.method(x_k, d_k)
         p_k = alpha_k*d_k
         return p_k
@@ -116,9 +117,8 @@ class step_model:
         n = h_k.shape[0]
         eigenvalues = eigvals(h_k)
         min_eigenvalue = min(eigenvalues)
-        if min_eigenvalue > 0:
-            return h_k
-        else:
+        tau = 0
+        if min_eigenvalue < 0:
             tau = beta - min_eigenvalue
         while(True):
             b_k = h_k + tau*eye(n)

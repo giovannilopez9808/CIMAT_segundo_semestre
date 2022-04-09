@@ -71,7 +71,10 @@ class problem_model:
                 # Calculo métrica ro para evaluar modelo
                 m_kp = f_k + g_k.dot(p_k) + 0.5 * p_k.dot(h_k).dot(p_k)
                 ro_k = f_k - function(x_k + p_k, function_params)
-                ro_k = ro_k / max((f_k - m_kp), 1)
+                dfk = f_k - m_kp
+                if abs(dfk) < 1e-6:
+                    dfk = 1
+                ro_k = ro_k / dfk
                 # Actualizo radio de la región de confianza
                 if ro_k < eta_min:
                     delta_k = eta1_hat * delta_k
@@ -82,6 +85,7 @@ class problem_model:
                     x_k = x_k + p_k
             else:
                 x_k = x_k+p_k
+            print(f_k)
             # Calculo valores de f, gradiente y Hessiano
             f_k = function(x_k, function_params)
             g_k = gradient(x_k, function_params)
