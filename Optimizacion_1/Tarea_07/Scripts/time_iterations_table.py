@@ -5,17 +5,15 @@ from os.path import join
 
 params = get_params()
 datasets = get_datasets()
-columns = ["Time",
-           "Function",
-           "Gradient",
-           "Iterations"]
+columns = ["Time", "Function", "Gradient", "Iterations"]
 header = ["Funcion"]
-header += [step_model.replace("-", " ")
-           for step_model in datasets["step models"]]
+header += [
+    step_model.replace("-", " ") for step_model in datasets["step models"]
+]
 for column in columns:
-    print("-"*80)
+    print("-" * 80)
     print("\t\t\t\t", column)
-    print("-"*80)
+    print("-" * 80)
     table = []
     for function in datasets["functions"]:
         data_function = [function]
@@ -24,12 +22,14 @@ for column in columns:
                 "function": function,
                 "step model": step_model,
             }
-            path = obtain_path(params,
-                               dataset)
-            filename = join(path,
-                            params["file stadistics"])
+            path = obtain_path(params, dataset)
+            filename = join(path, params["file stadistics"])
             data = read_csv(filename)
             mean = data[column].mean()
             data_function += [mean]
         table += [data_function]
-    print(tabulate(table, headers=header))
+    print(tabulate(
+        table,
+        headers=header,
+        #tablefmt='latex',
+    ))
