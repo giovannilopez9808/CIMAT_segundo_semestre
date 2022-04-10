@@ -1,8 +1,12 @@
 \section{Conclusiones}
 
-Con los resultados expuestos anteriormente se pueden obtener las siguientes conclusiones:
+Con los resultados anteriormente expuestos se pueden llegar a las siguientes conclusiones:
 
 \begin{itemize}
-    \item El método de Newton realiza una cantidad menor de iteraciones a comparación dle método del descenso del gradiente. Esto es debido a la elección continua del tamaño de paso que se calcula en cada iteración. Esto es reflejado en las tablas \ref{table:rosembrock_2}, \ref{table:rosembrock_2_random}, \ref{table:rosembrock_100}, \ref{table:rosembrock_100_random}, \ref{table:wood_predefined} y \ref{table:wood_random}
-    \item El método del descenso del gradiente logra obtener con mayor frecuencia un mínimo global. Si se obtuvo un mínimo local este no tiene un valor muy lejano al mínimo global. Esto puede verse en las tablas \ref{table:rosembrock_2_random_newton}, \ref{table:rosembrock_100_random_gradient}, \ref{table:rosembrock_100_random_newton}, \ref{table:rosembrock_100_random_gradient}, \ref{table:wood_4_random_newton} y \ref{table:wood_4_random_gradient}. En cambio el método de Newton tiende a detenerse en mínimos locales que esten cercanos a el punto inicial dado.
+    \item El método de Newton modificado tiene tiempos de ejecucción y número de iteraciones menores a comparación del resto de métodos independientemente de la función que se uso.
+    \item El método de Cauchy y Newton-Cauchy logran obtener el mínimo global de la función con mayor frecuencia.
+    \item El método de Newton modificado tiende a llegar a mínimos locales pero en ocasiones si llega a obtener el mínimo global de la función.
+    \item Para funciones que tienen una dimensión alta en su hessiano, el método de Newton-Cauchy y Cauchy llegan a obtener un número grande de iteraciones y tiempo promedio.
+    \item Dogleg al ser una combinación de los métodos llega a presentar caracteristicas antes mencionadas.
+    \item El tamaño de $\Delta_k$ hace varian mucho el resultado, en algunos casos los métodos entraban en un ciclo sin fin si el $\Delta_k$ era muy grande $\Delta_k>1$ o muy pequeño $\Delta_k < 0.001$, pero siempre sobre un mínimo local. Esto pasaba con frecuencia en la función de Rosembrock y Branin.
 \end{itemize}

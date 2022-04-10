@@ -72,11 +72,11 @@ def get_function_params(function_name: str) -> dict:
             "n": 2,
             "optimal position": array([pi, 2.275]),
             "a": 1,
-            "b": 5.1/(4*pi**2),
-            "c": 5/pi,
+            "b": 5.1 / (4 * pi**2),
+            "c": 5 / pi,
             "r": 6,
             "s": 10,
-            "t": 1/(8*pi),
+            "t": 1 / (8 * pi),
             'tau vector': 1e-12,
             'tau function': 1e-12,
             'tau gradient': 1e-12,
@@ -96,25 +96,21 @@ def get_function_params(function_name: str) -> dict:
 
 
 def mkdir(path: str) -> None:
-    makedirs(path,
-             exist_ok=True)
+    makedirs(path, exist_ok=True)
 
 
 def obtain_path(params: dict, dataset: dict) -> str:
     path = dataset["step model"].replace("-", "_")
-    path = join(params["path results"],
-                dataset["function"],
-                path)
+    path = join(params["path results"], dataset["function"], path)
     return path
 
 
-def obtain_filename_iteration(params: dict, dataset: dict, iteration: int) -> str:
+def obtain_filename_iteration(params: dict, dataset: dict,
+                              iteration: int) -> str:
     n = str(iteration).zfill(2)
     filename = "{}.csv".format(n)
-    path = obtain_path(params,
-                       dataset)
-    path = join(path,
-                "Iteration")
+    path = obtain_path(params, dataset)
+    path = join(path, "Iteration")
     mkdir(path)
     filename = join(path, filename)
     return filename

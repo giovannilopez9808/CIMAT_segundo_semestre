@@ -9,13 +9,13 @@ from time import time
 
 
 class problem_model:
+
     def __init__(self, dataset: dict) -> None:
         self.function_params = get_function_params(dataset["function"])
         self.function = functions_class(dataset["function"])
         self.params = get_params()
         self._inital_position()
-        self.step = step_model(self.function,
-                               self.function_params)
+        self.step = step_model(self.function, self.function_params)
         self.step.select_model(dataset["step model"])
         self.step_model = dataset["step model"]
         self.stop = stop_model(self.function_params)
@@ -35,9 +35,7 @@ class problem_model:
         # Inicializacion del conteo de pasos
         k = 1
         # Inicializacion del guardado de resultados
-        results = DataFrame(columns=["Function",
-                                     "Gradient",
-                                     "Time"])
+        results = DataFrame(columns=["Function", "Gradient", "Time"])
         results.index.name = "Iterations"
         # Inicializacion de los parametros para el algoritmo
         function_params = self.function_params
@@ -78,20 +76,18 @@ class problem_model:
                 # Actualizo radio de la región de confianza
                 if ro_k < eta_min:
                     delta_k = eta1_hat * delta_k
-                elif ro_k > eta_max and abs((norm(p_k)-delta_k)) < 1e-6:
+                elif ro_k > eta_max and abs((norm(p_k) - delta_k)) < 1e-6:
                     delta_k = min(eta2_hat * delta_k, delta_max)
                 # Actualizo valor del punto
                 if ro_k > eta:
                     x_k = x_k + p_k
             else:
-                x_k = x_k+p_k
+                x_k = x_k + p_k
             # Calculo valores de f, gradiente y Hessiano
             f_k = function(x_k, function_params)
             g_k = gradient(x_k, function_params)
             h_k = hessian(x_k, function_params)
-            results.loc[k] = [f_k,
-                              norm(g_k),
-                              time()-time_start]
+            results.loc[k] = [f_k, norm(g_k), time() - time_start]
             # Actualizo contador
             k = k + 1
             if self.stop.gradient(g_k):
