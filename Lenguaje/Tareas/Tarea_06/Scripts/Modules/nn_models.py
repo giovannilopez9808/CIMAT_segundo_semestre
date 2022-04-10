@@ -1,116 +1,211 @@
-from sklearn.model_selection import train_test_split
-from torch.nn.utils.rnn import pad_sequence
-from .Tweet_dataset import TweeterDataset
-from torch.utils.data import DataLoader
-from pandas import DataFrame, read_csv
-from torch import LongTensor
+from sklearn.metrics import accuracy_score
 from argparse import Namespace
-from nltk import FreqDist
+from pandas import DataFrame
+from shutil import copyfile
 from os.path import join
-from numpy import array
+from numpy import mean
+import torch.nn as nn
+import torch
+import time
 
 
-class Mex_data_class:
-    def __init__(self, params: dict, args: Namespace) -> None:
-        self.params = params
+class CNNTextCls(nn.Module):
+    def __init__(self, args, embeddings=None, freeze=False):
+        super(CNNTextCls, self).__init__()
+        if embeddings is not None:
+            self.emb = nn.Embedding.from_pretrained(
+                torch.FloatTensor(embeddings))
+            if freeze:
+                self.emb.weight.requires_grad = False
+        else:
+            self.emb = nn.Embedding(args.max_vocabulary, args.d)
+        conv_block_list = []
+        for k in args.filter_sizes:
+            conv_block = nn.Sequential(
+                nn.Conv1d(in_channels=args.d,
+                          out_channels=args.num_filters, kernel_size=k, stride=1),
+                nn.ReLU(),
+                nn.MaxPool1d(kernel_size=(args.max_seq_len-k+1))
+            )
+            conv_block_list.append(conv_block)
+        self.conv_block_list = nn.ModuleList(conv_block_list)
+        self.dropout = nn.Dropout(args.dropout)
+        self.fc = nn.Linear(args.num_filters*len(args.filter_sizes), 1)
+
+    def forward(self, x):
+        '''
+        B: batch size
+        L: sequence length
+        D: embedding dim
+        C: Convolution output channels (number of filters)
+        k: Convolution kernel size
+        N: Number of convolution blocks
+
+        x shape: (B, L)
+        '''
+        # (B, L, D)
+        x = self.emb(x)
+        # (B, D, L) conv1d expects L in last dimension
+        x = x.transpose(1, 2)
+        x_filter = []
+        # Conv1d -> ReLU -> MaxPool1d
+        for conv_block in self.conv_block_list:
+            # (B, C, L-k+1) -> ReLU -> (B, C, 1) -> (B, C) after squeeze
+            x_filter.append(conv_block(x).squeeze(2))
+        x_cat = torch.cat(x_filter, dim=1)  # (B, C*N)
+        x = self.dropout(x_cat)
+        return self.fc(x)
+
+
+class model_class:
+    """
+    Modelo que realiza la ejeccución del entrenamiento de la red neuronal dada su estructura y datos
+    """
+
+    def __init__(self, model: CNNTextCls, args: Namespace, train_loader, validation_loader):
+        self.validation_loader = validation_loader
+        self.train_loader = train_loader
+        self.model = model
         self.args = args
-        self.read()
-        self.get_vocabulary()
-        self.obtain_loaders()
 
-    def read(self) -> None:
+    def get_pred(self, outputs) -> torch.Tensor:
+        result = torch.round(torch.sigmoid(outputs.detach())).cpu().numpy()
+        return result
+
+    def model_eval(self, data, gpu=False):
+        with torch.no_grad():
+            preds, tgts = [], []
+            for input, labels in data:
+                if gpu:
+                    input = input.cuda()
+                outputs = self.model(input)
+                # Get prediction for Accuracy
+                y_pred = self.get_pred(outputs)
+                tgt = labels.numpy()
+                tgts.append(tgt)
+                preds.append(y_pred)
+        tgts = [e for l in tgts for e in l]
+        preds = [e for l in preds for e in l]
+        metrics = {
+            "accuracy": accuracy_score(tgts, preds),
+        }
+        return metrics
+
+    def save_checkpoint(self, state,
+                        is_best: bool,
+                        checkpoint_path: str,
+                        filename: str = 'checkpoint.pt',
+                        best_model_name: str = 'model_best.pt') -> None:
+        name = join(checkpoint_path,
+                    filename)
+        torch.save(state,
+                   name)
+        if is_best:
+            filename_best = join(checkpoint_path,
+                                 best_model_name)
+            copyfile(name,
+                     filename_best)
+
+    def run(self) -> DataFrame:
         """
-        Lectura de los archivos de datos a partir de su ruta y nombre de archivo
+        Ejecuta el entrenamiento de la red neuronal, regresa un dataframe con las estadisticas del entrenamiento
         """
-        train_data_filename = join(self.params["path data"],
-                                   self.params["train data"])
-        train_labels_filename = join(self.params["path data"],
-                                     self.params["train labels"])
-        test_data_filename = join(self.params["path data"],
-                                  self.params["test data"])
-        test_labels_filename = join(self.params["path data"],
-                                    self.params["test labels"])
-        train_text = self.read_file(train_data_filename)
-        train_labels = self.read_file(train_labels_filename)
-        self.split_data(train_text, train_labels)
-        self.test_text = self.read_file(test_data_filename)
-        self.test_labels = self.read_file(test_labels_filename)
-
-    def split_data(self, train_data: DataFrame, train_labels: DataFrame) -> None:
-        self.train_text,  self.validation_text, self.train_labels, self.validation_labels = train_test_split(
-            train_data,
-            train_labels,
-            test_size=self.args.test_size,
-            random_state=self.args.seed)
-
-    def read_file(self, filename: str) -> DataFrame:
-        data = read_csv(filename,
-                        engine="python",
-                        sep="\r\n",
-                        header=None)
-        data = data[0]
-        return data
-
-    def get_vocabulary(self) -> None:
-        freq_dist = FreqDist([word.lower()
-                              for sentence in self.train_text
-                              for word in self.args.tokenize(sentence)])
-        max_words = min(self.args.max_vocabulary-1,
-                        len(freq_dist))
-        sorted_words = self.sortFreqDict(freq_dist)[:max_words]
-        self.word_index = {word: i+1
-                           for i, word in enumerate(sorted_words)}
-        # Append <pad> token with 0 index
-        sorted_words.append('<pad>')
-        self.word_index['<pad>'] = 0
-        self.vocabulary = set(sorted_words)
-
-    def sortFreqDict(self, freq_dist: FreqDist) -> list:
-        freq_dict = dict(freq_dist)
-        sorted_words = sorted(freq_dict, key=freq_dict.get, reverse=True)
-        return sorted_words
-
-    def obtain_loaders(self) -> None:
-        self.train_loader = obtain_loader(self.train_text,
-                                          self.train_labels,
-                                          self.vocabulary,
-                                          self.word_index,
-                                          self.args)
-        self.validation_loader = obtain_loader(self.validation_text,
-                                               self.validation_labels,
-                                               self.vocabulary,
-                                               self.word_index,
-                                               self.args)
-        self.test_loader = obtain_loader(self.test_text,
-                                         self.test_labels,
-                                         self.vocabulary,
-                                         self.word_index,
-                                         self.args)
-
-
-def obtain_loader(data: array, labels: array, vocabulary: set, word_index: dict, args: Namespace) -> DataLoader:
-    dataset = TweeterDataset(data,
-                             labels,
-                             vocabulary,
-                             word_index,
-                             args.tokenize,
-                             args.max_seq_len)
-    loader = DataLoader(dataset,
-                        batch_size=args.batch_size,
-                        num_workers=args.num_workers,
-                        collate_fn=collate_fn,
-                        shuffle=True)
-    return loader
+        stadistics = DataFrame(columns=["Train acc",
+                                        "Loss",
+                                        "Val acc",
+                                        "Time"])
+        best_metric = 0
+        metric_history = []
+        train_metric_history = []
+        criterion, optimizer, scheduler = init_models_parameters(self.model,
+                                                                 self.args)
+        for epoch in range(self.args.num_epochs):
+            epoch_start_time = time.time()
+            loss_epoch = []
+            training_metric = []
+            self.model.train()
+            for input, labels in self.train_loader:
+                # If GPU available
+                if self.args.use_gpu:
+                    input = input.cuda()
+                    labels = labels.cuda()
+                # Forward pass
+                outputs = self.model(input)
+                loss = criterion(outputs, labels)
+                loss_epoch.append(loss.item())
+                # Get Trainning Metrics
+                preds = self.get_pred(outputs)
+                tgt = labels.cpu().numpy()
+                training_metric.append(accuracy_score(tgt, preds))
+                # Backward and Optimize
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+            # Get Metric in Trainning Dataset
+            mean_epoch_metric = mean(training_metric)
+            train_metric_history.append(mean_epoch_metric)
+            # Get Metric in Validation Dataset
+            self.model.eval()
+            tuning_metric = self.model_eval(self.validation_loader,
+                                            self.args.use_gpu)
+            metric_history.append(tuning_metric["accuracy"])
+            # Update Scheduler
+            scheduler.step(tuning_metric["accuracy"])
+            # Check for Metric Improvement
+            is_improvement = tuning_metric["accuracy"] > best_metric
+            if is_improvement:
+                best_metric = tuning_metric["accuracy"]
+                n_no_improve = 0
+            else:
+                n_no_improve += 1
+            # Save best model if metric improved
+            state = {
+                'epoch': epoch + 1,
+                'state_dict': self.model.state_dict(),
+                'optimizer': optimizer.state_dict(),
+                'scheduler': scheduler.state_dict(),
+                'best_metric': best_metric, }
+            self.save_checkpoint(
+                state,
+                is_improvement,
+                self.args.savedir,
+            )
+            # Early stopping
+            if n_no_improve >= self.args.patience:
+                print('No improvement. Breaking out of loop')
+                break
+            finish_time = time.time()-epoch_start_time
+            stadistics.loc[epoch+1] = [mean_epoch_metric,
+                                       mean(loss_epoch),
+                                       tuning_metric["accuracy"],
+                                       finish_time]
+            print('Epoch[{}/{}], Loss : {:4f} - Train Accuracy: {:.4f} - Val accuracy: {:4f} - Epoch time: {:2f}'.format(
+                epoch + 1,
+                self.args.num_epochs,
+                mean(loss_epoch),
+                mean_epoch_metric,
+                tuning_metric["accuracy"],
+                finish_time))
+        return stadistics
 
 
-def collate_fn(batch):
-    # Get X
-    batch_tokens = [row[0]
-                    for row in batch]
-    # Get y
-    batch_labels = LongTensor([row[1]
-                               for row in batch]).to(float)
-    # Pad with 0 (to the rigth) shorter sequences than max_seq_len
-    padded_batch_tokens = pad_sequence(batch_tokens,
-                                       batch_first=True)
-    return padded_batch_tokens, batch_labels.unsqueeze(1)
+def init_models_parameters(model: CNNTextCls, args: Namespace) -> tuple:
+    args.use_gpu = torch.cuda.is_available()
+    if args.use_gpu:
+        model.cuda()
+    criterion = nn.BCEWithLogitsLoss()
+    optimizer = torch.optim.SGD(model.parameters(),
+                                lr=args.lr)
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer,
+                                                           "max",
+                                                           patience=args.lr_patience,
+                                                           verbose=True,
+                                                           factor=args.lr_factor)
+    return criterion, optimizer, scheduler
+
+
+def save_stadistics(params: dict, stadistics: DataFrame) -> None:
+    filename = join(params["path results"],
+                    params["stadistics  file"])
+    stadistics.index.name = "Epoch"
+    stadistics.to_csv(filename)

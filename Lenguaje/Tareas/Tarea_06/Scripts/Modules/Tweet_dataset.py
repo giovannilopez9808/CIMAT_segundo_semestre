@@ -5,6 +5,10 @@ from typing import Callable
 
 
 class TweeterDataset(Dataset):
+    """
+    Modelo de los datos para la red neuronal
+    """
+
     def __init__(self, x: DataFrame, y: DataFrame, vocabulary: set, word_index: dict, tokenizer: Callable[[str], list], max_seq_len: int):
         self.x = x
         self.y = y
@@ -12,14 +16,17 @@ class TweeterDataset(Dataset):
         self.word_index = word_index
         self.tokenizer = tokenizer
         self.max_seq_len = max_seq_len
-        print(len(x))
-        print(len(y))
-        print(len(vocabulary))
 
     def __len__(self):
+        """
+        tamaño de los datos
+        """
         return self.x.shape[0]
 
     def __getitem__(self, idx):
+        """
+        obtiene los tokens de una palabra y su clasificacion dado un indice
+        """
         # Get sequence of token ids
         sentence = self.x.iloc[idx]
         tokens = [self.word_index[word]
