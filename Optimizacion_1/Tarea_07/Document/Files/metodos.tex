@@ -1,1 +1,118 @@
 \section{Métodos}
+
+\subsection{Función de Rosembrock}
+
+La función de Rosembrock se define en la ecuación \ref{eq:rosembrock}.
+
+\begin{equation}
+    f(x) = \sum_{i=1}^{n-1}  100(x_{i+1}-x_{i}^2)^2 +(1-x_i)
+    \label{eq:rosembrock}
+\end{equation}
+
+donde $x\in \Real^n$
+
+Con la función de Rosembrock definida, se tiene que su gradiente es calculado con en la ecuación \ref{eq:rosembrock_gradient}.
+
+\begin{equation}
+    \nabla f (x) =\begin{cases}
+        -400x_i(x_{i+1}-x_{i}^2)                              & \text{para } i=1   \\[0.25cm]
+        200(x_{i}-x_{i-1}^2-400x_i(x_{i+1}-x_{i}^2) -2(1-x_i) & \text{para } 1<i<n \\[0.25cm]
+        200(x_{i}-x_{i-1}                                     & \text{para } i=n
+    \end{cases} \label{eq:rosembrock_gradient}
+\end{equation}
+
+Con la función de Rosembrock definda, se tiene que su hessiano es calculado con la ecuación \ref{eq:rosembrock_hessian}.
+
+\begin{equation}
+    \nabla^2 f(x)  = \begin{cases}
+        \ddpartial{f}{x_i} = -200                    & \text{para } x=1         \\[0.25cm]
+        \ddpartial{f}{x_i} =1200x_i^2-400x_{i+1}+202 & \text{para } 1<i<n       \\[0.25cm]
+        \dpartiald{f}{x_i}{x_{i+1}}  = -400x_i       & \text{para } 0\leq i < n \\[0.25cm]
+        \ddpartial{f}{x_i} = 200                     & \text{para } i=n
+    \end{cases}
+    \label{eq:rosembrock_hessian}
+\end{equation}
+
+\subsection{Función de Wood}
+
+La función de Wood se define en la ecuación \ref{eq:wood}.
+
+\begin{equation}
+    f(x) = 100(x_1^2-x_2)^2+(x_1-1)^2+(x_3-1)^2+90(x_3-x_4)^2 +10.1((x_2-1)^2+(x_4-1)^2)+19.8(x_2-1)(x_4-1) \label{eq:wood}
+\end{equation}
+
+Donde $x\in \Real^4$.
+
+Con la función de Wood definida, podemos obtener le gradiente de la función de Wood. El resultado del gradiente de la función de Wood se encuentra en la ecuación \ref{eq:wood_gradient}.
+
+\begin{equation}
+    \nabla f(x) = \begin{cases}
+        \dpartial{f}{x_1}=400(x_1^2-x_2)x_1 +2(x_1-1)             \\[0.25cm]
+        \dpartial{f}{x_2}=-200(x_1^2-x_2)+20.2(x_2-1)+19.8(x_4-1) \\[0.25cm]
+        \dpartial{f}{x_3}=2(x_3-1)+360(x_3^2-x_4)x_3              \\[0.25cm]
+        \dpartial{f}{x_4}=-180(x_3^2-x_4)+20.2(x_4-1)+19.8(x_2-1)
+    \end{cases} \label{eq:wood_gradient}
+\end{equation}
+
+De igual forma, se puede obtener el hessiano de la función de Wood. El resultado del Hessiano se encuentra en la ecuación \ref{eq:wood_hessian}.
+
+\begin{equation}
+    \nabla^2 f(x) = \begin{cases}
+        \ddpartial{f}{x_1} = 400(x_1^2-x_2)+800x_1^2+2             \\[0.25cm]
+        \dpartiald{f}{x_1}{x_2} =\dpartiald{f}{x_2}{x_1} = -400x_1 \\[0.25cm]
+        \ddpartial{f}{x_2} = 220.2                                 \\[0.25cm]
+        \dpartiald{f}{x_4}{x_2} = \dpartiald{f}{x_2}{x_4} = 19.8   \\[0.25cm]
+        \ddpartial{f}{x_3} = 720x_3^2+360(x_3^2-x_4)+2             \\[0.25cm]
+        \dpartiald{f}{x_4}{x_3}=\dpartiald{f}{x_3}{x_4} = -360x_3  \\[0.25cm]
+        \ddpartial{f}{x_4} = 200.2
+    \end{cases} \label{eq:wood_hessian}
+\end{equation}
+
+
+\subsection{Función de Branin}
+
+La función de Branin se define en la ecuación \ref{eq:branin}.
+
+\begin{equation}
+    f(x) = a(x_2-bx_1^2+cx_1-r)^2 + s(1-t)cos(x_1)+s
+    \label{eq:branin}
+\end{equation}
+
+Donde $a=1$, $b=5.1/(4\pi^2)$, $c=5/\pi$, $r=6$, $s=10$ y $t=1/(8\pi)$.
+
+Con la función de Branin definida, podemos obtener le gradiente de la función de Branin. El resultado del gradiente de la función de Branin se encuentra en la ecuación \ref{eq:Branin_gradient}.
+
+\begin{equation}
+    \nabla f(x) = \begin{cases}
+        \dpartial{f}{x_1}=2a(x_2-bx_1^2+cx_1-r)(c-2bx_1) - s(1-t)sin(x_1) \\[0.25cm]
+        \dpartial{f}{x_2}=2a(x_2-bx_1^2+cx_1-r)
+    \end{cases} \label{eq:Branin_gradient}
+\end{equation}
+
+De igual forma, se puede obtener el hessiano de la función de Branin. El resultado del Hessiano se encuentra en la ecuación \ref{eq:Branin_hessian}.
+
+\begin{equation}
+    \nabla^2 f(x) = \begin{cases}
+        \ddpartial{f}{x_1} = 2a(c-2bx_1)^2 -4ab(x_2-bx_1^2+cx_1-r)-s(1-t)cos(x_1) \\[0.25cm]
+        \dpartiald{f}{x_1}{x_2} =2a(c-2bx_1)                                      \\[0.25cm]
+        \ddpartial{f}{x_2} = 2a                                                   \\
+    \end{cases} \label{eq:Branin_hessian}
+\end{equation}
+
+\subsection{Parámetros}
+
+Los parámetros que se usaron para cada metodo se encuentran en la tabla \ref{table:parameters}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lccccccccc} \hline
+        Función    & $\Delta_k$ & $\Delta_{max}$ & $\eta$ & $\eta_{min}$          & $\eta_{max}$          & $\hat{\eta}_{1}$      & $\hat{\eta}_{2}$     & $c_1$                      & $c_2$                \\ \hline
+        Wood       & 0.06       & 0.1            & 0.05   & \multirow{3}{*}{0.25} & \multirow{3}{*}{0.75} & \multirow{3}{*}{0.25} & \multirow{3}{*}{2.0} & \multirow{3}{*}{$10^{-4}$} & \multirow{3}{*}{0.9} \\
+        Rosembrock & 0.05       & 0.1            & 0.01   &                       &                       &                       &                      &                            &                      \\
+        Branin     & 0.1        & 0.2            & 0.1    &                       &                       &                       &                      &                            &                      \\ \hline
+    \end{tabular}
+    \caption{Parámetros para los metodos de Newton-Cauchy, Newton modificado, Dogleg y Cauchy.}
+    \label{table:parameters}
+\end{table}
+
+Las condiciones de paro usadas fueron la diferencia de la posicion actual y la anterior, la diferencia del valor de la función anterior y actual y la cercania del gradiente a cero. Todas con una tolerancia igual a $10^{-12}$.

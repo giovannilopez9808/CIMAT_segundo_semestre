@@ -85,7 +85,6 @@ class problem_model:
                     x_k = x_k + p_k
             else:
                 x_k = x_k+p_k
-            print(f_k)
             # Calculo valores de f, gradiente y Hessiano
             f_k = function(x_k, function_params)
             g_k = gradient(x_k, function_params)
