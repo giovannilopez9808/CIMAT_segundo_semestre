@@ -120,6 +120,17 @@ def collate_fn(batch):
 
 
 def obtain_loader(data: array, labels: array, vocabulary: set, word_index: dict, args: Namespace) -> DataLoader:
+    """
+    Modelación de los dataloaders de cada conjunto de datos
+
+    Input
+    ---------------
+    data -> conjunto de datos
+    labels -> etiquetas de cada tweet
+    vocabulary -> vocabulario del dataset
+    word_index -> diccionario de palabras con su indice
+    args -> parametros del modelo
+    """
     dataset = TweeterDataset(data,
                              labels,
                              vocabulary,
