@@ -19,8 +19,7 @@ def get_params() -> dict:
         "test data": "mex_val.txt",
         "test labels": "mex_val_labels.txt",
         "path model": "/content/drive/MyDrive/Lenguaje/Tarea_06/Results",
-        # "path results": "/content/drive/MyDrive/Lenguaje/Tarea_06/Results",
-        "path results": "../Results",
+        "path results": "/content/drive/MyDrive/Lenguaje/Tarea_06/Results",
         "file model": "model_best.pt",
         "stadistics  file": "stadistics.csv",
     }
