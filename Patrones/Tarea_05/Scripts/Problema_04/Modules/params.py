@@ -2,6 +2,7 @@ def get_params() -> dict:
     params = {
         "path data": "Data",
         "path graphics": "../../Graphics/Problema_04",
+        "path results": "../../Results/Problema_04",
         "file data": "data.csv",
         "type cash": {"False": "#660708",
                       "True": "#55a630"

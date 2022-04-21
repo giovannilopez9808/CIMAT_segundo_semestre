@@ -10,8 +10,8 @@ class dataset_model:
     def read(self) -> DataFrame:
         filename = join(self.params["path data"],
                         self.params["file data"])
-        data = read_csv(filename)
-        self.data = self.shuffle_data(data)
+        self.data = read_csv(filename)
+        self.data = self.shuffle_data(self.data)
 
     def shuffle_data(self, data: DataFrame) -> DataFrame:
         data_shuffle = data.sample(frac=1,
