@@ -1,6 +1,6 @@
 library(kernlab)
 library(mlbench)
-path_graphics <- "../../Graphics/Experiment_04_"
+path_graphics <- "../../Graphics/Problema_01/Experiment_04_"
 ds <- mlbench.spirals(300, 2, 0.03)
 sigmas <- c(0.5, 5, 10, 20)
 for (i in 1:4) {

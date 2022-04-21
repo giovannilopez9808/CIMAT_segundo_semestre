@@ -1,5 +1,5 @@
 library(kernlab)
-path_graphics <- "../../Graphics/Experiment_02_"
+path_graphics <- "../../Graphics/Problema_01/Experiment_02_"
 x1 <- rnorm(30, 0, 1)
 y1 <- rnorm(30, 0, 1)
 x2 <- rnorm(30, 2, 1)
