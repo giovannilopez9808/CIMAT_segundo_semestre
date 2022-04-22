@@ -1,3 +1,47 @@
 \section*{Problema 2}
 
 \textbf{Vimos que minimizar $E(1-Y(g(X))_+$ sobre g conduce al clasificador óptimo $\hat{y}(x)=sgn(g(x))$. Usando el mismo camino, muestra que se obtiene el mismo resultado para $E(exp(-Yg(X)))$}
+
+El problema se encuentra planteado en la ecuación \ref{eq:problem_02}.
+
+\begin{equation}
+    \underset{g(x)}{min}\; E(e^{-yg(x)}) \label{eq:problem_02}
+\end{equation}
+
+Por el teorema de números grandes, el problema de la ecuación \ref{eq:problem_02} se puede resolver encontrando el valor de $g(x)$ para cada x dada. Esto puede ser visto en la ecuación \ref{eq:problem_02_reduced}.
+
+\begin{equation}
+    \underset{g(x)}{min}\; E_{Y|X=x} (e^{-yg(x)}) \label{eq:problem_02_reduced}
+\end{equation}
+
+Realizando el calculo explicito de la ecuación \ref{eq:problem_02_reduced} se obtiene lo siguiente:
+
+\begin{align*}
+    E_{Y|X=x} (exp(-yg(x))) & = e^{-g(x)} P(Y=1|X=x) + e^{g(x)} P(Y=-1| X=x)
+\end{align*}
+
+por lo tanto:
+
+\begin{align*}
+    \underset{g(x)}{min} E_{Y|X=x} & = \frac{\partial}{\partial g(x)} \left (e^{-g(x)} P(Y=1|X=x) + e^{g(x)} P(Y=-1| X=x) \right ) \\
+                                   & = -e^{-g(x)} P(Y=1|X=x) + e^{g(x)} P(Y=-1| X=x)
+\end{align*}
+
+Encontrando el valor crítico del resultado anterior se obtiene que $g(x)$ es:
+
+\begin{align*}
+     & -e^{-g(x)} P(Y=1|X=x) + e^{g(x)} P(Y=-1| X=x)  = 0                                                                \\
+     & -P(Y=1|X=x) + e^{2g(x)} P(Y=-1|X=x)            = 0                                                                \\
+     & e^{2g(x)} P(Y=-1|X=x)                          = P(Y=1|X=x)                                                       \\
+     & e^{2g(x)}                                      = \frac{P(Y=1|X=x)}{P(Y=-1|X=x)}                                   \\
+     & 2g(x)                                          = \log \left ( \frac{P(Y=1|X=x)}{P(Y=-1|X=x)}\right )              \\
+     & g(x)                                           = \frac{1}{2} \left (\log (P(Y=1|X=x))-\log (P(Y=-1|X=x)) \right )
+\end{align*}
+
+por lo tanto, $g(x)$ tiene esta descrito por la ecuación \ref{eq:problem_2_result}.
+
+\begin{equation}
+    g(x) = \frac{1}{2} \left (\log (P(Y=1|X=x))-\log (P(Y=-1|X=x)) \right ) \label{eq:problem_2_result}
+\end{equation}
+
+Tomando el caso cuando $P(Y=1|X=x) > P(Y=-1|X=x)$, se tiene que $g(x)>0$, por lo tanto $\hat{y}(x)=1$. Por otro lado cuando $P(Y=-1|X=x) > P(Y=1|X=x)$, entonces $g(x)<0$, por lo tanto $\hat{y}(x)=-1$. El comportamiento que presenta $g(x)$ es el mismo que tiene el clasificador óptimo bayesiano. Por lo que el problema planteado en la ecuación \ref{eq:problem_02} condude al clasificador óptimo bayesiano.
