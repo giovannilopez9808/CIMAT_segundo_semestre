@@ -1,5 +1,6 @@
 from pandas import DataFrame, read_csv
 from os.path import join
+from numpy import array
 
 
 class dataset_model:
@@ -11,13 +12,14 @@ class dataset_model:
         filename = join(self.params["path data"],
                         self.params["file data"])
         self.data = read_csv(filename)
-        self.data = self.shuffle_data(self.data)
 
-    def shuffle_data(self, data: DataFrame) -> DataFrame:
-        data_shuffle = data.sample(frac=1,
-                                   random_state=42)
-        data_shuffle = data_shuffle.reset_index(drop=True)
-        return data_shuffle
+    def select_data(self, names: list) -> array:
+        subset = self.data[names].to_numpy()
+        return subset
+
+    def get_labels(self) -> array:
+        labels = self.data["label"].to_numpy()
+        return labels
 
     def select_cash_type(self, type_name: str) -> DataFrame:
         if type_name == "True":

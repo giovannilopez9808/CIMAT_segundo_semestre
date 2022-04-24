@@ -1,3 +1,6 @@
+from numpy import array
+
+
 def get_params() -> dict:
     params = {
         "path data": "Data",
@@ -14,6 +17,19 @@ def get_params() -> dict:
                          },
         "pair plots": [["variance", "skewness"],
                        ["variance", "curtosis"],
-                       ["skewness", "curtosis"]]
+                       ["skewness", "curtosis"]],
+        "SVM kernels": ["linear",
+                        "poly",
+                        "rbf",
+                        "sigmoid"
+                        ],
     }
     return params
+
+
+def get_colors_array(params: dict, labels: array) -> array:
+    colors = [params["type cash"]["True"]
+              if value
+              else params["type cash"]["False"]
+              for value in labels]
+    return colors
