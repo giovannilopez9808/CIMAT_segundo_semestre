@@ -37,6 +37,18 @@ fig.legend(handles,
            fontsize=16,
            loc='upper center',
            )
+fig.text(0.025,
+         0.94,
+         "A",
+         fontsize=14)
+fig.text(0.35,
+         0.94,
+         "B",
+         fontsize=14)
+fig.text(0.68,
+         0.94,
+         "C",
+         fontsize=14)
 plt.tight_layout(pad=3)
 filename = join(params["path graphics"],
                 params["file graphics"])

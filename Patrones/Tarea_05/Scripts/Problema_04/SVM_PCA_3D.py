@@ -1,8 +1,8 @@
-from Modules.params import get_colors_array, get_params
 from sklearn.model_selection import train_test_split
 from Modules.dataset import dataset_model, join
 from sklearn.metrics import accuracy_score
 from pandas import DataFrame, read_csv
+from Modules.params import get_params
 from Modules.svm import SVM_model
 
 # Lectura de los parametros
