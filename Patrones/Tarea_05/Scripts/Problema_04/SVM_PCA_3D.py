@@ -8,15 +8,12 @@ from Modules.svm import SVM_model
 # Lectura de los parametros
 params = get_params()
 params["file PCA"] = "PCA.csv"
-params["file results"] = "SVM_PCA.csv"
-params["file graphics"] = "SVM_PCA.png"
-data_types = [["Component 1", "Component 2"],
-              ["Component 2", "Component 3"],
+params["file results"] = "SVM_PCA_3D.csv"
+data_types = [["Component 1", "Component 2"], ["Component 2", "Component 3"],
               ["Component 1", "Component 3"]]
 # Lectura de los datos
 dataset = dataset_model(params)
-filename = join(params["path results"],
-                params["file PCA"])
+filename = join(params["path results"], params["file PCA"])
 data = read_csv(filename)
 # Etiquedas
 labels = data["label"].to_numpy()
@@ -36,17 +33,12 @@ for kernel_name in params["SVM kernels"]:
         train_size=0.9,
     )
     # Ejecucion del modelo SVM
-    svm.run(data_train,
-            label_train,
-            create_grid=False)
+    svm.run(data_train, label_train, create_grid=False)
     # Predicción de valores de validacion
     predict = svm.preditct(data_validation)
     # Score
-    score = accuracy_score(label_validation,
-                           predict)
+    score = accuracy_score(label_validation, predict)
     # Guardado de los resultados
     results.loc[0, kernel_name] = score
-filename = join(params["path results"],
-                params["file results"])
-results.to_csv(filename,
-               index=False)
+filename = join(params["path results"], params["file results"])
+results.to_csv(filename, index=False)
