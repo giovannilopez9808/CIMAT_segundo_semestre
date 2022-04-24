@@ -1,9 +1,10 @@
+from sklearn.metrics import accuracy_score, confusion_matrix
 from sklearn.model_selection import train_test_split
 from Modules.dataset import dataset_model, join
-from sklearn.metrics import accuracy_score
 from pandas import DataFrame, read_csv
 from Modules.params import get_params
 from Modules.svm import SVM_model
+from numpy import round, sum
 
 # Lectura de los parametros
 params = get_params()
@@ -38,6 +39,14 @@ for kernel_name in params["SVM kernels"]:
     predict = svm.preditct(data_validation)
     # Score
     score = accuracy_score(label_validation, predict)
+    true_table = confusion_matrix(label_validation,
+                                  predict)
+    total = sum(true_table, axis=None)
+    true_table = true_table/total
+    true_table = round(true_table, 3)
+    print("-"*20)
+    print("Kernel {}".format(kernel_name))
+    print(true_table)
     # Guardado de los resultados
     results.loc[0, kernel_name] = score
 filename = join(params["path results"], params["file results"])

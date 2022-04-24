@@ -55,7 +55,7 @@ Para el método de SVM se usaron el kernel lineal, polinomial, rbf y sigmoide. E
 \end{table}
 
 
-Se realizo una partición del conjunto de datos $X$. En esta partición de considero el 90\% como datos de entrenamiento y 10\% como datos de validación. Con los datos de validación se obtuvo un puntaje de precisión. En la tabla \ref{table:data_2d} se encuentran los resultados de aplicar SVM y los datos $X$ como se muestran en la figura \ref{fig:data_2d}.
+Se realizo una partición del conjunto de datos $X$. En esta partición de considero el 90\% como datos de entrenamiento y 10\% como datos de validación. Con los datos de validación se obtuvo un puntaje de accuracy. En la tabla \ref{table:data_2d} se encuentran los resultados de aplicar SVM y los datos $X$ como se muestran en la figura \ref{fig:data_2d}.
 
 \begin{table}[H]
     \centering
@@ -65,13 +65,13 @@ Se realizo una partición del conjunto de datos $X$. En esta partición de consi
         B      & 0.927  & 0.906      & 0.899 & 0.811    \\
         C      & 0.978  & 1.000      & 1.000 & 0.877    \\ \hline
     \end{tabular}
-    \caption{}
+    \caption{Puntajes de accuracy para las configuraciones mostradas en la figura \ref{fig:data_2d}.}
     \label{table:data_2d}
 \end{table}
 
 Estos resultados pueden ser visualizados en la figura \ref{fig:svm_data}.
 
-Con los datos obtenidos con PCA se obtuvieron los puntajes de precisión mostrados en la tabla \ref{table:pca_2d}.
+Con los datos obtenidos con PCA se obtuvieron los puntajes de accuracy mostrados en la tabla \ref{table:pca_2d}.
 
 \begin{table}[H]
     \centering
@@ -81,30 +81,36 @@ Con los datos obtenidos con PCA se obtuvieron los puntajes de precisión mostrad
         B      & 0.927  & 0.848      & 0.920 & 0.826    \\
         C      & 0.964  & 1.000      & 1.000 & 0.862    \\ \hline
     \end{tabular}
-    \caption{}
+    \caption{Puntajes de accuracy para las configuraciones mostradas en la figura \ref{fig:pca_2d}.}
     \label{table:pca_2d}
 \end{table}
 
 Estos resultados pueden ser visualizados en la figura \ref{fig:svm_pca}.
 
-Tratando a los conjuntos de datos como en las figuras \ref{fig:data_3d} y \ref{fig:pca_3d}, se obtuvieron los puntajes mostrados en la tabla \ref{table:results_3d}.
+Tratando a los conjuntos de datos mostrados en las figuras \ref{fig:data_3d} y \ref{fig:pca_3d}. Se realizo una comparación de los puntajes de accuracy, porcentajes de falsos positivos y porcentajes de falsos negativos. Los resultados que se obtuvieron son mostrados en la tabla \ref{table:results_3d}.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{lcccc} \hline
-        Datos      & Lineal   & Polinomial & RBF & Sigmoide \\ \hline
-        Originales & 0.992754 & 0.992754   & 1.0 & 0.73913  \\
-        PCA        & 1.0      & 1.0        & 1.0 & 0.876812 \\ \hline
+    \begin{tabular}{l|ccc|ccc} \hline
+        \multirow{2}{*}{Kernel} & \multicolumn{3}{c}{Originales} & \multicolumn{3}{|c}{PCA}                                    \\ \cline{2-7}
+                                & Accuracy                       & FN                       & FP    & Accuracy & FN    & FP    \\ \hline
+        Lineal                  & 0.971                          & 0.014                    & 0.014 & 0.978    & 0     & 0.022 \\
+        Polinomial              & 0.978                          & 0                        & 0.022 & 1.0      & 0     & 0     \\
+        RBF                     & 1.0                            & 0                        & 0     & 1.0      & 0     & 0     \\
+        Sigmoide                & 0.565                          & 0.21                     & 0.225 & 0.841    & 0.101 & 0.058 \\ \hline
     \end{tabular}
-    \caption{}
+    \caption{Puntajes de accuracy para las configuraciones mostradas en la figura \ref{fig:data_3d} y \ref{fig:pca_3d}.}
     \label{table:results_3d}
 \end{table}
+
+
+Con estos resultados se obtiene que por medio de los parámetros de varianza, skewness, curtosis y las primeras tres componentes obtenidas de PCA obtenidas de los parámetros se pueden crear clasificadores eficientes para la tarea de diferenciar billetes verdaderos y billetes falsos. El mejor kernel para la tarea es el RBF con los parámetros usados en la tala \ref{table:parameters}. Para obtener una mejor clasificación es usar todos los datos para generar el kernel. Usar PCA como entrada para el modelo de SVM produce mejores resultados, sin embargo para datos de mayor longitud esto puede ser perjudicial por el tiempo de computo.
 
 \pagebreak
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=16cm]{Graphics/Problema_04/SVM_data.png}
+    % \includegraphics[width=16cm]{Graphics/Problema_04/SVM_data.png}
     \caption{}
     \label{fig:svm_data}
 \end{figure}
@@ -113,7 +119,7 @@ Tratando a los conjuntos de datos como en las figuras \ref{fig:data_3d} y \ref{f
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=16cm]{Graphics/Problema_04/SVM_PCA.png}
+    % \includegraphics[width=16cm]{Graphics/Problema_04/SVM_PCA.png}
     \caption{}
     \label{fig:svm_pca}
 \end{figure}
