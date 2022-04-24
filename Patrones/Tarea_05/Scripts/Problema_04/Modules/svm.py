@@ -19,12 +19,13 @@ class SVM_model:
         self.model = SVC(C=10,
                          kernel=kernel,)
 
-    def run(self, data: array, labels: array) -> None:
+    def run(self, data: array, labels: array, create_grid: bool = True) -> None:
         """
         Ejecuta el modelo PCA dado un embedding
         """
         self.model.fit(data, labels)
-        self.get_grid(data)
+        if create_grid:
+            self.get_grid(data)
 
     def get_grid(self, data: array) -> array:
         x, y = data.T.copy()
