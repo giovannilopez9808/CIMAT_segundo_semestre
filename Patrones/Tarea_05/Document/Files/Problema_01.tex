@@ -11,22 +11,25 @@
 	\centering
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_01_1.pdf}
-		\caption{}
+		\caption{Costo igual a 0.05}
 	\end{subfigure}
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_01_2.pdf}
-		\caption{}
+		\caption{Costo igual a 1}
 	\end{subfigure}
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_01_3.pdf}
-		\caption{}
+		\caption{Costo igual a 5}
 	\end{subfigure}
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_01_4.pdf}
-		\caption{}
+		\caption{Costo igual a 10}
 	\end{subfigure}
-	\caption{}
+	\caption{Diferentes valores de $\lambda / \gamma$ para el kernel lineal.}
+	\label{fig:experimento_1}
 \end{figure}
+
+En la figura \ref{fig:experimento_1} se observa que conforme se aumenta el parámetro $\lambda / \gamma$ el número de vectores de soporte disminuye.
 
 \subsection*{Experimento 2}
 
@@ -36,47 +39,53 @@
 	\centering
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_02_1.pdf}
-		\caption{}
+		\caption{Polinomio grado 1}
 	\end{subfigure}
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_02_2.pdf}
-		\caption{}
+		\caption{Polinomio grado 2}
 	\end{subfigure}
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_02_3.pdf}
-		\caption{}
+		\caption{Polinomio grado 5}
 	\end{subfigure}
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_02_4.pdf}
-		\caption{}
+		\caption{Polinomio grado 10}
 	\end{subfigure}
-	\caption{}
+	\caption{Diferentes grados para el kernel polinomial.}
+	\label{fig:experimento_2}
 \end{figure}
+
+En la figura \ref{fig:experimento_2} se observa que conforme se aumenta el grado del kernel polinomial, la región de clasificación para cada conjunto de datos se disuelve llegando a que todos los datos conforman un mismo conjunto.
 
 \subsection*{Experimento 3}
 
-\textbf{¿Cuál es el efecto de cambiar el parámetro de kernel de base radial?}
+\textbf{¿Cuál es el efecto de cambiar el parámetro $\sigma$ de kernel de base radial?}
 
 \begin{figure}[H]
 	\centering
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_03_1.pdf}
-		\caption{}
+		\caption{$\sigma=0.5$}
 	\end{subfigure}
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_03_2.pdf}
-		\caption{}
+		\caption{$\sigma=5$}
 	\end{subfigure}
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_03_3.pdf}
-		\caption{}
+		\caption{$\sigma=10$}
 	\end{subfigure}
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_03_4.pdf}
-		\caption{}
+		\caption{$\sigma=20$}
 	\end{subfigure}
-	\caption{}
+	\caption{Diferentes valores para el parámetro $\sigma$ para el kernel radial.}
+	\label{fig:experimento_3}
 \end{figure}
+
+En la figura \ref{fig:experimento_3} se observa que conforme se aumenta el valor de $\sigma$, el modelo de SVM con kernel radial se aproxima a tener un kernel lineal.
 
 \subsection*{Experimento 4}
 
@@ -86,19 +95,22 @@
 	\centering
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_04_1.pdf}
-		\caption{}
+		\caption{$\sigma=0.5$}
 	\end{subfigure}
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_04_2.pdf}
-		\caption{}
+		\caption{$\sigma=5$}
 	\end{subfigure}
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_04_3.pdf}
-		\caption{}
+		\caption{$\sigma=10$}
 	\end{subfigure}
 	\begin{subfigure}{0.24\linewidth}
 		\includegraphics[width=1\linewidth]{Graphics/Problema_01/Experiment_04_4.pdf}
-		\caption{}
+		\caption{$\sigma=20$}
 	\end{subfigure}
-	\caption{}
+	\caption{Diferentes valores para el parámetro $\sigma$ para el kernel radial.}
+	\label{fig:experimento_4}
 \end{figure}
+
+En la figura \ref{fig:experimento_4} se obtienen los resultados para los diferentes valores de $\sigma$ con una base de datos dada. En esta se observa el mismo resultado que la figura \ref{fig:experimento_3}. Conforme se aumenta el valor de $\sigma$, el kernel radial se aproxima a un kernel lineal.

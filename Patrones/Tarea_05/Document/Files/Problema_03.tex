@@ -1,7 +1,5 @@
 \section*{Problema 3}
 
-\textbf{Supongamos que (X,Y) cumplen los supuestos del clasificador binario LDA. Sin embargo, a partir de una muestra de (X,Y), alguien decida usar QDA (el clasificador bayesiano óptimo para el caso donde $X|Y = Y \sim \mathcal{N}(\mu_y,\Sigma_y)$, o sea no aprovechar que las covarianzas son iguales) y no LDA.}
+\textbf{Supongamos que (X,Y) cumplen los supuestos del clasificador binario LDA. Sin embargo, a partir de una muestra de (X,Y), alguien decida usar QDA (el clasificador bayesiano óptimo para el caso donde $X|Y = Y \sim \mathcal{N}(\mu_y,\Sigma_y)$, o sea no aprovechar que las covarianzas son iguales) y no LDA. ¿Cómo se comparan el error de entrenamiento de QDA con el de LDA para este caso? No hay que hacer cálculos formales sino dar argumentos intuituvos}
 
-\subsection*{Experimento 1}
-
-\textbf{¿Cómo se comparan el error de entrenamiento de QDA con el de LDA para este caso? No hay que hacer cálculos formales sino dar argumentos intuituvos}
+El error de entrenamiento puede incrementar al usar QDA. Esto es debido a que el número de parámetros a estimar es mayor cuando se usa QDA en vez de LDA. Puede que al final se obtenga el mismo resultado que LDA, pero se tendra un mayor costo computacional.
