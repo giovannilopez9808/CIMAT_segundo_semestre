@@ -3,9 +3,13 @@ Created on Tue Feb 17 13:27:12 2015
 
 @author: odin
 """
+from params import get_params
+from os.path import join
+from os import makedirs
 import numpy as np
 import argparse
 import cv2
+
 # Variables Globales
 #------------------#
 num_bins = 8
@@ -13,6 +17,17 @@ num_clases = 2
 status_clase = 1
 status_lb = 0
 #------------------#
+
+
+def get_folder_name(image_name: str) -> str:
+    name = image_name.split("/")[-1]
+    name = name.split(".")[0]
+    return name
+
+
+def mkdir(path: str) -> None:
+    makedirs(path,
+             exist_ok=True)
 
 
 def dibujar_punto(x, y):
@@ -135,6 +150,7 @@ def guardar_histograma(hist, FileName):
 if __name__ == '__main__':
     # PARAMETROS DE ENTRADA: Path de la imagen a segmentar y numero de bins
     # EJEMPLO EJECUCION: python histograma_3D_class.py --image rose.png --bins 3
+    params = get_params()
     ap = argparse.ArgumentParser()
     ap.add_argument('--image',
                     required=True,
@@ -165,16 +181,28 @@ if __name__ == '__main__':
     cv2.imshow('Imagen_1',
                img_1)
     cv2.waitKey(0)
-    # Guardar clases dadas por el usuaario
-    cv2.imwrite('Strokes.png',
-                img_1)
     # Calcular el histograma por cada clase
     H = calcular_histogramas_OPTI(imagen_1,
                                   num_bins,
                                   matriz_clases_inicial,
                                   num_clases)
+    image_folder = get_folder_name(args["image"])
+    path_graphics = join(params["path graphics"],
+                         image_folder)
+    path_results = join(params["path results"],
+                        image_folder)
+    mkdir(path_results)
+    mkdir(path_graphics)
+    # Guardar clases dadas por el usuario
+    filename = "Stokes.png"
+    filename = join(path_graphics,
+                    filename)
+    cv2.imwrite(filename,
+                img_1)
     # Guardar cada histograma
     for i in range(num_clases):
         filename = "H_{}.txt".format(i)
+        filename = join(path_results,
+                        filename)
         guardar_histograma(H[i, :, :],
                            filename)
