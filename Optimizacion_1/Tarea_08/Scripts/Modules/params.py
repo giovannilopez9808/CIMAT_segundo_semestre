@@ -7,9 +7,9 @@ def get_params() -> dict:
         "path graphics": "/home/giovanni/CIMAT_segundo_semestre/Optimizacion_1/Tarea_08/Scripts/Graphics",
         "path results": "/home/giovanni/CIMAT_segundo_semestre/Optimizacion_1/Tarea_08/Scripts/Results",
         "Images": {
-            # "flower",
+            "flower",
             "grave",
-            # "memorial",
+            "memorial",
             "person1",
             "rose",
             "sheep"
