@@ -7,63 +7,48 @@ class image_model:
         self.red = 1
         self.blue = 2
 
-    def get_h_j(self, h: array) -> array:
-        """
-        c = [r, g, b]
-        r \in B_1
-        g \in B_2
-        b \in B_3
-        """
-        b1, b2, b3 = h.shape
-        h_j = [(h[i][j][k],
-                array([i, j, k]))
-               for i in range(b1)
-               for j in range(b2)
-               for k in range(b3)
-               ]
-        return h_j
-
     def _rgb_to_class(self, rgb, n_bins):
         x = int(rgb[0] / 256.0 * n_bins)
         y = int(rgb[1] / 256.0 * n_bins)
         z = int(rgb[2] / 256.0 * n_bins)
         return array([x, y, z])
 
-    def _function(alpha: float, mu: float, c: float, sigma: float = 0.2) -> array:
+    def _function(self, alpha: float, mu: float, c: float, sigma: float) -> array:
         f_exp = exp(-norm(c - mu, axis=1)**2 / (2*sigma**2))
+        print(alpha)
         s = alpha * f_exp
         return sum(s)
 
-    def _F1(self, c: float, alpha_1: array, mu_1: array, alpha_2: array, mu_2: array, epsilon: float = 0.01, sigma: float = 0.2) -> float:
-        t1 = self._function(alpha_1, mu_1, c, sigma=sigma) + epsilon
-        t2 = self._function(alpha_1, mu_1, c, sigma=sigma)
-        t2 += self._function(alpha_2, mu_2, c, sigma=sigma) + 2.0 * epsilon
+    def _F1(self, c: float, alpha_1: array, mu_1: array, alpha_2: array, mu_2: array, epsilon: float, sigma: float) -> float:
+        t1 = self._function(alpha_1, mu_1, c, sigma) + epsilon
+        t2 = self._function(alpha_1, mu_1, c, sigma)
+        t2 += self._function(alpha_2, mu_2, c, sigma) + 2.0 * epsilon
         return t1/t2
 
-    def _F2(self, c: float, alpha_1: array, mu_1: array, alpha_2: array, mu_2: array, epsilon: float = 0.01, sigma: float = 0.2) -> float:
-        t1 = self._function(alpha_2, mu_2, c, sigma=sigma) + epsilon
-        t2 = self._function(alpha_1, mu_1, c, sigma=sigma)
-        t2 += self._function(alpha_2, mu_2, c, sigma=sigma) + 2.0 * epsilon
+    def _F2(self, c: float, alpha_1: array, mu_1: array, alpha_2: array, mu_2: array, epsilon: float, sigma: float) -> float:
+        t1 = self._function(alpha_2, mu_2, c, sigma) + epsilon
+        t2 = self._function(alpha_1, mu_1, c, sigma)
+        t2 += self._function(alpha_2, mu_2, c, sigma) + 2.0 * epsilon
         return t1/t2
 
-    def _get_c_label(self, c: float, alpha_1: array, mu_1: array, alpha_2: array, mu_2: array, epsilon: float = 0.01, sigma: float = 0.2) -> float:
+    def _get_c_label(self, c: float, alpha_1: array, mu_1: array, alpha_2: array, mu_2: array, epsilon: float, sigma: float) -> float:
         f1 = self._F1(c,
                       alpha_1,
                       mu_1,
                       alpha_2,
                       mu_2,
-                      epsilon=epsilon,
-                      sigma=sigma)
+                      epsilon,
+                      sigma)
         f2 = self._F2(c,
                       alpha_1,
                       mu_1,
                       alpha_2,
                       mu_2,
-                      epsilon=epsilon,
-                      sigma=sigma)
+                      epsilon,
+                      sigma)
         return self.red if f1 < f2 else self.blue
 
-    def _get_c_labels(self, nbins: int, alpha_1: array, mu_1: array, alpha_2: array, mu_2: array, epsilon: float = 0.01, sigma: float = 0.2) -> array:
+    def _get_c_labels(self, nbins: int, alpha_1: array, mu_1: array, alpha_2: array, mu_2: array, epsilon: float, sigma: float) -> array:
         labels = zeros((nbins,
                         nbins,
                         nbins),
@@ -82,7 +67,9 @@ class image_model:
                     labels[i][j][k] = label
         return labels
 
-    def segmentation(self, img: array, nbins: int, alpha_1: array, mu_1: array, alpha_2: array, mu_2: array, epsilon: float = 0.01, sigma: float = 0.1) -> array:
+    def segmentation(self, img: array, nbins: int, alpha: array, mu: array, epsilon: float, sigma: float) -> array:
+        alpha_1, alpha_2 = alpha
+        mu_1, mu_2 = mu
         labels = self._get_c_labels(nbins,
                                     alpha_1,
                                     mu_1,
@@ -90,7 +77,8 @@ class image_model:
                                     mu_2,
                                     epsilon=epsilon,
                                     sigma=sigma)
-        n, m = img.shape
+        n = img.shape[0]
+        m = img.shape[1]
         img_seg = img.copy()
         for i in range(n):
             for j in range(m):
@@ -102,12 +90,12 @@ class image_model:
                 img_seg[i][j][2] = 255 if label == self.blue else 0
         return img_seg
 
-    def _H1(self, h1: array, h2: array, c: array, epsilon: float = 0.001) -> float:
+    def _H1(self, h1: array, h2: array, c: array, epsilon: float = 0.01) -> float:
         t1 = h1[c[0]][c[1]][c[2]] + epsilon
         t2 = h1[c[0]][c[1]][c[2]] + h2[c[0]][c[1]][c[2]] + 2.0 * epsilon
         return t1/t2
 
-    def _H2(self, h1: array, h2: array, c: array, epsilon: float = 0.001) -> float:
+    def _H2(self, h1: array, h2: array, c: array, epsilon: float = 0.01) -> float:
         t1 = h2[c[0]][c[1]][c[2]] + epsilon
         t2 = h1[c[0]][c[1]][c[2]] + h2[c[0]][c[1]][c[2]] + 2.0 * epsilon
         return t1/t2
@@ -133,7 +121,8 @@ class image_model:
         labels = self._get_c_labels_h(nbins,
                                       hist_1,
                                       hist_2)
-        n, m = img.shape
+        n = img.shape[0]
+        m = img.shape[1]
         img_seg = img.copy()
         for i in range(n):
             for j in range(m):
