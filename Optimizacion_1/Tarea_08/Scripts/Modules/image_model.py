@@ -34,10 +34,7 @@ class image_model:
         return self.red if f1 < f2 else self.blue
 
     def _get_c_labels(self, nbins: int, alpha: array, mu: array, sigma: float) -> array:
-        labels = zeros((nbins,
-                        nbins,
-                        nbins),
-                       dtype=int)
+        labels = zeros((nbins, nbins, nbins), dtype=int)
         for i in range(nbins):
             for j in range(nbins):
                 for k in range(nbins):
@@ -46,25 +43,25 @@ class image_model:
                                               alpha,
                                               mu,
                                               sigma)
-                    labels[i][j][k] = label
+                    labels[i, j, k] = label
         return labels
 
     def segmentation(self, img: array, nbins: int, alpha: array, mu: array, sigma: float) -> array:
         labels = self._get_c_labels(nbins,
                                     alpha,
                                     mu,
-                                    sigma=sigma)
+                                    sigma)
         n = img.shape[0]
         m = img.shape[1]
         img_seg = img.copy()
         for i in range(n):
             for j in range(m):
-                c = self._rgb_to_class(img[i][j],
+                c = self._rgb_to_class(img[i, j],
                                        nbins)
                 label = labels[c[0], c[1], c[2]]
-                img_seg[i][j][0] = 255 if label == self.red else 0
-                img_seg[i][j][1] = 0
-                img_seg[i][j][2] = 255 if label == self.blue else 0
+                img_seg[i, j, 0] = 255 if label == self.red else 0
+                img_seg[i, j, 1] = 0
+                img_seg[i, j, 2] = 255 if label == self.blue else 0
         return img_seg
 
     def _H_function(self, h: array, c: array) -> float:

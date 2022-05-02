@@ -1,4 +1,4 @@
-from numpy.random import normal
+from numpy.random import sample
 
 
 def get_params() -> dict:
@@ -18,10 +18,11 @@ def get_params() -> dict:
 
 
 def get_f_params(dimension: int) -> dict:
-    f_params = {"sigma": 1,
-                "alpha": normal(0, 10, dimension),
-                "mu": normal(0, 10, (dimension, 3)),
+    f_params = {"sigma": 0.5,
+                "alpha": sample(dimension),
+                "mu": sample((dimension, 3)),
                 "search name": "bisection",
+                "max iterations": 300,
                 "c1": 1e-4,
                 "c2": 0.9,
                 "tau": 1e-6,

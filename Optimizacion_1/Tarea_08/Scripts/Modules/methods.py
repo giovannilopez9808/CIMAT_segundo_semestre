@@ -89,25 +89,26 @@ class algorithm_class:
             # Calculo del gradiente en el paso i
             gradient = -gradient_gaussian_alpha(alpha_i, f_params)
             # Siguiente paso
-            # alpha = self.obtain_alpha.method(function,
-            #                                  gradient_gaussian_alpha,
-            #                                  alpha_i,
-            #                                  f_params,
-            #                                  gradient,
-            #                                  "alpha")
-            alpha = 0.5
+            alpha = self.obtain_alpha.method(function,
+                                             gradient_gaussian_alpha,
+                                             alpha_i,
+                                             f_params,
+                                             gradient,
+                                             "alpha")
+            # alpha = 0.5
             alpha_j = alpha_i + alpha * gradient
             if self.stop_functions.gradient(gradient_gaussian_alpha,
                                             alpha_j,
                                             f_params):
                 break
+            f_params["alpha"] = alpha_j
             gradient = -gradient_gaussian_mu(mu_i, f_params)
-            # alpha = self.obtain_alpha.method(function,
-            #                                  gradient_gaussian_mu,
-            #                                  mu_i,
-            #                                  f_params,
-            #                                  gradient,
-            #                                  "mu")
+            alpha = self.obtain_alpha.method(function,
+                                             gradient_gaussian_mu,
+                                             mu_i,
+                                             f_params,
+                                             gradient,
+                                             "mu")
             mu_j = mu_i + alpha * gradient
             alpha_decision = self.stop_functions.gradient(gradient_gaussian_alpha,
                                                           alpha_j,
@@ -115,16 +116,13 @@ class algorithm_class:
             mu_decision = self.stop_functions.gradient(gradient_gaussian_mu,
                                                        mu_j,
                                                        f_params)
-            f_params["alpha"] = alpha_j
             f_params["mu"] = mu_j
             function_i = function(f_params)
-            grad_alpha = norm(gradient_gaussian_alpha(alpha_j, f_params))
-            grad_mu = norm(gradient_gaussian_mu(mu_j, f_params))
-            print("{:>3} {:>25} {:>20} {:>20}".format(iteration,
-                                                      function_i,
-                                                      grad_alpha,
-                                                      grad_mu))
+            print("{:>3} {:>25}".format(iteration,
+                                        function_i))
             if alpha_decision and mu_decision:
+                break
+            if iteration >= f_params["max iterations"]:
                 break
             iteration += 1
 
@@ -176,9 +174,7 @@ class obtain_alpha():
         alpha = 0.0
         beta_i = inf
         alpha_k = 1
-        print(gradient(x, f_params).shape)
-        print(d.shape)
-        dot_grad = gradient(x, f_params) @ d
+        dot_grad = gradient(x, f_params).flatten() @ d.flatten()
         while True:
             armijo_condition = self.obtain_armijo_condition(function_f,
                                                             dot_grad,
@@ -207,7 +203,7 @@ class obtain_alpha():
                 break
         return alpha_k
 
-    def back_tracking(self, gradient: Callable, x: array, y: array, beta: array, d: array):
+    def back_tracking(self, function_f: Callable, gradient: Callable, x: array, f_params: dict, d: array, name: str):
         """
         Calcula tamaño de paso alpha
 
@@ -226,11 +222,16 @@ class obtain_alpha():
         """
         # Inicialización
         alpha_k = self.params["alpha bisection"]
-        dot_grad = (-gradient(x, y, beta)) @ d
+        dot_grad = -gradient(x, f_params).flatten() @ d.flatten()
         # Repetir hasta que se cumpla la condición de armijo
         while True:
-            armijo_condition = self.obtain_armijo_condition(
-                function, dot_grad, x, y, beta, d, alpha_k)
+            armijo_condition = self.obtain_armijo_condition(function_f,
+                                                            dot_grad,
+                                                            x,
+                                                            f_params,
+                                                            d,
+                                                            alpha_k,
+                                                            name)
             if armijo_condition:
                 alpha_k = self.params["rho"] * alpha_k
             else:
@@ -254,7 +255,7 @@ class obtain_alpha():
         Condicion de Wolfe
         """
         dfx_alpha = gradient(x+alpha*d, f_params)
-        dfx_alpha = dfx_alpha @ d
+        dfx_alpha = dfx_alpha.flatten() @ d.flatten()
         wolfe_condition = dfx_alpha < self.params["c2"]*dot_grad
         return wolfe_condition
 
