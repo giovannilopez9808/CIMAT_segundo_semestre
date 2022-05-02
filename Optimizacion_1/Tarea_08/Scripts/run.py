@@ -3,5 +3,7 @@ from Modules.params import get_params
 
 params = get_params()
 problem = problem_class()
-problem.init(params, "flower")
-problem.solve()
+for image in params["Images"]:
+    print("Optimizando {}".format(image))
+    problem.init(params, image)
+    problem.solve()

@@ -6,13 +6,14 @@ def get_params() -> dict:
         "path data": "/home/giovanni/CIMAT_segundo_semestre/Optimizacion_1/Tarea_08/Scripts/Data",
         "path graphics": "/home/giovanni/CIMAT_segundo_semestre/Optimizacion_1/Tarea_08/Scripts/Graphics",
         "path results": "/home/giovanni/CIMAT_segundo_semestre/Optimizacion_1/Tarea_08/Scripts/Results",
-        "Images": {"flower",
-                   "grave",
-                   "memorial",
-                   "person1",
-                   "rose",
-                   "sheep"
-                   }
+        "Images": {
+            # "flower",
+            "grave",
+            # "memorial",
+            "person1",
+            "rose",
+            "sheep"
+        }
     }
     return params
 

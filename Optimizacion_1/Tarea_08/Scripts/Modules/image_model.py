@@ -1,12 +1,16 @@
 from numpy import array, sum, exp, zeros
+import matplotlib.pyplot as plt
 from numpy.linalg import norm
+from os.path import join
+import cv2
 
 
 class image_model:
-    def __init__(self) -> None:
-        self.red = 1
-        self.blue = 2
+    def __init__(self, params: dict) -> None:
+        self.params = params
         self.epsilon = 0.01
+        self.blue = 2
+        self.red = 1
 
     def _rgb_to_class(self, rgb, n_bins):
         x = int(rgb[0]*n_bins // 256.0)
@@ -53,16 +57,15 @@ class image_model:
                                     sigma)
         n = img.shape[0]
         m = img.shape[1]
-        img_seg = img.copy()
+        self.img_seg = img.copy()
         for i in range(n):
             for j in range(m):
                 c = self._rgb_to_class(img[i, j],
                                        nbins)
                 label = labels[c[0], c[1], c[2]]
-                img_seg[i, j, 0] = 255 if label == self.red else 0
-                img_seg[i, j, 1] = 0
-                img_seg[i, j, 2] = 255 if label == self.blue else 0
-        return img_seg
+                self.img_seg[i, j, 0] = 255 if label == self.red else 0
+                self.img_seg[i, j, 1] = 0
+                self.img_seg[i, j, 2] = 255 if label == self.blue else 0
 
     def _H_function(self, h: array, c: array) -> float:
         h = h[c[0], c[1], c[2]]
@@ -91,12 +94,31 @@ class image_model:
                                       hist_2)
         n = img.shape[0]
         m = img.shape[1]
-        img_seg = img.copy()
+        self.img_h = img.copy()
         for i in range(n):
             for j in range(m):
                 c = self._rgb_to_class(img[i, j], nbins)
                 label = labels[c[0]][c[1]][c[2]]
-                img_seg[i, j, 0] = 255 if label == self.red else 0
-                img_seg[i, j, 1] = 0
-                img_seg[i, j, 2] = 255 if label == self.blue else 0
-        return img_seg
+                self.img_h[i, j, 0] = 255 if label == self.red else 0
+                self.img_h[i, j, 1] = 0
+                self.img_h[i, j, 2] = 255 if label == self.blue else 0
+
+    def plot(self, img_original: array, image_name: str) -> None:
+        fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 4))
+        ax1.set_title("Original")
+        ax1.imshow(cv2.cvtColor(img_original,
+                                cv2.COLOR_BGR2RGB))
+        ax1.axis("off")
+        ax2.set_title("Segmentación")
+        ax2.imshow(cv2.cvtColor(self.img_seg,
+                                cv2.COLOR_BGR2RGB))
+        ax2.axis("off")
+        ax3.set_title("Histogramas")
+        ax3.imshow(cv2.cvtColor(self.img_h,
+                                cv2.COLOR_BGR2RGB))
+        ax3.axis("off")
+        plt.tight_layout()
+        filename = join(self.params["path graphics"],
+                        image_name,
+                        "result.png")
+        plt.savefig(filename)
