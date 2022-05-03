@@ -1,0 +1,15 @@
+\section*{Métodos}
+
+Se implemento el algoritmo de descenso de gradiente en conjunto a la linea de búsqueda. Los parámetros usados se encuentran en la tabla \ref{table:parameters}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{cccc}\hline
+        $\sigma$ & $c_1$     & $c_2$ & $\tau$    \\  \hline
+        0.5      & $10^{-4}$ & 0.9   & $10^{-6}$ \\ \hline
+    \end{tabular}
+    \caption{Parámetros usados para el problema}
+    \label{table:parameters}
+\end{table}
+
+Para detener el algoritmo se uso el criterio de la norma del gradiente y un máximo de iteraciones. El máximo de iteraciones de la implementación se establecio en 300 iteraciones.

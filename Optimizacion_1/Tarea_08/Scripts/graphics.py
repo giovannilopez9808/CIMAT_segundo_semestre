@@ -18,4 +18,5 @@ for image_name in params["Images"]:
                                  results.h_0,
                                  results.h_1)
     image.plot(results.image,
+               results.select_area,
                image_name)

@@ -1,0 +1,20 @@
+\section*{Problema}
+
+En este trabajo se implemento la segmentación de imágenes por medio de una optimización de los parámetros $\alpha$ y $\mu$ de una función de mínimos cuadrados. La función de costo se encuentra definida en la ecuación \ref{eq:cost_function}.
+
+\begin{equation}
+    g(\alpha^j,\mu^j) = \sum_{c\in \Omega}\left[  h^j(c) - \sum_i^n \alpha^j_i exp\left(\frac{-||c-\mu_i^j||}{2\sigma^2} \right)\right]^2 \label{eq:cost_function}
+\end{equation}
+
+donde $\alpha^j$ y $\mu^j$ son los parámetros a optimizar de cada clase de segmentación. $h^j$ y $c$ es el valor y posición del histograma respectivamente.
+
+El propósito es obtener el mínimo de la función $g$. Al realizar una optimización de dos parámetros se recurrida a una optimización coordenada. Es por ello que será necesario obtener el gradiente de la función $g$ con respecto a $\alpha$ y $\mu$. En las ecuaciones \ref{eq:alpha_partial} y se muestran los gradintes para $\alpha$ y $\mu$ de la función $g$ respectivamente.
+
+\begin{equation}
+    \frac{\partial g(\alpha^j,\mu^j)}{\partial \alpha^j_k} =  \sum_{c\in \Omega}\left[  h^j(c) - \sum_i^n \alpha^j_i exp\left(\frac{-||c-\mu_i^j||}{2\sigma^2} \right)\right] exp\left( \frac{-||c-\mu_k^j||}{2\sigma^2} \right)
+    \label{eq:alpha_partial}
+\end{equation}
+
+\begin{equation}
+    \frac{\partial g(\alpha^j,\mu^j)}{\partial \mu^j_k} = -\frac{2}{\sigma^2}\sum_{c\in \Omega}\left[  h^j(c) - \sum_i^n \alpha^j_i exp\left(\frac{-||c-\mu_i^j||}{2\sigma^2} \right)\right] \alpha_k exp\left( \frac{-||c-\mu_k^j||}{2\sigma^2} \right) (c-\mu_k^j)
+\end{equation}

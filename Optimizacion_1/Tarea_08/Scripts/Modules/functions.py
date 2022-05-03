@@ -3,6 +3,18 @@ from numpy.linalg import norm
 
 
 def function(f_params: dict) -> float:
+    """
+    Calcula la función dado unos parametros
+
+    Parametros
+    ----------------------
+    alpha -> array con los valores de alpha
+    mu -> matriz con los valores de mu
+    sigma -> parametro de la función de la distribucion normal
+    h_list -> array con los valores del histograma
+    c_lits -> lista con las posiciones del histograma
+    ----------------------
+    """
     alpha = f_params["alpha"]
     mu = f_params["mu"]
     sigma = f_params["sigma"]
@@ -19,13 +31,14 @@ def function(f_params: dict) -> float:
 
 def gradient_gaussian_alpha(alpha: array, f_params: dict) -> array:
     """
-    Calcula el gradiente respecto a mu
-    Parámetros
-    -----------
-    theta
-    f_params -> lista de parametros para la funcion objetivo,
-    X = f_params['X'] Variable independiente
-    y = f_params['y'] Variable dependiente
+    Calcula el gradiente respecto a alpha
+   Parametros
+    ----------------------
+    alpha -> array con los valores de alpha
+    mu -> matriz con los valores de mu
+    sigma -> parametro de la función de la distribucion normal
+    h_list -> array con los valores del histograma
+    c_lits -> lista con las posiciones del histograma
 
     Output
     -----------
@@ -51,12 +64,13 @@ def gradient_gaussian_alpha(alpha: array, f_params: dict) -> array:
 def gradient_gaussian_mu(mu: array, f_params: dict) -> array:
     """
     Calcula el gradiente respecto a alpha
-    Parámetros
-    -----------
-        theta
-        f_params : lista de parametros para la funcion objetivo,
-                    X -> f_params['X'] Variable independiente
-                    y -> f_params['y'] Variable dependiente
+    Parametros
+    ----------------------
+    alpha -> array con los valores de alpha
+    mu -> matriz con los valores de mu
+    sigma -> parametro de la función de la distribucion normal
+    h_list -> array con los valores del histograma
+    c_lits -> lista con las posiciones del histograma
 
     Output
     -----------
@@ -83,5 +97,8 @@ def gradient_gaussian_mu(mu: array, f_params: dict) -> array:
 
 
 def get_exp(x, sigma) -> float:
+    """
+    Generalización de la función exponencial
+    """
     f_exp = exp(-(norm(x, axis=1)**2)/(2*sigma**2))
     return f_exp

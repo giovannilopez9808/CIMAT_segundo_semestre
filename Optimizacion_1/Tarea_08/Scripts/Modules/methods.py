@@ -33,7 +33,7 @@ class problem_class:
             self.results[class_type] = {}
             print("Optimizando para {}".format(class_type))
             data = self.image.get_data(class_type)
-            self.f_params = get_f_params(self.image.n)
+            self.f_params = get_f_params()
             self.f_params["h"] = data[0]
             self.f_params["c"] = data[1]
             self.algorithm = algorithm_class(self.f_params)
@@ -118,9 +118,6 @@ class algorithm_class:
                                                        mu_j,
                                                        f_params)
             f_params["mu"] = mu_j
-            function_i = round(function(f_params), 6)
-            print("Iteración: {:>3} Function: {:>25}".format(iteration,
-                                                             function_i))
             if alpha_decision and mu_decision:
                 break
             if iteration >= f_params["max iterations"]:

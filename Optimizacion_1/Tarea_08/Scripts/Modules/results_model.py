@@ -19,6 +19,11 @@ class results_model:
         filename = join(self.params["path data"],
                         filename)
         self.image = cv2.imread(filename)
+        filename = "Stokes.png"
+        filename = join(self.params["path graphics"],
+                        name,
+                        filename)
+        self.select_area = cv2.imread(filename)
 
     def _read_h_files(self, name: str) -> array:
         folder = join(self.params["path results"],

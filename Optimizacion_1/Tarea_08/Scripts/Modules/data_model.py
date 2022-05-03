@@ -3,6 +3,10 @@ from os.path import join
 
 
 class data_model:
+    """
+    Lectura y organización de los histogramas dado el nombre de la imagen
+    """
+
     def __init__(self, params: dict) -> None:
         self.params = params
         self.data = {"Clase 0": {"Name": "H_0.txt",
@@ -12,6 +16,9 @@ class data_model:
                      }
 
     def read(self, name: str) -> array:
+        """
+        Lectura de los datos
+        """
         path = self.params["path results"]
         for class_type in self.data:
             filename = self.data[class_type]["Name"]
@@ -22,6 +29,9 @@ class data_model:
             self.data[class_type]["Data"] = data
 
     def _get_data(self, filename) -> array:
+        """
+        Lectura de los histogramas y estructuración de los datos
+        """
         shape = loadtxt(filename,
                         max_rows=1,
                         dtype=int)
@@ -37,4 +47,7 @@ class data_model:
         return data
 
     def get_data(self, name: str) -> tuple:
+        """
+        Devueve los datos dado un nombre
+        """
         return self.data[name]["Data"]

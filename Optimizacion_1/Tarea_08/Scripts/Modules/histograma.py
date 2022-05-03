@@ -75,16 +75,13 @@ def onMouse(event, x, y, flags, param):
     global status_lb
     # Clic IZQ-DOWN del mouse
     if event == cv2.EVENT_LBUTTONDOWN:
-        print("izquierdo abajo")
         status_lb = 1
         dibujar_punto(x, y)
     # Clic IZQ-UP del mouse
     if event == cv2.EVENT_LBUTTONUP:
-        print("izquierdo arriba")
         status_lb = 0
     # Clic DER-UP del mouse
     if event == cv2.EVENT_RBUTTONDOWN:
-        print("derecho")
         status_clase = status_clase + 1 if (status_clase +
                                             1) <= num_clases else 1
         print('Activa la clase: ', status_clase)
