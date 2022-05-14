@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from os.path import join
 from os import makedirs
 
-datasets = {}
-params = get_params(datasets)
+
+params = get_params()
 for lambda_value in params["lambda values"]:
     for method in params["methods"]:
         datasets = {
