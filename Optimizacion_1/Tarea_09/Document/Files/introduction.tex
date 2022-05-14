@@ -1,0 +1,25 @@
+\section{Introducción}
+
+El método del CG fue presentado por Hestenes y Stiefel\cite{Hestenes_1952} como un método directo, mas tarde Reid\cite{Reid_1972} y Concus\cite{Concus_1976} le descubrieron su verdadero potencial al mirarlo como un método iterativo bastante adecuado para resolver sistemas de la forma Ax = b, donde A es simétrica y definida positiva. El método de CG está basado en un principio de conjugación teniendo un almacenamiento modesto y siempre converge.
+
+El problema de minimización a tratar será el caso de una función cuadrática, la tiene asociada una matriz simétrica y definida positiva. Esta definición se encuentra escrita en la ecuación \ref{eq:quadratic_equation}.
+
+\begin{equation}
+    f(x) = \frac{1}{2}x^TAx -x^Tb \qquad A\in \Real^{n\times n}, b\in \Real^n
+    \label{eq:quadratic_equation}
+\end{equation}
+
+La solución análitica de la ecuación \ref{eq:quadratic_equation} es $Ax=b$, el cual se trata de un sistema de $n$ ecuaciones. El método de GC compromete a una clase de funciones sin restricciones. El método se caracteriza por la baja memoria que requiere para adquirir propiedades de una convergencia local o global. El método de GC genera una secuencia de pasos $x_k$ para $k>1$ a partir de la ecuación \ref{eq:reccurence}. El primer paso $(x_0)$ siempre es dado.
+
+\begin{equation}
+    x_{k+1} = x_k + \alpha_k d_k \label{eq:reccurence}
+\end{equation}
+
+donde $\alpha_k$ es un parámetro positivo determinado por una búsqueda en linea y $d_k$ son las direcciones de descenso. La secuencia $d_k$ es obtenida con la ecuación \ref{eq:dk_recurrence}.
+
+\begin{equation}
+    d_{k+1} = \beta_k d_k  - g_{k+1}  \qquad d_0 = -g_0
+    \label{eq:dk_recurrence}
+\end{equation}
+
+En la ecuación \ref{eq:dk_recurrence}, el término $\beta_k$ es un parámetro que es obtenido por el método GC. En este trabajo nos centraremos en optimizar una función usando el método GC con $\beta_k$ obtenidas a partir de los algoritmos de Fletcher-Reeves (FR), Polak-Ribiere (PR), Hestenes-Stiefel (HS) y una combinación de Fletcher-Reeves con Polak-Ribiere (FR-PR).

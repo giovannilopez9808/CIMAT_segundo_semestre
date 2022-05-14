@@ -1,0 +1,68 @@
+\section{Métodos}
+
+\subsection{Gradiente Conjugado}
+
+De manera general, el algortimo para el método de Gradiente Conjugado se encuentra descrito en .
+
+\begin{algorithm}[H]
+    \KwIn{$x_0$, $d_0$}
+    \KwOut{$x^*$}
+    $d_0 \gets -\nabla f(x_0)$\\
+    \While{$||g(x_k)||<\tau$}{
+        $\alpha_k \gets$ line search\\
+        Calcular $\nabla f(x_{k+1})$\\
+        Calcular $\beta_{k+1}$\\
+        $d_{k+1}=\beta_{k+1}d_k-\nabla f(x_{k+1})$
+    }
+\end{algorithm}
+
+La razón por la que $\alpha_k$ es calculado usando una búsqueda en linea es debido a que asi se asegura que la dirección $d_{k+1}$ es de descenso. Esto es debido a que $d_{k+1}^Td_k=0$, entonces
+
+\begin{align*}
+    d_{k+1}^Td_{k+1} & = - ||g_{k+1}||^2+\beta_{k+1}^{FR}g_{k+1}^Td_k \\
+                     & = -||g_{k+1}||^2                               \\
+                     & <0
+\end{align*}
+
+Si $\alpha_{k+1}$ no es un tamaño de paso exacto. El término $beta_{k+1}^{FR}g_{k+1}^Td_k $ podria dominar provocando que no se garantize el descenso.
+
+\subsection{Fletcher-Reeves}
+
+El algortimo de Fletcher-Reeves\cite{fletcher_1964} se basa en encontrar una secuencia de $\beta_k$ descritas en la ecuación \ref{eq:FR_beta}.
+
+\begin{equation}
+    \beta_{k+1}^{FR} = \frac{\nabla^T f(x_{k+1})\nabla f(x_{k+1})}{\nabla^T f(x_{k})\nabla f(x_{k})} \label{eq:FR_beta}
+\end{equation}
+
+\subsection{Polak-Ribiere}
+
+El algortimo de Polak-Ribiere\cite{polak_1969} se basa en encontrar una secuencia de $\beta_k$ descritas en la ecuación \ref{eq:PR_beta}.
+
+\begin{equation}
+    \beta_{k+1}^{PR} = \frac{\nabla^T f(x_{k+1})(\nabla f(x_{k+1})-\nabla f(x_{k}))}{\nabla^T f(x_{k})\nabla f(x_{k})} \label{eq:PR_beta}
+\end{equation}
+
+Es conveniente elegir el valor máximo entre $\beta_{k+1}^{PR}$ y 0. Esto es debido a que existen funciones las cuales pueden ciclarse de forma indefinida.
+
+\subsection{Hestenes-Stiefel}
+
+El algortimo de Hestenes-Stiefel\cite{hestenes_1978} se basa en encontrar una secuencia de $\beta_k$ descritas en la ecuación \ref{eq:HS_beta}.
+
+\begin{equation}
+    \beta_{k+1}^{HS} = \frac{\nabla^T f(x_{k+1})(\nabla f(x_{k+1})-\nabla f(x_{k}))}{(\nabla f(x_{k+1})-\nabla f(x_{k}))^Td_{k}} \label{eq:HS_beta}
+\end{equation}
+
+
+\subsection{Fletcher-Reeves Polak-Ribiere}
+
+El algortimo de Fletcher-Reeves en combinación con Polak-Ribiere\cite{Babaie_2014} se basa en encontrar una secuencia de $\beta_k$ descritas en la ecuación \ref{eq:FR_PR_beta}.
+
+\begin{equation}
+    \beta_{k+1}^{FR-PR} = \begin{cases}
+        -\beta_k^{FR} & \text{si } \beta_k^{PF} < -\beta_k^{FR}     \\
+        \beta_k^{PR}  & \text{si } |\beta_k^{PF}| \leq \beta_k^{FR} \\
+        \beta_k^{FR}  & \text{si } \beta_k^{PF} >\beta_k^{FR}
+    \end{cases} \label{eq:FR_PR_beta}
+\end{equation}
+
+La secuencia $\beta_{k+1}^{FR-PR}$ garantiza la convergencia, debido a que $\beta_k \leq \beta_k^{FR}$ para $k>2$.
