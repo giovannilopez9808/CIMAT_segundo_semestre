@@ -33,19 +33,19 @@ def get_graphics_params() -> dict:
               "y delta": {"Function": 2000,
                           "Gradient": 50}
               },
-        1:  {"y lim": {"Function": [11000, 22000],
-                       "Gradient": [0, 350], },
+        1:  {"y lim": {"Function": [100000, 220000],
+                       "Gradient": [0, 3000], },
              "x lim": [0, 50],
              "x delta": 5,
-             "y delta": {"Function": 2000,
-                         "Gradient": 50}
+             "y delta": {"Function": 20000,
+                         "Gradient": 500}
              },
-        10:  {"y lim": {"Function": [11000, 22000],
-                        "Gradient": [0, 350], },
+        10:  {"y lim": {"Function": [1000000, 2000000],
+                        "Gradient": [0, 20000], },
               "x lim": [0, 50],
               "x delta": 5,
-              "y delta": {"Function": 2000,
-                          "Gradient": 50}
+              "y delta": {"Function": 200000,
+                          "Gradient": 5000}
               },
     }
     return params

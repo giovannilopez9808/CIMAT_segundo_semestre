@@ -62,9 +62,13 @@ for lambda_value in params["lambda values"]:
     ax1.set_xlim(g_params["x lim"][0],
                  g_params["x lim"][1])
     ax1.set_xticks(get_ticks(g_params, "x"))
+    ax2.set_ylim(g_params["y lim"]["Function"][0],
+                 g_params["y lim"]["Function"][1])
     ax1.set_yticks(get_ticks(g_params,
                              "y",
                              "Function"))
+    ax2.set_ylim(g_params["y lim"]["Gradient"][0],
+                 g_params["y lim"]["Gradient"][1])
     ax2.set_yticks(get_ticks(g_params,
                              "y",
                              "Gradient"))
@@ -73,6 +77,9 @@ for lambda_value in params["lambda values"]:
                frameon=False,
                loc="upper center")
     plt.tight_layout(pad=2)
-    plt.savefig("test.png",
+    filename = optimize.get_image_filename_results()
+    filename = filename.replace("csv", "png")
+    filename = join(params["path graphics"],
+                    filename)
+    plt.savefig(filename,
                 dpi=400)
-    break
