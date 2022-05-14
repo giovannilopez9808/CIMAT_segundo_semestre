@@ -9,7 +9,7 @@ for lambda_value in params["lambda values"]:
                                                                     lambda_value))
         datasets = {
             "lambda": lambda_value,
-            "tau": 1e-3,
+            "tau": 1e-2,
             "GC method": method
         }
         params = get_params(datasets)

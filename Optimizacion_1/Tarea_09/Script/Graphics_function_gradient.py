@@ -44,12 +44,10 @@ for lambda_value in params["lambda values"]:
                  data["Function"],
                  color=color,
                  label=method,
-                 alpha=0.5,
                  ls="--")
         ax2.plot(data.index,
                  data["Gradient"],
                  color=color,
-                 alpha=0.5,
                  ls="--")
     ax1.grid(ls="--",
              alpha=0.7,
