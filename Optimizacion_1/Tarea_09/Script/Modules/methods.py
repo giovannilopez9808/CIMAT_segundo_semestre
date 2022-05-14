@@ -96,7 +96,6 @@ class optimize_method:
         d_j = -gradient_j.copy()
         self.function = []
         self.gradient = []
-        alpha_i = 0
         while True:
             # Calculo de la apha
             alpha = self.line_search.run(x_j, d_j, params)
@@ -176,6 +175,7 @@ class get_alpha():
                             x,
                             d,
                             args=args,
-                            maxiter=100)
+                            maxiter=100,
+                            c2=0.1)
         alpha = alpha[0]
         return alpha
