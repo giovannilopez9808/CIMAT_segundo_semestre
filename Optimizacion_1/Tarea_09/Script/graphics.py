@@ -4,41 +4,47 @@ from Modules.params import get_params
 import matplotlib.pyplot as plt
 from os.path import join
 from os import makedirs
+from numpy import sqrt
 
 
 params = get_params()
-for lambda_value in params["lambda values"]:
-    for method in params["methods"]:
+for method in params["methods"]:
+    fig, axs = plt.subplots(1, 5,
+                            figsize=(16, 4))
+    image = read_image(params)
+    shape = int(sqrt(image.shape[0]))
+    image = image.reshape((shape, shape))
+    axs = axs.flatten()
+    axs[0].imshow(image,
+                  cmap="gray")
+    axs[0].set_title("Original")
+    axs[0].axis("off")
+    for i, lambda_value in enumerate(params["lambda values"]):
         datasets = {
             "lambda": lambda_value,
             "tau": 1e-3,
             "GC method": method
         }
+        ax = axs[i+1]
         params = get_params(datasets)
         optimize = optimize_method(params)
         folder = optimize.get_folder_results()
         filename = optimize.get_image_filename_results()
         filename = join(folder,
                         filename)
-        image = read_image(params)
         image_result = read_image_result(filename)
-        image = image.reshape(image_result.shape)
-        fig, (ax1, ax2) = plt.subplots(1, 2,
-                                       figsize=(8, 4))
-        ax1.imshow(image,
-                   cmap="gray")
-        ax1.set_title("Original")
-        ax1.axis("off")
-        ax2.imshow(image_result,
-                   cmap="gray")
-        ax2.axis("off")
-        ax2.set_title("Modificada")
+        ax.imshow(image_result,
+                  cmap="gray")
+        ax.axis("off")
+        ax.set_title(f"$\\lambda = {lambda_value}$")
         plt.tight_layout()
-        folder = folder.replace(params["path results"],
-                                params["path graphics"])
-        makedirs(folder,
-                 exist_ok=True)
-        filename = filename.replace(params["path results"],
-                                    params["path graphics"])
-        filename = filename.replace("csv", "png")
-        plt.savefig(filename)
+    filename = f"{method}.png"
+    filename = join(params["path graphics"],
+                    filename)
+    plt.subplots_adjust(wspace=0.01,
+                        hspace=0)
+    plt.tick_params(pad=0)
+    plt.savefig(filename,
+                dpi=500,
+                bbox_inches="tight",
+                pad_inches=0.1)

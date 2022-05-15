@@ -23,7 +23,10 @@ def get_params(dataset: dict = {}) -> dict:
             },
             1: {
                 "name": "lambda_3"
-            }
+            },
+            5: {
+                "name": "lambda_4"
+            },
         }
     }
     params.update(dataset)
@@ -66,6 +69,18 @@ def get_graphics_params() -> dict:
             "y delta": {
                 "Function": 20000,
                 "Gradient": 400
+            }
+        },
+        5: {
+            "y lim": {
+                "Function": [500000, 1000000],
+                "Gradient": [0, 10000],
+            },
+            "x lim": [0, 50],
+            "x delta": 5,
+            "y delta": {
+                "Function": 100000,
+                "Gradient": 2000
             }
         },
     }

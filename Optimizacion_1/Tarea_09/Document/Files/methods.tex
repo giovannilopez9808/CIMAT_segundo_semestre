@@ -24,7 +24,14 @@ La razón por la que $\alpha_k$ es calculado usando una búsqueda en linea es de
                      & <0
 \end{align*}
 
-Si $\alpha_{k+1}$ no es un tamaño de paso exacto. El término $beta_{k+1}^{FR}g_{k+1}^Td_k $ podria dominar provocando que no se garantize el descenso.
+Si $\alpha_{k+1}$ no es un tamaño de paso exacto. El término $beta_{k+1}^{FR}g_{k+1}^Td_k $ podria dominar provocando que no se garantize el descenso. Para el caso cuando $\alpha_{k+1}$ no es un tamaño de paso exacto, se puede garantizar el descenso si se usan las condiciones fuertes de Wolfe. Esto es
+
+\begin{align*}
+    f(x_{k+1})     & \leq f(x_{k})+c_1 \alpha_k g_k^Td_k \\
+    |g_{k+1}^Td_k| & \leq -c_2g_k^Td_k
+\end{align*}
+
+con $0<c_1<c_2<1$. Para el caso del algoritmo de gradiente Conjugado, el valor de $c_2=0.1$ garantiza la convergencia.
 
 \subsection{Fletcher-Reeves}
 
@@ -66,3 +73,24 @@ El algortimo de Fletcher-Reeves en combinación con Polak-Ribiere\cite{Babaie_20
 \end{equation}
 
 La secuencia $\beta_{k+1}^{FR-PR}$ garantiza la convergencia, debido a que $\beta_k \leq \beta_k^{FR}$ para $k>2$.
+
+\subsection{Función de suavizado}
+
+En este trabajo utilizaremos como función de costo la ecuación \ref{eq:cost_function}.
+
+\begin{equation}
+    f(x) =\sum_{ij} \left[(x_{i,j}-g_{i,j})^2 + \lambda \sum_{(l,m)\in \Omega_{i,j}}\sqrt{(x_{i,j}-x_{l,m})^2+\mu} \right] \label{eq:cost_function}
+\end{equation}
+
+donde $g$ es la función a suavizar, en este caso será la imagen \file{lena.png}, $\lambda$ es un parámetro positivo a elegir, $\mu$ es un parámetro fijo con valor de 0.01 y el conjunto $\Omega_{i,j}$ esta definido de la siguiente manera:
+
+\begin{equation*}
+    \Omega_{i,j} = \{ (i+1,j), (i-1,j), (i,j+1), (i,j-1)\}
+\end{equation*}
+
+El gradiente de la ecuación \ref{eq:cost_function} se encuentra descrito en la ecuación \ref{eq:gradient}.
+
+\begin{equation}
+    \frac{\partial f(x)}{\partial x_{i,j}} = 2(x_{i,j} -g_{i,j}) + \lambda \sum_{(l,m) \in \Omega_{i,j}} \frac{x_{i,j}-x_{l,m}}{\sqrt{(x_{i,j}-x_{l,m})^2+\mu}} \label{eq:gradient}
+\end{equation}
+

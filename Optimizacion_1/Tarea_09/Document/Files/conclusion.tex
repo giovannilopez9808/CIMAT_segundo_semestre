@@ -1,0 +1,12 @@
+\section{Conclusiones}
+
+A partir de la figura \ref{fig:function_gradient} se obtienen las siguientes conclusiones:
+
+\begin{itemize}
+    \item Conforme aumenta el valor del parámetro $\lambda$ el número de iteraciones crece, por ende tarda más tiempo en llegar al mínimo global.
+    \item El mejor método para esta imagen es usando el tamaño de paso de Hestenes-Stiefel, debido a que llega más rápido al mínimo local.
+    \item El peor método para esta imagen es el tamaño de paso de Fletcher-Reeves debido a que tarda más en llegar al punto óptimo.
+    \item El método con tamaño de paso Polak-Ribiere y el tamaño de paso Fletcher-Reeves con Polak-Ribiere tiene una dinámica muy semejante. Esto es debido a que se toma más seguido el paso PR que el FR en FR-PR.
+\end{itemize}
+
+A partir de la figura \ref{fig:images} se obtiene que independientemente del tamaño de paso, se obtiene una imagen muy semejante para cada valor de $\lambda$. Sin embargo, conforme aumenta el valor de $\lambda$ la imagen se ve cada vez más difuminada.
