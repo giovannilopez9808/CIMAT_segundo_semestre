@@ -3,9 +3,9 @@ from numpy.random import sample
 
 def get_params() -> dict:
     params = {
-        "path data": "/home/d714/CIMAT_segundo_semestre/Optimizacion_1/Tarea_08/Scripts/Data",
-        "path graphics": "/home/d714/CIMAT_segundo_semestre/Optimizacion_1/Tarea_08/Scripts/Graphics",
-        "path results": "/home/d714/CIMAT_segundo_semestre/Optimizacion_1/Tarea_08/Scripts/Results",
+        "path data": "/home/giovanni/CIMAT_segundo_semestre/Optimizacion_1/Tarea_08/Scripts/Data",
+        "path graphics": "/home/giovanni/CIMAT_segundo_semestre/Optimizacion_1/Tarea_08/Scripts/Graphics",
+        "path results": "/home/giovanni/CIMAT_segundo_semestre/Optimizacion_1/Tarea_08/Scripts/Results",
         "Images": {
             "flower",
             "grave",
@@ -19,7 +19,7 @@ def get_params() -> dict:
 
 
 def get_f_params() -> dict:
-    dimension = 10
+    dimension = 50
     f_params = {"sigma": 0.5,
                 "alpha": sample(dimension),
                 "mu": sample((dimension, 3)),
