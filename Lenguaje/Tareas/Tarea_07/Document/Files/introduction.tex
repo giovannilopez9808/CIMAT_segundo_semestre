@@ -1,0 +1,44 @@
+\section{Introduction}
+
+El análisis de sentimiento o opinion mining es el estudio computacional de las opiniones, comentarios, emociones, sentimientos y actitudes de entes como servicios, organizaciones, personas, problemas, eventos y topicos\cite{Liu_2015}. El crecimiento rapido de la rama de estudio coincide con el auge de las redes sociales, como lo son blogs, revisiones, foros y Twitter. El análisis de sentimiento es uno de las ramas más activas del procesamiento de lenguaje natural (NLP). El uso de este procesamiento se ha esparcido hacia las áreas de managment science y social science como lo son el marketing, finanzas, ciencias politicas, comunicaciones e historia\cite{Chalothom_2015}.
+
+Existen investigaciones que han producido un numero de tecnicas para las tareas de analsisi de sentmiento las cuales involucran metodos de aprendizaje supervisado y no supervisado. Las tecnicas de aprendizaje no supervisado explotan metodos basados en lexicones, analisis de gramatica, analsis de patrones sintacticos. Algunas de las tecnicas de aprendizaje no supervisado estan el support vector machines (SVM), maximum entropy y  naive bayes\cite{Liu_2012,Liu_2015,Lee_2009}.
+
+A inicio de la decada del 2010, el deep learning emergio como una tecnica importante para el aprendizaje supervisado\cite{Goodfellow_2016}. Obtieniendo resultados comparables al estado del arte en diversas aplicaciones en los campos de vision computacional y reconocimiento del habla. La aplicación del deep learning se ha vuelto popular en años recientes.
+
+\subsection{Sentiment analysis tasks}
+
+El análsis de sentimiento esta divido en varios niveles\cite{Thomas_2013}. A nivel de documento\cite{Yessenalina_2010}, nivel de sentencia\cite{Farra_2010}, nivel de palabra\cite{Engonopoulos_2011} o nivel de aspecto\cite{Haochen_2015}.
+
+\subsubsection{Document-level sentiment classification}
+
+El documento es tratad como la unidad primaria de información en la que se puede enfocar. El documento puede ser clasificado en un apartado positivo o negativo. Yang\cite{Yang_2016} propuso una hierarchical attention network model que se enfoca en la información para construir una representacion de documentos. El mayor reto para document-level sentiment classification es crear la relaciones entre palabras de un documento extenso. Este problema puede ser tratado con el modelo SR-LSTM\cite{Guozheng_2018}. El modelo esta compuesto de una capa de LSTM que aprende los vectores de cada palabra (sentence vectors) y una segunda capa que encodes la relacion entre palabras.
+
+\subsubsection{Sentence-level sentiment classification}
+
+El trabajar una clasificación a nivel de documento es la dificultad de extraer diferentes
+sentimientos sobre entes separados. Es por ello que la clasificación a nivel palabra es clasificada de manera objetiva o subjetiva. Una expresión es clasificada de subjetiva cuando se expresa una opinión de un ente. Las expresiones objetivas se caracterizan por no contener un sentimiento. Zhao\cite{Zhao_2018_weakly} propuso un esquema (framework) llamado Weakly-supervised Deep Embedding (WDE). El esquema se basa en review ratings para entrenar un clasificador de sentimientos usando una Convolutional Neural Network (CNN). Se implementaron dos redes, WDE-CNN y (WDE-LSTM) para extraer los vectores para representar cada review sentence. El modelo se probo con el Amazon dataset from three domains (digital cameras, cell phones and laptops). The accuracy obtained on WDE-CNN model was
+87.7\%, and on WDE-LSTM model was 87.9\%, which shows that deep learning models gives
+highest accuracy as compared to baseline models.
+
+\subsubsection{Aspect-level sentiment classification}
+
+
+Aspect level sentiment analysis is commonly called feature-based sentiment analysis or
+entity-based sentiment analysis. This sentiment analysis task includes the identification of
+features or aspects in a sentence (which is a user-generated review of an entity) and categorizing the features as positive or negative. The sentiment-target pairs are first identified, then they are classified into different polarities, and finally, sentiment values for every aspect are clubbed. Recently, attention-based LSTM mechanisms are being used for aspect-based sentiment analysis. Ma et al.\cite{Ma_2018} proposed a two-step attention architecture, which attends words of the target expression along with the whole sentence. The author also applied extended LSTM, which can utilize external knowledge for developing a common-sense system for target aspect-based sentiment analysis. The initial systems were not able to model different aspects in a sentence and do not explore the explicit position context of words. Hence, Ma et al.\cite{Ma_2019} developed a two-stage approach that can handle the above problems. In Stage-1, position attention model is introduced for modelling the aspects and its neighboring context words. In Stage-2 multiple aspect terms within a sentence are modelled simultaneously. The most recent approach is proposed by Yang et al.\cite{Yang_2019a}, which replaces the conventional attention models with coattention mechanism by introducing a Coattention-LSTM network that can model the context-level and target-level attention alternatively by learning the non-linear representations of the target and context simultaneously. Thus, the proposed model can extract more effective sentiment features for aspect-based sentiment analysis.
+
+\subsubsection{Multi-domain sentiment classification}
+
+The word domain is referred as a set of documents that are related to a specific topic. Multi-domain sentiment classification focuses on transferring information from one domain to the next domain. The models are first trained in source domain. The knowledge is then transferred and explored in another domain. Yuan et al.\cite{Yuan_2018} proposed a Domain Attention Model (DAM) for modeling the feature-level tasks using attention mechanism for multi-domain sentiment classification. DAM is composed of two modules: domain module and sentiment module. The domain mod- ule predicts the domain in which text belongs using bi-LSTM, and sentiment module selects the important features related to the domain using another bi-LSTM with attention mechanism. The vector thus obtained from the sentiment module is fed into a softmax classifier to predict the polarity of the texts. The author used Amazon multi-domain dataset containing reviews from four domains, and Sanders Twitter Sentiment dataset containing tweets about four different IT companies. The proposed model was compared with traditional machine learning approaches, and results show that the model performed well for multi-domain sentiment classification.
+
+\subsubsection{Multimodal sentiment classification}
+
+Different people express their sentiments or opinions in different ways. Earlier, the text was considered as the primary medium to express an opinion. This is known as a unimodal approach. With the advancement of technology and science, people are now shifting towards visual and audio modalities to express their sentiments. Combining or fusing more than one modalities for detecting the opinion is known as multimodal sentiment analysis. Hence, researchers are now focusing on this direction for improving the sentiment classification process. Poria et al.\cite{Poria_2016} proposed a novel methodology for merging the affective information extracted from audio, visual, and textual modalities. They discussed how different modalities were combined together to improve the overall sentiment analysis process. The experimental results showed that bimodal and trimodal models
+have shown better accuracy as compared to unimodal models, which shows the importance
+of using features from all the modality for enhancing the performance of sentiment analysis
+models.
+
+\subsubsection{Taxonomy of sentiment analysis}
+
+Research in the field of sentiment analysis is taking place for several years. Initially, handcrafted features were used for various classification tasks. On the other hand, machine-learned features can be categorized into traditional machine learning-based approaches and deep learning-based approaches. Machine learning-based methods include Support Vector Machine (SVM), Naïve Bayes (NB), Maximum Entropy (ME), Decision tree learning, and Random Forests. They are further categorized into supervised and unsupervised learning methods.
