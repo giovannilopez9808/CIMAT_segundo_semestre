@@ -11,9 +11,26 @@ In the works of NLP, the use of pre-entrained language models hace become a usef
     \label{fig:transformer}
 \end{figure}
 
-\subsection{Bert}
+\subsection{BERT}
 
-\subsection{Robertuito}
+BERT model is an acronym for Bidirectional Encoder Representations for Transformers. BERT alleviates the previously mentioned unidi rectionality constraint by using a `masked lan guage model' (MLM) pretraining objective, in spired by the Cloze task\cite{Taylor_1953}. The masked language model randomly masks some of the tokens from the input, and the objective is to predict the original vocabulary id of the masked word based only on its context. Pre-trained word embeddings are an integral part of modern NLP systems, offering significant improvements over embeddings learned from scratch\cite{Turian_2010}. To pre-train word embedding vectors, left-to-right language modeling objectives have been used\cite{Mnih_2008}, as well as objectives to discriminate correct from incorrect words in left and right context\cite{Mikolov_2014}. As with the feature-based approaches, the first works in this direction only pre-trained word embedding parameters from unlabeled text\cite{Collobert_2008}. More recently, sentence or document encoders which produce contextual token representations have been pre-trained from unlabeled text and fine-tuned for a supervised downstream task. The advantage of these approaches is that few parameters need to be learned from scratch.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=13cm]{Graphics/bert.png}
+    \caption{Overall pretraining and fine-tuning procedures for BERT. Apart from output layers, the same architectures are used in both pretraining and fine-tuning. The same pre-trained model parameters are used to initialize models for different down-stream tasks.\cite{Devlin_2018}}
+    \label{fig:bert}
+\end{figure}
+
+There are two steps in our framework: pretraining and fine-tuning. During pretraining, the model is trained on unlabeled data over different pretraining tasks. For fine-tuning, the BERT model is first initialized with the pre-trained parameters, and all of the parameters are fine-tuned using labeled data from the downstream tasks. Each downstream task has separate fine-tuned models, even though they are initialized with the same pre-trained parameters. The question-answering example in Figure \ref{fig:bert} will serve as a running example for this section. To make BERT handle a variety of down-stream tasks, our input representation is able to unambiguously represent both a single sentence and a pair of sentences in one token sequence. Throughout this work, a sentence can be an arbitrary span of contiguous text, rather than an actual linguistic sentence.
+
+\subsection{RoBERTa}
+
+The BERT model can be optimized with some modifications on the pretraining procedure. Liu\cite{Liu_2019} join this configurations in one model named Robustly optimized BERT approach (RoBERTa). Especifically, RoBERTa is trained with dynamic masking, FULL-SENTENCES without NS loss, large mini-batches. One of the most important modifications is the number of training passes and the size of the bacth. This is because Large batch training can improve training efficiency even without large scale parallel hardware through gradient accumulation, whereby gradients from multiple mini-batches are accumulated locally before each optimization step\cite{Ott_2019}. In all the test that Liu\cite{Liu_2019} did in his paper demostrate that RoBERTa have a perfomance by training the model with bigger batches over more data, removing the next sentence prediction, training on longer sequences and dynamically changing the masking pattern applied to the traning data.
+
+\subsection{RoBERTuito}
+
+The RoBERTuito model has a RoBERTa base architecture. This model have 2 self-attention layers, 12 attention heads, and hidden size equal to 768, in the same fashion as BERTweet\cite{Nguyen_2020}. RoBERTuito use a masked language objective disregarding the next-sentence prediction task used in BERT or other tweet-order tasks such as those used in Gonzalez et al.\cite{Gonzalez_2021}.
 
 \subsection{MEX-A3T}
 
