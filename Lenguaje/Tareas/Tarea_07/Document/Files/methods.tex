@@ -1,4 +1,4 @@
-\section{Methods}
+\section{Dataset and methods}
 
 \subsection{Transformers}
 
@@ -34,4 +34,36 @@ The RoBERTuito model has a RoBERTa base architecture. This model have 2 self-att
 
 \subsection{MEX-A3T}
 
+The MEX-A3T is an evaluation forum for IberLEF intended for the research in NLP and considering a variety of Mexican Spanish cultural traits. In this vein, the 2018 edition was the first to consider the aggressiveness identification for Mexican Spanish tweets\cite{Carmona_2018}.  This dataset have two columns with 7332 rows (5278 for train, 587 for validation and 1467 for test). The categories are offensive (1) and no-offensive (0). The distribution of this categorias in the data are show in figure \ref{fig:distribution}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=17cm]{Graphics/distribution.png}
+    \caption{Distribution of the categories (offensive and no offensive) for the train and validation dataset from MEX-A3T.}
+    \label{fig:distribution}
+\end{figure}
+
+In the Iberian Languages Evaluation Forum 2020 (IberLEF 2020) 21 teams participated. The evaluation consisted in two task, fake news track and aggressiveness identification. The results of this evaluation is in table \ref{table:fakenews} and \ref{table:agIberLEF_2020}.
+
+\input{Files/fakenews.tex}
+
 \input{Files/mex_a3t_results.tex}
+
+\subsection{Implementation}
+
+The implementation of this work is based on RoBERTuito uncased model. The loss function used was Croos Entropy from pytorch library. This function recives a tensor with weights from the data. This procedure benefits the unbalansed clategories data (figure \ref{fig:distribution}). The optimization method was AdaW from pytorch library. The hyperparameters chosed for this report are in the table \ref{table:hyperparameters}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{lr} \hline
+        \\[-0.05cm]
+        \textbf{Hyperparameter} & \textbf{Value} \\ \hline
+        \\[-0.1cm]
+        \textbf{Batch size}     & 8              \\
+        \textbf{Epochs}         & 3              \\
+        \textbf{Learning rate}  & 1x$10^{-5}$    \\
+        \textbf{Max tokens}     & 130            \\ \hline
+    \end{tabular}
+    \caption{Hyperparameters used in the implementation.}
+    \label{table:hyperparameters}
+\end{table}
